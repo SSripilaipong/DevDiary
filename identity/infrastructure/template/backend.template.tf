@@ -16,6 +16,5 @@ terraform {
 }
 
 provider "aws" {
-  profile = "workshop"
   region  = "AWS_REGION"
 }
