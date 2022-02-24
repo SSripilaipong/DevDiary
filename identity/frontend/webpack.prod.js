@@ -6,7 +6,7 @@ module.exports = merge(common, {
     mode: "production",
     plugins: [
         new ModuleFederationPlugin({
-            name: 'core',
+            name: 'identity',
             filename: 'remoteEntry.js',
             exposes: {
                 './Button': './src/Button',
