@@ -1,27 +1,9 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { merge } = require('webpack-merge');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const common = require('./webpack.common.js');
 
-module.exports = {
+module.exports = merge(common, {
     mode: "production",
-    entry: path.join(__dirname, "src", "index.js"),
-    output: {
-        path:path.resolve(__dirname, "dist"),
-    },
-    module: {
-        rules: [
-            {
-                test: /\.?js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: ['@babel/preset-env', '@babel/preset-react'],
-                    },
-                },
-            },
-        ],
-    },
     plugins: [
         new ModuleFederationPlugin({
             name: 'core',
@@ -30,8 +12,5 @@ module.exports = {
                 './Button': './src/Button',
             },
         }),
-        new HtmlWebpackPlugin({
-            template: path.join(__dirname, "src", "index.html"),
-        }),
     ],
-}
+})

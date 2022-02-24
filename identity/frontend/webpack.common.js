@@ -1,9 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 
 module.exports = {
-    mode: "development",
     entry: path.join(__dirname, "src", "index.js"),
     output: {
         path:path.resolve(__dirname, "dist"),
@@ -23,13 +21,6 @@ module.exports = {
         ],
     },
     plugins: [
-        new ModuleFederationPlugin({
-            name: 'core',
-            filename: 'remoteEntry.js',
-            exposes: {
-                './Button': './src/Button',
-            },
-        }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "src", "index.html"),
         }),
