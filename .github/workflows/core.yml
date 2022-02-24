@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - core/
+      - core/**
       - .github/workflows/core.yml
 jobs:
   deploy-core-frontend:

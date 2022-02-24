@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - identity/
+      - identity/**
       - .github/workflows/identity.yml
 jobs:
   deploy-identity-infrastructure:
