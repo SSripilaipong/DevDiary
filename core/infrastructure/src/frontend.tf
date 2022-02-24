@@ -19,7 +19,7 @@ resource "aws_s3_bucket_policy" "frontend" {
         Action    = "s3:GetObject"
         Effect    = "Allow"
         Principal = "*"
-        Resource  = "arn:aws:s3:::devdiary.link/*"
+        Resource  = "${aws_s3_bucket.frontend.arn}/*"
       },
     ]
     Version   = "2012-10-17"
