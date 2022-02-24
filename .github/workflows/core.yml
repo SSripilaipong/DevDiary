@@ -35,7 +35,7 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           TF_BACKEND_BUCKET_NAME: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
           TF_BACKEND_BUCKET_PATH: prod/core.tfstate
-          TF_VAR_FRONTEND_S3_BUCKET_NAME: devdiary.link
+          TF_VAR_FRONTEND_S3_BUCKET_NAME: ${{ secrets.APP_NAME }}
         run: |
           chmod +x ../script/apply.sh
           ../script/apply.sh
@@ -71,4 +71,6 @@ jobs:
         run: npm run build
 
       - name: Upload to S3
-        run: aws s3 cp dist/ s3://devdiary.link/ --recursive
+        env:
+          FRONTEND_S3_BUCKET_NAME: ${{ secrets.APP_NAME }}
+        run: aws s3 cp dist/ s3://"$FRONTEND_S3_BUCKET_NAME"/ --recursive
