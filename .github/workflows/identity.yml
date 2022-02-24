@@ -4,8 +4,8 @@ on:
     branches:
       - main
     paths:
-      - ./identity/
-      - ./.github/workflows/identity.yml
+      - identity/
+      - .github/workflows/identity.yml
 jobs:
   deploy-identity-infrastructure:
     name: Deploy identity.infrastructure to AWS

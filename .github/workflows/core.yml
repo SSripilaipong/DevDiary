@@ -4,8 +4,8 @@ on:
     branches:
       - main
     paths:
-      - ./core/
-      - ./.github/workflows/core.yml
+      - core/
+      - .github/workflows/core.yml
 jobs:
   deploy-core-frontend:
     name: Deploy core.frontend to AWS
