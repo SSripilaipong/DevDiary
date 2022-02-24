@@ -23,6 +23,5 @@ resource "aws_s3_bucket_policy" "frontend" {
       },
     ]
     Version   = "2012-10-17"
-  }
-  )
+  })
 }
