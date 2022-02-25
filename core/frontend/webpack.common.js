@@ -8,7 +8,8 @@ const APP_IDENTITY_BUCKET_NAME = process.env.APP_IDENTITY_BUCKET_NAME || 'devdia
 module.exports = {
     entry: path.join(__dirname, "src", "index.js"),
     output: {
-        path:path.resolve(__dirname, "dist"),
+        path: path.resolve(__dirname, "dist"),
+        publicPath: "auto",
     },
     module: {
         rules: [
