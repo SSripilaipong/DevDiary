@@ -11,6 +11,11 @@ module.exports = merge(common, {
             exposes: {
                 './Register': './src/Pages/Register',
             },
+            shared: {
+                react: {
+                    eager: true,
+                },
+            },
         }),
     ],
 })
