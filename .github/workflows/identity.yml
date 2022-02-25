@@ -72,5 +72,16 @@ jobs:
 
       - name: Upload to S3
         env:
-          FRONTEND_S3_BUCKET_NAME: ${{ secrets.APP_NAME }}-prod-identity-frontend
-        run: aws s3 cp dist/ s3://"$FRONTEND_S3_BUCKET_NAME"/ --recursive
+          FRONTEND_S3_BUCKET_NAME: ${{ secrets.APP_NAME }}
+          PATH: identity
+        run: aws s3 cp dist/ s3://"$FRONTEND_S3_BUCKET_NAME"/_s3/"$PATH" --recursive
+
+      - name: Invalidate Cache on Cloudfront if CLOUDFRONT_DISTRIBUTION_ID provided
+        env:
+          CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          PATH: /_s3/identity/*
+        run: |
+          if [[ ! -z "$CLOUDFRONT_DISTRIBUTION_ID" ]]
+          then
+            aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "$PATH"
+          fi
