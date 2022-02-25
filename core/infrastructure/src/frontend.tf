@@ -25,3 +25,12 @@ resource "aws_s3_bucket_policy" "frontend" {
     Version   = "2012-10-17"
   })
 }
+resource "aws_s3_bucket_website_configuration" "frontend" {
+  bucket = aws_s3_bucket.frontend.bucket
+  error_document {
+    key = "_s3/core/index.html"
+  }
+  index_document {
+    suffix = "index.html"
+  }
+}
