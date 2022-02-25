@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const deps = require('./package.json').dependencies;
 
-const APP_IDENTITY_BUCKET_NAME = process.env.APP_IDENTITY_BUCKET_NAME || 'devdiary.link-prod-identity-frontend';
+const APP_IDENTITY_BUCKET_NAME = process.env.APP_IDENTITY_BUCKET_NAME || 'devdiary.link/_s3/identity';
 
 module.exports = {
     entry: path.join(__dirname, "src", "index.js"),

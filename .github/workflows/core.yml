@@ -69,7 +69,7 @@ jobs:
 
       - name: Build
         env:
-          APP_IDENTITY_BUCKET_NAME: ${{ secrets.APP_NAME }}-prod-identity-frontend
+          APP_IDENTITY_BUCKET_NAME: ${{ secrets.APP_NAME }}/_s3/identity
         run: npm run build
 
       - name: Upload to S3
