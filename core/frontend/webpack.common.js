@@ -4,12 +4,13 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 const deps = require('./package.json').dependencies;
 
 const APP_IDENTITY_BUCKET_NAME = process.env.APP_IDENTITY_BUCKET_NAME || 'devdiary.link/_s3/identity';
+const ASSETS_PUBLIC_PATH = process.env.ASSETS_PUBLIC_PATH || '/';
 
 module.exports = {
     entry: path.join(__dirname, "src", "index.js"),
     output: {
         path: path.resolve(__dirname, "dist"),
-        publicPath: "auto",
+        publicPath: ASSETS_PUBLIC_PATH,
     },
     module: {
         rules: [
