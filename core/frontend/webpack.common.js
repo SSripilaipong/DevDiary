@@ -1,5 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const deps = require('./package.json').dependencies;
+
+const APP_IDENTITY_BUCKET_NAME = process.env.APP_IDENTITY_BUCKET_NAME || 'devdiary.link-prod-identity-frontend';
 
 module.exports = {
     entry: path.join(__dirname, "src", "index.js"),
@@ -24,5 +28,23 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "src", "index.html"),
         }),
-    ],
+        new ModuleFederationPlugin({
+            name: 'core',
+            filename: 'remoteEntry.js',
+            remotes: {
+                identity: `identity@https://s3.ap-southeast-1.amazonaws.com/${APP_IDENTITY_BUCKET_NAME}/remoteEntry.js`,
+            },
+            shared: {
+                ...deps,
+                react: {
+                    singleton: true,
+                    requiredVersion: deps.react,
+                },
+                'react-dom': {
+                    singleton: true,
+                    requiredVersion: deps['react-dom'],
+                },
+            },
+        }),
+    ]
 }

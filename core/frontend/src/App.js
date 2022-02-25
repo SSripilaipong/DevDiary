@@ -5,7 +5,6 @@ import HomePage from "./Pages/Home";
 import LoginPage from "./Pages/Login";
 import RegisterPage from "./Pages/Register";
 
-
 export default function App() {
     return (
         <BrowserRouter>
@@ -16,7 +15,7 @@ export default function App() {
                 }}
             >
                 <Link to="/home">Home</Link> | {" "}
-                <Link to="/login">Login</Link>
+                <Link to="/login">Login</Link> | {" "}
                 <Link to="/register">Register</Link>
             </nav>
             <Routes>
