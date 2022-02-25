@@ -9,7 +9,7 @@ module.exports = merge(common, {
             name: 'identity',
             filename: 'remoteEntry.js',
             exposes: {
-                './Button': './src/Button',
+                './Register': './src/Register',
             },
         }),
     ],
