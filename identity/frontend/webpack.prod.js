@@ -14,6 +14,7 @@ module.exports = merge(common, {
             shared: {
                 react: {
                     eager: true,
+                    singleton: true,
                 },
             },
         }),
