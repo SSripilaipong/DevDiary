@@ -7,5 +7,5 @@ variable RESOURCE_SHARING_BUCKET_NAME {
 }
 
 data "aws_s3_bucket" "resource-sharing" {
-  name = var.RESOURCE_SHARING_BUCKET_NAME
+  bucket = var.RESOURCE_SHARING_BUCKET_NAME
 }
