@@ -23,13 +23,20 @@ resource "aws_lambda_function" "backend" {
 
   s3_bucket = data.aws_s3_bucket.resource-sharing.id
   s3_key    = "template/lambda-default.zip"
+  source_code_hash = base64sha256("NO NEED")
 
   runtime = "python3.9"
   handler = "default.handler"
 
-  source_code_hash = base64sha256("NO NEED")
-
   role = aws_iam_role.backend-exec.arn
+
+  lifecycle {
+    ignore_changes = [
+      "s3_bucket",
+      "s3_key",
+      "source_code_hash",  # will be deployed by workflow
+    ]
+  }
   depends_on = [
     aws_iam_role.backend-exec,
   ]
