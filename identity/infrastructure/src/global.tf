@@ -15,5 +15,5 @@ data "aws_apigatewayv2_apis" "core" {
 }
 
 data "aws_apigatewayv2_api" "core" {
-  api_id = data.aws_apigatewayv2_apis.core
+  api_id = data.aws_apigatewayv2_apis.core.ids[0]
 }
