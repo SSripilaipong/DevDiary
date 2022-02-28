@@ -15,5 +15,6 @@ data "aws_apigatewayv2_apis" "core" {
 }
 
 data "aws_apigatewayv2_api" "core" {
-  api_id = data.aws_apigatewayv2_apis.core.ids[0]
+  for_each = data.aws_apigatewayv2_apis.core.ids
+  api_id = each
 }
