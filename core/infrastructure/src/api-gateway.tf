@@ -5,6 +5,6 @@ resource "aws_apigatewayv2_api" "api-gateway" {
 
 resource "aws_apigatewayv2_stage" "api-gateway" {
   api_id = aws_apigatewayv2_api.api-gateway.id
-  name        = var.GLOBAL_PREFIX
+  name        = "$default"
   auto_deploy = true
 }
