@@ -35,6 +35,7 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           TF_BACKEND_BUCKET_NAME: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
           TF_BACKEND_BUCKET_PATH: prod/core.tfstate
+          TF_VAR_GLOBAL_PREFIX: prod
           TF_VAR_FRONTEND_S3_BUCKET_NAME: ${{ secrets.APP_NAME }}
           TF_VAR_RESOURCE_SHARING_BUCKET_NAME: ${{ secrets.APP_NAME }}-resource-sharing
         run: |
