@@ -16,5 +16,5 @@ data "aws_apigatewayv2_apis" "core" {
 
 data "aws_apigatewayv2_api" "core" {
   for_each = data.aws_apigatewayv2_apis.core.ids
-  api_id = each
+  api_id = each.value
 }
