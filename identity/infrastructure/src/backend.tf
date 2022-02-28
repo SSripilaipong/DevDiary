@@ -47,3 +47,27 @@ resource "aws_iam_role_policy_attachment" "backend-policy" {
     aws_iam_role.backend-exec,
   ]
 }
+
+resource "aws_apigatewayv2_integration" "backend" {
+  api_id = data.aws_apigatewayv2_api.core.id
+
+  integration_uri    = aws_lambda_function.backend.invoke_arn
+  integration_type   = "AWS_PROXY"
+  integration_method = "POST"
+}
+
+resource "aws_lambda_permission" "api-gateway" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.backend.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${data.aws_apigatewayv2_api.core.execution_arn}/*/*"
+}
+
+resource "aws_apigatewayv2_route" "GET_hello" {
+  api_id = data.aws_apigatewayv2_api.core.id
+
+  route_key = "GET /hello"
+  target    = "integrations/${aws_apigatewayv2_integration.backend.id}"
+}
