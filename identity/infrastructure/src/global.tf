@@ -13,3 +13,7 @@ data "aws_s3_bucket" "resource-sharing" {
 data "aws_apigatewayv2_apis" "core" {
   name          = var.GLOBAL_PREFIX
 }
+
+data "aws_apigatewayv2_api" "core" {
+  api_id = data.aws_apigatewayv2_apis.core
+}
