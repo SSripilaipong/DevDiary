@@ -82,7 +82,7 @@ resource "aws_apigatewayv2_integration" "say-hello" {
   payload_format_version = "2.0"
 
   request_parameters = {
-    "header.X-DevDiary-Operation": "'SayHello'",
+    "overwrite:header.X-DevDiary-Operation": "SayHello",
   }
 }
 
@@ -102,7 +102,7 @@ resource "aws_apigatewayv2_integration" "say-hello-with-body" {
   payload_format_version = "2.0"
 
   request_parameters = {
-    "header.X-DevDiary-Operation": "'SayHelloWithBody'",
+    "overwrite:header.X-DevDiary-Operation": "SayHelloWithBody",
   }
 }
 
