@@ -64,15 +64,6 @@ resource "aws_iam_role_policy_attachment" "backend-policy" {
   ]
 }
 
-resource "aws_apigatewayv2_integration" "backend" {
-  api_id = data.aws_apigatewayv2_api.core.id
-
-  integration_uri    = aws_lambda_function.backend.invoke_arn
-  integration_type   = "AWS_PROXY"
-  integration_method = "POST"
-  payload_format_version = "2.0"
-}
-
 resource "aws_lambda_permission" "api-gateway" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
@@ -82,20 +73,42 @@ resource "aws_lambda_permission" "api-gateway" {
   source_arn = "${data.aws_apigatewayv2_api.core.execution_arn}/*/*"
 }
 
-resource "aws_apigatewayv2_route" "GET_hello" {
+resource "aws_apigatewayv2_integration" "say-hello" {
+  api_id = data.aws_apigatewayv2_api.core.id
+
+  integration_uri    = aws_lambda_function.backend.invoke_arn
+  integration_type   = "AWS_PROXY"
+  integration_method = "POST"
+  payload_format_version = "2.0"
+
+  request_parameters = {
+    "integration.request.header.X-${var.APP_NAME}-Operation": "SayHello",
+  }
+}
+
+resource "aws_apigatewayv2_route" "say-hello" {
   api_id = data.aws_apigatewayv2_api.core.id
 
   route_key = "GET /hello"
-  target    = "integrations/${aws_apigatewayv2_integration.backend.id}"
-
-  operation_name = "SayHello"
+  target    = "integrations/${aws_apigatewayv2_integration.say-hello.id}"
 }
 
-resource "aws_apigatewayv2_route" "POST_hello" {
+resource "aws_apigatewayv2_integration" "say-hello-with-body" {
+  api_id = data.aws_apigatewayv2_api.core.id
+
+  integration_uri    = aws_lambda_function.backend.invoke_arn
+  integration_type   = "AWS_PROXY"
+  integration_method = "POST"
+  payload_format_version = "2.0"
+
+  request_parameters = {
+    "integration.request.header.X-${var.APP_NAME}-Operation": "SayHelloWithBody",
+  }
+}
+
+resource "aws_apigatewayv2_route" "say-hello-with-body" {
   api_id = data.aws_apigatewayv2_api.core.id
 
   route_key = "POST /hello"
-  target    = "integrations/${aws_apigatewayv2_integration.backend.id}"
-
-  operation_name = "SayHelloWithBody"
+  target    = "integrations/${aws_apigatewayv2_integration.say-hello-with-body.id}"
 }
