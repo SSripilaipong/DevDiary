@@ -87,6 +87,8 @@ resource "aws_apigatewayv2_route" "GET_hello" {
 
   route_key = "GET /hello"
   target    = "integrations/${aws_apigatewayv2_integration.backend.id}"
+
+  operation_name = "SayHello"
 }
 
 resource "aws_apigatewayv2_route" "POST_hello" {
@@ -94,4 +96,6 @@ resource "aws_apigatewayv2_route" "POST_hello" {
 
   route_key = "POST /hello"
   target    = "integrations/${aws_apigatewayv2_integration.backend.id}"
+
+  operation_name = "SayHelloWithBody"
 }
