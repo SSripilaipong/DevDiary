@@ -47,7 +47,7 @@ resource "aws_lambda_function" "backend" {
 
   depends_on = [
     aws_iam_role.backend-exec,
-    data.archive_file,
+    data.archive_file.lambda,
   ]
 }
 
