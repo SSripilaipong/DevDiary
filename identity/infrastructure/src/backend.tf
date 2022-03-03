@@ -70,6 +70,7 @@ resource "aws_apigatewayv2_integration" "backend" {
   integration_uri    = aws_lambda_function.backend.invoke_arn
   integration_type   = "AWS_PROXY"
   integration_method = "POST"
+  payload_format_version = "2.0"
 }
 
 resource "aws_lambda_permission" "api-gateway" {
