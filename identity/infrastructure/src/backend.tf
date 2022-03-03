@@ -86,3 +86,10 @@ resource "aws_apigatewayv2_route" "GET_hello" {
   route_key = "GET /hello"
   target    = "integrations/${aws_apigatewayv2_integration.backend.id}"
 }
+
+resource "aws_apigatewayv2_route" "GET_hello" {
+  api_id = data.aws_apigatewayv2_api.core.id
+
+  route_key = "POST /hello"
+  target    = "integrations/${aws_apigatewayv2_integration.backend.id}"
+}
