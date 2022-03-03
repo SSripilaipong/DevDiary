@@ -18,25 +18,33 @@ resource "aws_iam_role" "backend-exec" {
   })
 }
 
+data "archive_file" "lambda" {
+  type = "zip"
+  source_dir  = "../../backend/src"
+  output_path = "../../backend/lambda.zip"
+}
+
+resource "aws_s3_object" "lambda" {
+  bucket = aws_s3_bucket.identity.id
+
+  key    = "backend/lambda.zip"
+  source = data.archive_file.lambda.output_path
+
+  etag = filemd5(data.archive_file.lambda.output_path)
+}
+
 resource "aws_lambda_function" "backend" {
   function_name = local.BACKEND_NAME
 
-  s3_bucket = data.aws_s3_bucket.resource-sharing.id
-  s3_key    = "template/lambda-default.zip"
-  source_code_hash = base64sha256("NO NEED")
+  s3_bucket = aws_s3_bucket.identity.id
+  s3_key    = "backend/lambda.zip"
+  source_code_hash = data.archive_file.lambda.output_base64sha256
 
   runtime = "python3.9"
-  handler = "default.handler"
+  handler = "main.handler"
 
   role = aws_iam_role.backend-exec.arn
 
-  lifecycle {
-    ignore_changes = [
-      "s3_bucket",
-      "s3_key",
-      "source_code_hash",  # will be deployed by workflow
-    ]
-  }
   depends_on = [
     aws_iam_role.backend-exec,
   ]
