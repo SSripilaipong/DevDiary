@@ -36,8 +36,8 @@ resource "aws_s3_object" "lambda" {
 resource "aws_lambda_function" "backend" {
   function_name = local.BACKEND_NAME
 
-  s3_bucket = aws_s3_bucket.identity.id
-  s3_key    = "backend/lambda.zip"
+  s3_bucket = aws_s3_object.lambda.bucket
+  s3_key    = aws_s3_object.lambda.key
   source_code_hash = data.archive_file.lambda.output_base64sha256
 
   runtime = "python3.9"
@@ -47,6 +47,7 @@ resource "aws_lambda_function" "backend" {
 
   depends_on = [
     aws_iam_role.backend-exec,
+    data.archive_file,
   ]
 }
 

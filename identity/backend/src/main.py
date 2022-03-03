@@ -2,7 +2,7 @@ import json
 
 
 def handler(event, context):
-    print(event)
+    print("event:", event)
     return {
         "statusCode": 200,
         "headers": {
