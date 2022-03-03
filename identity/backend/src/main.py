@@ -7,7 +7,5 @@ service_event_mapper = ServiceEventMapper.from_list([
 
 
 def handler(event, context):
-    print('context:', context)
-    print('service_event:', event)
     service_event = service_event_mapper.map(event)
     return service_event.handle()
