@@ -1,17 +1,13 @@
-import json
-from lambda_event.api_gateway import RawApiGatewayEvent
+from api_gateway.service_event import ApiGatewayServiceEvent
+from lambda_handler.mapper.mapper import ServiceEventMapper
+
+service_event_mapper = ServiceEventMapper.from_list([
+    ApiGatewayServiceEvent,
+])
 
 
 def handler(event, context):
     print('context:', context)
-    print('event:', event)
-    print(RawApiGatewayEvent(**event))
-    return {
-        "statusCode": 200,
-        "headers": {
-            "Content-Type": "application/json",
-        },
-        "body": json.dumps({
-            "message": "OK!",
-        }),
-    }
+    print('service_event:', event)
+    service_event = service_event_mapper.map(event)
+    return service_event.handle()

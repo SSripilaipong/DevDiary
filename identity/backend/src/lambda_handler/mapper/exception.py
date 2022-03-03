@@ -1,0 +1,2 @@
+class NoServiceEventMatchedException(Exception):
+    pass
