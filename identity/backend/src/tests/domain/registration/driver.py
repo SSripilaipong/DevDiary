@@ -1,7 +1,7 @@
 from devdiary.specification.registration import RegistrationDriver
 
 from domain.identity.registration.usecase import register_user, confirm_registration
-from domain.identity.login.usecase import login_with_username_and_password
+from domain.identity.usecase.login import login_with_username_and_password
 from domain.identity.user.usecase import get_username_from_user_token
 from domain.registry import Registry
 from in_memory_email_service import EmailServiceInMemory
