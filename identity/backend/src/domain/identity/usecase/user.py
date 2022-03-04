@@ -1,5 +1,5 @@
 from domain.identity.user.user import User
-from domain.identity.authentication.token import get_username_from_user_token as _get_username_from_user_token
+from domain.identity.security.token import get_username_from_user_token as _get_username_from_user_token
 from domain.identity.value_object.username import Username
 from domain.registry import Registry
 

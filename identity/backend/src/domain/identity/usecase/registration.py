@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from chamber.transaction import transaction
-from domain.identity.authentication.password import hash_password
+from domain.identity.security.password import hash_password
 from domain.identity.registration.registration import Registration
 from domain.identity.value_object.username import Username
 from domain.registry import Registry

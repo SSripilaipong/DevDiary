@@ -1,5 +1,5 @@
-from domain.identity.authentication.password import check_password
-from domain.identity.authentication.token import generate_user_token
+from domain.identity.security.password import check_password
+from domain.identity.security.token import generate_user_token
 from domain.identity.usecase.login.exception import LoginFailedException
 from domain.identity.value_object.username import Username, InvalidUsernameException
 from domain.registry import Registry

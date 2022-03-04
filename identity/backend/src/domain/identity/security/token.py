@@ -2,7 +2,7 @@ from typing import Dict
 
 import jwt
 
-from domain.identity.authentication.exception import UserTokenValidationFailedException, UserTokenExpiredException
+from domain.identity.security.exception import UserTokenValidationFailedException, UserTokenExpiredException
 from domain.identity.user.user import User
 from domain.registry import Registry
 
