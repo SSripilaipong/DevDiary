@@ -1,0 +1,2 @@
+class InvalidAggregateVersionException(Exception):
+    pass

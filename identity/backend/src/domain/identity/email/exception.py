@@ -1,0 +1,2 @@
+class ConfirmationEmailNotFoundException(Exception):
+    pass
