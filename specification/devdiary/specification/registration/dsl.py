@@ -10,7 +10,8 @@ class RegistrationDsl(Dsl):
         self.driver.submit_registration(username, password, display_name, email)
 
     def confirm_registration(self, email: str):
-        self.driver.confirm_registration_by_email(email)
+        confirmation_code = self.driver.get_confirmation_code_from_email(email)
+        self.driver.confirm_registration_by_email(email, confirmation_code)
 
     def login(self, username: str, password: str):
         self.driver.login_with_username_and_password(username, password)

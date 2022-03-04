@@ -8,7 +8,11 @@ class RegistrationDriver(Driver, ABC):
         pass
 
     @abstractmethod
-    def confirm_registration_by_email(self, email: str):
+    def get_confirmation_code_from_email(self, email: str) -> str:
+        pass
+
+    @abstractmethod
+    def confirm_registration_by_email(self, email: str, confirmation_code: str):
         pass
 
     @abstractmethod
