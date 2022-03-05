@@ -51,6 +51,16 @@ def test_should_accept_anything_when_create_as_is():
     assert WithConstraints.as_is("X").str() == "X"
 
 
+def test_should_match_pattern():
+    SimpleUrl('https://www.google.com')
+    SimpleUrl('http://www.youtube.com')
+
+
+def test_should_raise_PatternNotMatchedException():
+    with raises(SimpleUrl.PatternNotMatchedException):
+        SimpleUrl('www.google.c')
+
+
 class NoConstraint(StringFlat):
     pass
 
@@ -91,3 +101,7 @@ class WithConstraints(StringFlat):
 
 class CharactersRequired(StringFlat):
     REQUIRED_CHARACTER_SETS = ['abc', 'def', '123']
+
+
+class SimpleUrl(StringFlat):
+    PATTERN = r'^https?://[a-z0-9]+\.[a-z0-9]+\.com$'

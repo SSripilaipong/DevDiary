@@ -1,9 +1,9 @@
+import re
 from typing import Dict, Union, Set, List, Type, TypeVar
 
 from chamber.flat.base import Flat
 from chamber.flat.string.validate_config import _validate_min_length_config, _validate_max_length_config, \
-    _validate_valid_characters_config, _validate_required_character_config
-
+    _validate_valid_characters_config, _validate_required_character_config, _validate_pattern_config
 
 F = TypeVar("F", bound="StringFlat")
 
@@ -13,6 +13,7 @@ class StringFlat(Flat):
     MAX_LENGTH: int = None
     VALID_CHARACTERS: Union[str, Set[str]] = None
     REQUIRED_CHARACTER_SETS: Union[str, List[str], List[Set[str]]] = None
+    PATTERN: Union[str, re.Pattern] = None
 
     def __init__(self, value: str):
         if value is None:
@@ -32,6 +33,7 @@ class StringFlat(Flat):
         cls._flat_validate_length(value)
         cls._flat_validate_valid_characters(value)
         cls._flat_validate_required_characters(value)
+        cls._flat_validate_pattern(value)
         return value
 
     @classmethod
@@ -66,12 +68,20 @@ class StringFlat(Flat):
                 required = [''.join(_char_set) for _char_set in cls.REQUIRED_CHARACTER_SETS]
                 raise cls.RequiredCharactersMissingException(f'Required characters are {required!r}.')
 
+    @classmethod
+    def _flat_validate_pattern(cls, value: str):
+        if cls.PATTERN is not None:
+            pattern: re.Pattern = cls.PATTERN
+            if not pattern.match(value):
+                raise cls.PatternNotMatchedException('Value must match with PATTERN.')
+
     def _validate_config(dct: Dict):
         validators = {
             "MIN_LENGTH": _validate_min_length_config,
             "MAX_LENGTH": _validate_max_length_config,
             "VALID_CHARACTERS": _validate_valid_characters_config,
             "REQUIRED_CHARACTER_SETS": _validate_required_character_config,
+            "PATTERN": _validate_pattern_config,
         }
 
         for field_name, validator in validators.items():
@@ -102,4 +112,7 @@ class StringFlat(Flat):
         pass
 
     class RequiredCharactersMissingException(Exception):
+        pass
+
+    class PatternNotMatchedException(Exception):
         pass

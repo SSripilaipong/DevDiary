@@ -1,3 +1,4 @@
+import re
 from typing import Set, List, Union
 
 
@@ -29,3 +30,8 @@ def _validate_required_character_config(required_characters) -> List[Set[str]]:
         assert isinstance(required_characters, (list, tuple))
         return [set(_set) for _set in required_characters]
     return []
+
+
+def _validate_pattern_config(pattern: Union[str, re.Pattern]) -> re.Pattern:
+    if pattern is not None:
+        return re.compile(pattern)
