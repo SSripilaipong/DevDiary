@@ -14,6 +14,14 @@ class StringFlat(Flat):
 
     @classmethod
     def _validate(cls, value: str) -> str:
+        value = cls._flat_ensure_string(value)
+        cls._flat_validate_length(value)
+        cls._flat_validate_valid_characters(value)
+        cls._flat_validate_required_characters(value)
+        return value
+
+    @classmethod
+    def _flat_ensure_string(cls, value) -> str:
         if not isinstance(value, str):
             if cls.CAST is None:
                 raise cls.InvalidTypeException(f"Only string value is accepted unless CAST function is specified "
@@ -24,23 +32,29 @@ class StringFlat(Flat):
                 raise cls.CastingFailedException(f"Casting with the provided CAST function failed (got {value!r}).")
             if not isinstance(value, str):
                 raise cls.CastingFailedException(f"CAST function should return string value (got {value!r}).")
+        return value
 
+    @classmethod
+    def _flat_validate_length(cls, value: str):
         if cls.MIN_LENGTH is not None and len(value) < cls.MIN_LENGTH:
             raise cls.TooShortException(f"Value must be at least {cls.MIN_LENGTH} length (got {len(value)}).")
         elif cls.MAX_LENGTH is not None and cls.MAX_LENGTH < len(value):
             raise cls.TooLongException(f"Value must be at most {cls.MIN_LENGTH} length (got {len(value)}).")
 
-        chars = set(value)
-        if cls.VALID_CHARACTERS is not None and chars - cls.VALID_CHARACTERS != set():
+    @classmethod
+    def _flat_validate_valid_characters(cls, value: str):
+        if cls.VALID_CHARACTERS is not None and set(value) - cls.VALID_CHARACTERS != set():
             raise cls.ContainsInvalidCharactersException(f"All characters must be a member of valid characters. "
                                                          f"(got {value})")
+
+    @classmethod
+    def _flat_validate_required_characters(cls, value: str):
         if cls.REQUIRED_CHARACTER_SETS is not None:
             for char_set in cls.REQUIRED_CHARACTER_SETS:  # type: Set[str]
-                if chars & char_set == set():
+                if set(value) & char_set == set():
                     required = [''.join(_char_set) for _char_set in cls.REQUIRED_CHARACTER_SETS]
                     raise cls.RequiredCharactersMissingException(f'Required characters are {required!r} '
                                                                  f'(got {value}).')
-        return value
 
     def _validate_config(dct: Dict):
         min_length = dct.get("MIN_LENGTH", None)
