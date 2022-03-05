@@ -1,10 +1,12 @@
+from typing import Dict, Union, Set
+
 from chamber.flat.base import Flat
 
 
 class StringFlat(Flat):
     MIN_LENGTH: int = None
     MAX_LENGTH: int = None
-    VALID_CHARACTERS: str = None
+    VALID_CHARACTERS: Union[str, Set[str]] = None
 
     def __init__(self, value: str):
         self._value = self._validate(value)
@@ -26,10 +28,24 @@ class StringFlat(Flat):
             raise cls.TooShortException(f"Value must be at least {cls.MIN_LENGTH} length (got {len(value)}).")
         elif cls.MAX_LENGTH is not None and cls.MAX_LENGTH < len(value):
             raise cls.TooLongException(f"Value must be at most {cls.MIN_LENGTH} length (got {len(value)}).")
-        if cls.VALID_CHARACTERS is not None and set(value) - set(cls.VALID_CHARACTERS) != set():
+        if cls.VALID_CHARACTERS is not None and set(value) - cls.VALID_CHARACTERS != set():
             raise cls.ContainsInvalidCharactersException(f"All characters must be a member of valid characters. "
                                                          f"(got {value})")
         return value
+
+    def _validate_config(dct: Dict):
+        min_length = dct.get("MIN_LENGTH", None)
+        if min_length is not None:
+            assert isinstance(min_length, int)
+
+        max_length = dct.get("MAX_LENGTH", None)
+        if max_length is not None:
+            assert isinstance(max_length, int)
+
+        chars = dct.get("VALID_CHARACTERS", None)
+        if chars is not None:
+            assert isinstance(chars, (str, set, list, tuple))
+            dct["VALID_CHARACTERS"] = set(dct["VALID_CHARACTERS"])
 
     def str(self) -> str:
         return self._value
