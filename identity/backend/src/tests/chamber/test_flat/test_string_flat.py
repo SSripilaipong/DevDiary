@@ -47,6 +47,10 @@ def test_should_raise_RequiredCharactersMissingException():
         CharactersRequired("aaaddd")
 
 
+def test_should_accept_anything_when_create_as_is():
+    assert WithConstraints.as_is("X").str() == "X"
+
+
 class NoConstraint(StringFlat):
     pass
 

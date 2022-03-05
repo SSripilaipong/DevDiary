@@ -1,8 +1,11 @@
-from typing import Dict, Union, Set, List
+from typing import Dict, Union, Set, List, Type, TypeVar
 
 from chamber.flat.base import Flat
 from chamber.flat.string.validate_config import _validate_min_length_config, _validate_max_length_config, \
     _validate_valid_characters_config, _validate_required_character_config
+
+
+F = TypeVar("F", bound="StringFlat")
 
 
 class StringFlat(Flat):
@@ -12,7 +15,16 @@ class StringFlat(Flat):
     REQUIRED_CHARACTER_SETS: Union[str, List[str], List[Set[str]]] = None
 
     def __init__(self, value: str):
-        self._value = self._validate(value)
+        if value is None:
+            self._value = None
+        else:
+            self._value = self._validate(value)
+
+    @classmethod
+    def as_is(cls: Type[F], value: str) -> F:
+        flat = cls(None)
+        flat._value = value
+        return flat
 
     @classmethod
     def _validate(cls, value: str) -> str:
@@ -66,7 +78,7 @@ class StringFlat(Flat):
             dct[field_name] = validator(dct.get(field_name, None))
 
     def str(self) -> str:
-        return self._value
+        return str(self._value)
 
     def __str__(self) -> str:
         return self.str()
