@@ -3,6 +3,8 @@ from devdiary.specification.registration import RegistrationDriver
 from domain.identity.usecase.registration import register_user, confirm_registration
 from domain.identity.usecase.login import login_with_username_and_password
 from domain.identity.usecase.user import get_username_from_user_token
+from domain.identity.value_object.password import Password
+from domain.identity.value_object.username import Username
 from domain.registry import Registry
 from event.subscription import subscribe_for_messages
 from in_memory_email_service import EmailServiceInMemory
@@ -30,10 +32,12 @@ class DomainRegistrationDriver(RegistrationDriver):
     def submit_registration(self, username: str, password: str, display_name: str, email: str):
         """
         :raises:
+            InvalidUsernameException
+            InvalidPasswordException
             EmailAlreadyRegisteredException
             UsernameAlreadyRegisteredException
         """
-        register_user(username, password, display_name, email)
+        register_user(Username(username), Password(password), display_name, email)
 
     def get_confirmation_code_from_email(self, email: str) -> str:
         """
@@ -46,7 +50,7 @@ class DomainRegistrationDriver(RegistrationDriver):
         confirm_registration(email, confirmation_code)
 
     def login_with_username_and_password(self, username: str, password: str):
-        self._user_token = login_with_username_and_password(username, password)
+        self._user_token = login_with_username_and_password(Username.as_is(username), Password.as_is(password))
 
     def get_current_username(self) -> str:
         return get_username_from_user_token(self._user_token).str()

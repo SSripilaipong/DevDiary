@@ -8,7 +8,7 @@ from domain.identity.value_object.username import Username
 from domain.registry import Registry
 
 
-def register_user(username: str, password: str, display_name: str, email: str) -> Registration:
+def register_user(username: Username, password: Password, display_name: str, email: str) -> Registration:
     """
     :raises:
         EmailAlreadyRegisteredException
@@ -16,8 +16,7 @@ def register_user(username: str, password: str, display_name: str, email: str) -
     """
     all_registrations = Registry().all_registrations
     confirmation_code = all_registrations.generate_confirmation_code()
-    registration = Registration.create(Username(username), hash_password(Password(password)), display_name, email,
-                                       confirmation_code)
+    registration = Registration.create(username, hash_password(password), display_name, email, confirmation_code)
     return all_registrations.create(registration)
 
 

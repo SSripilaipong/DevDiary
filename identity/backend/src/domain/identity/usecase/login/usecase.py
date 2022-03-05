@@ -7,15 +7,15 @@ from domain.identity.value_object.username.exception import InvalidUsernameExcep
 from domain.registry import Registry
 
 
-def login_with_username_and_password(username: str, password: str) -> str:
+def login_with_username_and_password(username: Username, password: Password) -> str:
     """
     :raises:
         LoginFailedException
     """
     try:
-        user = Registry().all_users.from_username(Username(username))
+        user = Registry().all_users.from_username(username)
     except InvalidUsernameException:
         raise LoginFailedException()
-    if check_password(Password.as_is(password), user.password_hashed):
+    if check_password(password, user.password_hashed):
         return generate_user_token(user)
     raise LoginFailedException()
