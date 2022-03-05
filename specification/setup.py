@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 NAME = 'devdiary-specification'
-VERSION = '0.0.3'
+VERSION = '0.0.4'
 URL = 'https://github.com/SSripilaipong/DevDiary/tree/main/specification'
 LICENSE = 'MIT'
 AUTHOR = 'SSripilaipong'
