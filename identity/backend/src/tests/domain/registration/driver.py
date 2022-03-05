@@ -4,6 +4,7 @@ from domain.identity.usecase.registration import register_user, confirm_registra
 from domain.identity.usecase.login import login_with_username_and_password
 from domain.identity.usecase.user import get_username_from_user_token
 from domain.registry import Registry
+from event.subscription import subscribe_for_messages
 from in_memory_email_service import EmailServiceInMemory
 from in_memory_persistence.identity.registration.repository import AllRegistrationsInMemory
 from in_memory_persistence.identity.user.repository import AllUsersInMemory
@@ -16,10 +17,13 @@ class DomainRegistrationDriver(RegistrationDriver):
         self._user_token = user_token
         self._email_service = EmailServiceInMemory()
 
+        message_bus = SynchronousMessageBus()
+        subscribe_for_messages(message_bus)
+
         registry = Registry()
         registry.all_registrations = AllRegistrationsInMemory()
         registry.all_users = AllUsersInMemory()
-        registry.message_bus = SynchronousMessageBus()
+        registry.message_bus = message_bus
         registry.secret_manager = RandomSecretManager()
         registry.email_service = self._email_service
 
