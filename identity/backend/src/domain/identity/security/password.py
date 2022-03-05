@@ -1,9 +1,11 @@
 import bcrypt
 
-
-def check_password(password: str, password_hashed: bytes) -> bool:
-    return bcrypt.checkpw(password.encode('ascii'), password_hashed)
+from domain.identity.value_object.password import Password
 
 
-def hash_password(password: str) -> bytes:
-    return bcrypt.hashpw(password.encode('ascii'), bcrypt.gensalt())
+def check_password(password: Password, password_hashed: bytes) -> bool:
+    return bcrypt.checkpw(password.str().encode('ascii'), password_hashed)
+
+
+def hash_password(password: Password) -> bytes:
+    return bcrypt.hashpw(password.str().encode('ascii'), bcrypt.gensalt())

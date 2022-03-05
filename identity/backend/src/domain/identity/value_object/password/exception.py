@@ -6,7 +6,7 @@ class PasswordMustBeStringException(InvalidPasswordException):
     pass
 
 
-class PasswordMustContainRequiredCharacters(InvalidPasswordException):
+class PasswordMustContainRequiredCharactersException(InvalidPasswordException):
     pass
 
 

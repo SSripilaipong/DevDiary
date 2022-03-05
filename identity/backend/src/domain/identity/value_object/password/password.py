@@ -2,7 +2,7 @@ import string
 
 from chamber.flat.string import StringFlat
 from domain.identity.value_object.password.exception import (
-    PasswordMustBeStringException, PasswordMustContainRequiredCharacters, PasswordTooShortException,
+    PasswordMustBeStringException, PasswordMustContainRequiredCharactersException, PasswordTooShortException,
     PasswordTooLongException,
 )
 
@@ -15,4 +15,4 @@ class Password(StringFlat):
     InvalidTypeException = PasswordMustBeStringException
     TooShortException = PasswordTooShortException
     TooLongException = PasswordTooLongException
-    RequiredCharactersMissingException = PasswordMustContainRequiredCharacters
+    RequiredCharactersMissingException = PasswordMustContainRequiredCharactersException
