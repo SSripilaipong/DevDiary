@@ -9,12 +9,13 @@ from domain.identity.registration.exception import (
 from domain.identity.user.exception import UsernameAlreadyRegisteredException
 from domain.identity.registration.registration import Registration
 from domain.identity.registration.repository import AllRegistrations
+from domain.identity.value_object.email import Email
 from domain.identity.value_object.username import Username
 from domain.registry import Registry
 
 
 class AllRegistrationsInMemory(AllRegistrations):
-    def __init__(self, registrations: Dict[str, Registration] = None,
+    def __init__(self, registrations: Dict[Email, Registration] = None,
                  active_or_confirmed_usernames: Set[Username] = None):
         self._registrations = registrations or dict()
         self._active_or_confirmed_usernames = active_or_confirmed_usernames or set()
@@ -33,7 +34,7 @@ class AllRegistrationsInMemory(AllRegistrations):
         self._store_and_handle_outbox(registration)
         return registration
 
-    def from_email(self, email: str) -> Registration:
+    def from_email(self, email: Email) -> Registration:
         """
         :raises:
             RegistrationNotFoundException

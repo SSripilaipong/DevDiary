@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from domain.identity.registration.registration import Registration
+from domain.identity.value_object.email import Email
 
 
 class AllRegistrations(ABC):
@@ -17,7 +18,7 @@ class AllRegistrations(ABC):
         """
 
     @abstractmethod
-    def from_email(self, email: str) -> Registration:
+    def from_email(self, email: Email) -> Registration:
         """
         :raises:
             RegistrationNotFoundException

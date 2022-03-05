@@ -1,15 +1,16 @@
 from typing import Dict
 
 from chamber.message import Message
+from domain.identity.value_object.email import Email
 
 
 class RegistrationEmailNeededToBeConfirmedEvent(Message):
-    def __init__(self, email: str, confirmation_code: str):
+    def __init__(self, email: Email, confirmation_code: str):
         self._email = email
         self._confirmation_code = confirmation_code
 
     @property
-    def email(self) -> str:
+    def email(self) -> Email:
         return self._email
 
     @property
@@ -18,13 +19,13 @@ class RegistrationEmailNeededToBeConfirmedEvent(Message):
 
     def _body_to_dict(self) -> Dict:
         return {
-            "email": self._email,
+            "email": self._email.str(),
             "confirmation_code": self._confirmation_code,
         }
 
     @classmethod
     def _body_from_dict(cls, obj: Dict) -> 'RegistrationEmailNeededToBeConfirmedEvent':
         return cls(
-            email=obj.get('email'),
+            email=Email.as_is(obj.get('email')),
             confirmation_code=obj.get('confirmation_code'),
         )

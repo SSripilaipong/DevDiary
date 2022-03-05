@@ -3,12 +3,13 @@ from typing import TYPE_CHECKING
 from chamber.transaction import transaction
 from domain.identity.security.password import hash_password
 from domain.identity.registration.registration import Registration
+from domain.identity.value_object.email import Email
 from domain.identity.value_object.password import Password
 from domain.identity.value_object.username import Username
 from domain.registry import Registry
 
 
-def register_user(username: Username, password: Password, display_name: str, email: str) -> Registration:
+def register_user(username: Username, password: Password, display_name: str, email: Email) -> Registration:
     """
     :raises:
         EmailAlreadyRegisteredException
@@ -21,7 +22,7 @@ def register_user(username: Username, password: Password, display_name: str, ema
 
 
 @transaction
-def confirm_registration(email: str, confirmation_code: str):
+def confirm_registration(email: Email, confirmation_code: str):
     """
     :raises:
         RegistrationNotFoundException
@@ -34,9 +35,9 @@ def confirm_registration(email: str, confirmation_code: str):
     all_registrations.save(registration)
 
 
-def send_confirmation_email(email: str, confirmation_code: str):
+def send_confirmation_email(email: Email, confirmation_code: str):
     Registry().email_service.send_confirmation_email(email, confirmation_code)
 
 
 if TYPE_CHECKING:
-    def confirm_registration(email: str, confirmation_code: str): ...
+    def confirm_registration(email: Email, confirmation_code: str): ...

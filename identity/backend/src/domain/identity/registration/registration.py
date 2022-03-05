@@ -5,11 +5,12 @@ from domain.identity.registration.event.confirmed import RegistrationConfirmedEv
 from domain.identity.registration.exception import (
     RegistrationCanNotBeConfirmedTwiceException, RegistrationConfirmationCodeNotMatchedException,
 )
+from domain.identity.value_object.email import Email
 from domain.identity.value_object.username import Username
 
 
 class Registration(Aggregate):
-    def __init__(self, username: Username, password_hashed: bytes, display_name: str, email: str, is_confirmed: bool,
+    def __init__(self, username: Username, password_hashed: bytes, display_name: str, email: Email, is_confirmed: bool,
                  confirmation_code: str, _version: AggregateVersion):
         super().__init__(aggregate_version=_version)
         self._username = username
@@ -20,7 +21,7 @@ class Registration(Aggregate):
         self._confirmation_code = confirmation_code
 
     @classmethod
-    def create(cls, username: Username, password_hashed: bytes, display_name: str, email: str,
+    def create(cls, username: Username, password_hashed: bytes, display_name: str, email: Email,
                confirmation_code: str) -> 'Registration':
         registration = cls(username, password_hashed, display_name, email,
                            is_confirmed=False, confirmation_code=confirmation_code, _version=AggregateVersion.create(0))
@@ -55,5 +56,5 @@ class Registration(Aggregate):
         return self._password_hashed
 
     @property
-    def email(self) -> str:
+    def email(self) -> Email:
         return self._email
