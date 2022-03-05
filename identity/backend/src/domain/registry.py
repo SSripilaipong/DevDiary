@@ -14,7 +14,7 @@ class Registry(ChamberRegistry):
         self.all_users: Optional[AllUsers] = None
         self.email_service: Optional[EmailService] = None
         self.secret_manager: Optional[SecretManager] = None
-        self._message_bus: Optional[MessageBus] = None
+        self.message_bus: Optional[MessageBus] = None
 
 
 if TYPE_CHECKING:
