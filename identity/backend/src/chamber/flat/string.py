@@ -1,4 +1,4 @@
-from typing import Dict, Union, Set
+from typing import Dict, Union, Set, List
 
 from chamber.flat.base import Flat
 
@@ -7,6 +7,7 @@ class StringFlat(Flat):
     MIN_LENGTH: int = None
     MAX_LENGTH: int = None
     VALID_CHARACTERS: Union[str, Set[str]] = None
+    REQUIRED_CHARACTER_SETS: Union[str, List[str], List[Set[str]]] = None
 
     def __init__(self, value: str):
         self._value = self._validate(value)
@@ -28,9 +29,17 @@ class StringFlat(Flat):
             raise cls.TooShortException(f"Value must be at least {cls.MIN_LENGTH} length (got {len(value)}).")
         elif cls.MAX_LENGTH is not None and cls.MAX_LENGTH < len(value):
             raise cls.TooLongException(f"Value must be at most {cls.MIN_LENGTH} length (got {len(value)}).")
-        if cls.VALID_CHARACTERS is not None and set(value) - cls.VALID_CHARACTERS != set():
+
+        chars = set(value)
+        if cls.VALID_CHARACTERS is not None and chars - cls.VALID_CHARACTERS != set():
             raise cls.ContainsInvalidCharactersException(f"All characters must be a member of valid characters. "
                                                          f"(got {value})")
+        if cls.REQUIRED_CHARACTER_SETS is not None:
+            for char_set in cls.REQUIRED_CHARACTER_SETS:  # type: Set[str]
+                if chars & char_set == set():
+                    required = [''.join(_char_set) for _char_set in cls.REQUIRED_CHARACTER_SETS]
+                    raise cls.RequiredCharactersMissingException(f'Required characters are {required!r} '
+                                                                 f'(got {value}).')
         return value
 
     def _validate_config(dct: Dict):
@@ -46,6 +55,14 @@ class StringFlat(Flat):
         if chars is not None:
             assert isinstance(chars, (str, set, list, tuple))
             dct["VALID_CHARACTERS"] = set(dct["VALID_CHARACTERS"])
+
+        char_sets = dct.get("REQUIRED_CHARACTER_SETS", None)
+        if char_sets is not None:
+            if isinstance(char_sets, str):
+                dct["REQUIRED_CHARACTER_SETS"] = set(char_sets)
+            else:
+                assert isinstance(char_sets, (list, tuple))
+                dct["REQUIRED_CHARACTER_SETS"] = [set(_set) for _set in char_sets]
 
     def str(self) -> str:
         return self._value
@@ -69,4 +86,7 @@ class StringFlat(Flat):
         pass
 
     class ContainsInvalidCharactersException(Exception):
+        pass
+
+    class RequiredCharactersMissingException(Exception):
         pass

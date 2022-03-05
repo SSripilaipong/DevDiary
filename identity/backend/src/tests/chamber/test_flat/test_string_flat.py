@@ -42,6 +42,11 @@ def test_should_raise_ContainsInvalidCharactersException():
         WithConstraints("bbb")
 
 
+def test_should_raise_RequiredCharactersMissingException():
+    with raises(CharactersRequired.RequiredCharactersMissingException):
+        CharactersRequired("aaaddd")
+
+
 class NoConstraint(StringFlat):
     pass
 
@@ -78,3 +83,7 @@ class WithConstraints(StringFlat):
     MIN_LENGTH = 3
     MAX_LENGTH = 5
     VALID_CHARACTERS = "a"
+
+
+class CharactersRequired(StringFlat):
+    REQUIRED_CHARACTER_SETS = ['abc', 'def', '123']
