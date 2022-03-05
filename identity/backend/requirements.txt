@@ -1,5 +1,5 @@
 pydantic==1.9.0
-devdiary-specification==0.0.3
+devdiary-specification==0.0.4
 respec==0.0.2
 bcrypt==3.2.0
 PyJWT==2.3.0
