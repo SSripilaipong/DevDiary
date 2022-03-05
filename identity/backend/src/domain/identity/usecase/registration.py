@@ -15,7 +15,7 @@ def register_user(username: str, password: str, display_name: str, email: str) -
     """
     all_registrations = Registry().all_registrations
     confirmation_code = all_registrations.generate_confirmation_code()
-    registration = Registration.create(Username.create(username), hash_password(password), display_name, email,
+    registration = Registration.create(Username(username), hash_password(password), display_name, email,
                                        confirmation_code)
     return all_registrations.create(registration)
 

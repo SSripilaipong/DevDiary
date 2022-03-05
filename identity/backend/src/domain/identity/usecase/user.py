@@ -17,4 +17,4 @@ def create_new_user_from_registered_email(email: str):
 
 
 def get_username_from_user_token(user_token: str) -> Username:
-    return Username.create(_get_username_from_user_token(user_token))
+    return Username(_get_username_from_user_token(user_token))
