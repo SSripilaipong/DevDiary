@@ -23,4 +23,4 @@ if TYPE_CHECKING:
     from domain.identity.registration.repository import AllRegistrations
     from domain.identity.user.repository import AllUsers
     from domain.identity.email.service import EmailService
-    from domain.identity.authentication.secret import SecretManager
+    from domain.identity.security.secret import SecretManager
