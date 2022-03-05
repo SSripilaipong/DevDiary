@@ -1,0 +1,2 @@
+class MessageTypeNotAllowedException(Exception):
+    pass

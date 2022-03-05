@@ -7,6 +7,7 @@ from domain.identity.value_object.password import Password
 from domain.identity.value_object.username import Username
 from domain.registry import Registry
 from event.subscription import subscribe_for_messages
+from event.publication import whitelist_messages
 from in_memory_email_service import EmailServiceInMemory
 from in_memory_persistence.identity.registration.repository import AllRegistrationsInMemory
 from in_memory_persistence.identity.user.repository import AllUsersInMemory
@@ -19,13 +20,10 @@ class DomainRegistrationDriver(RegistrationDriver):
         self._user_token = user_token
         self._email_service = EmailServiceInMemory()
 
-        message_bus = SynchronousMessageBus()
-        subscribe_for_messages(message_bus)
-
         registry = Registry()
         registry.all_registrations = AllRegistrationsInMemory()
         registry.all_users = AllUsersInMemory()
-        registry.message_bus = message_bus
+        registry.message_bus = _get_message_bus()
         registry.secret_manager = RandomSecretManager()
         registry.email_service = self._email_service
 
@@ -54,3 +52,10 @@ class DomainRegistrationDriver(RegistrationDriver):
 
     def get_current_username(self) -> str:
         return get_username_from_user_token(self._user_token).str()
+
+
+def _get_message_bus() -> SynchronousMessageBus:
+    message_bus = SynchronousMessageBus()
+    subscribe_for_messages(message_bus)
+    whitelist_messages(message_bus)
+    return message_bus
