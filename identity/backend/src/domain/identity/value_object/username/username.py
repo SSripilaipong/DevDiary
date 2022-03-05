@@ -6,8 +6,6 @@ from domain.identity.value_object.username.exception import (
     UsernameTooLongException,
 )
 
-_VALID_CHARACTERS = string.digits + string.ascii_lowercase + string.ascii_uppercase
-
 
 class Username(StringFlat):
     MIN_LENGTH = 4
