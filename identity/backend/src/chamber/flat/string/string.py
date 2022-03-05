@@ -26,14 +26,13 @@ class StringFlat(Flat):
     def _flat_ensure_string(cls, value) -> str:
         if not isinstance(value, str):
             if cls.CAST is None:
-                raise cls.InvalidTypeException(f"Only string value is accepted unless CAST function is specified "
-                                               f"(got {value!r}).")
+                raise cls.InvalidTypeException(f"Only string value is accepted unless CAST function is specified.")
             try:
                 value = cls.CAST(value)
             except Exception:
-                raise cls.CastingFailedException(f"Casting with the provided CAST function failed (got {value!r}).")
+                raise cls.CastingFailedException(f"Casting with the provided CAST function failed.")
             if not isinstance(value, str):
-                raise cls.CastingFailedException(f"CAST function should return string value (got {value!r}).")
+                raise cls.CastingFailedException(f"CAST function should return string value.")
         return value
 
     @classmethod
@@ -46,16 +45,14 @@ class StringFlat(Flat):
     @classmethod
     def _flat_validate_valid_characters(cls, value: str):
         if cls.VALID_CHARACTERS != set() and set(value) - cls.VALID_CHARACTERS != set():
-            raise cls.ContainsInvalidCharactersException(f"All characters must be a member of valid characters. "
-                                                         f"(got {value})")
+            raise cls.ContainsInvalidCharactersException(f"All characters must be a member of valid characters.")
 
     @classmethod
     def _flat_validate_required_characters(cls, value: str):
         for char_set in cls.REQUIRED_CHARACTER_SETS:  # type: Set[str]
             if set(value) & char_set == set():
                 required = [''.join(_char_set) for _char_set in cls.REQUIRED_CHARACTER_SETS]
-                raise cls.RequiredCharactersMissingException(f'Required characters are {required!r} '
-                                                             f'(got {value}).')
+                raise cls.RequiredCharactersMissingException(f'Required characters are {required!r}.')
 
     def _validate_config(dct: Dict):
         validators = {
