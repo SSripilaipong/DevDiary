@@ -42,6 +42,7 @@ resource "aws_lambda_function" "backend" {
 
   runtime = "python3.9"
   handler = "app.main.handler"
+  timeout = 5
 
   role = aws_iam_role.backend-exec.arn
 
