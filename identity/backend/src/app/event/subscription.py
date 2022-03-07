@@ -1,5 +1,5 @@
 from chamber.message.bus import MessageBus
-from event.handler import handle_email_needed_confirmation, handle_registration_confirmed
+from app.event.handler import handle_email_needed_confirmation, handle_registration_confirmed
 from domain.identity.registration.event.confirmation_needed import RegistrationEmailNeededToBeConfirmedEvent
 from domain.identity.registration.event.confirmed import RegistrationConfirmedEvent
 

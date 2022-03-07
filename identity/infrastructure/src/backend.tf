@@ -41,7 +41,7 @@ resource "aws_lambda_function" "backend" {
   source_code_hash = data.archive_file.lambda.output_base64sha256
 
   runtime = "python3.9"
-  handler = "main.handler"
+  handler = "app.main.handler"
 
   role = aws_iam_role.backend-exec.arn
 

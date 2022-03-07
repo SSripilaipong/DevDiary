@@ -1,2 +1,2 @@
-class NoServiceEventMatchedException(Exception):
+class NoHandlerMatchedException(Exception):
     pass

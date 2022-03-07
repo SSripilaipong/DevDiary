@@ -1,19 +1,19 @@
-from typing import Dict, List, Type
+from typing import Dict, List
 
-from lambda_handler.mapper.exception import NoServiceEventMatchedException
-from lambda_handler.service_event.abstract import ServiceEvent
+from lambda_handler.mapper.exception import NoHandlerMatchedException
+from lambda_handler.service_event.handler import ServiceEventHandler
 
 
-class ServiceEventMapper:
-    def __init__(self, event_types: List[Type[ServiceEvent]]):
-        self._event_types = event_types
+class ServiceEventHandlerMapper:
+    def __init__(self, handlers: List[ServiceEventHandler]):
+        self._handlers = handlers
 
-    def map(self, raw_event: Dict) -> ServiceEvent:
-        for event_type in self._event_types:
-            if event_type.match(raw_event):
-                return event_type.from_raw_event(raw_event)
-        raise NoServiceEventMatchedException()
+    def map(self, raw_event: Dict) -> ServiceEventHandler:
+        for handler in self._handlers:
+            if handler.match(raw_event):
+                return handler
+        raise NoHandlerMatchedException()
 
     @classmethod
-    def from_list(cls, event_types: List[Type[ServiceEvent]]) -> 'ServiceEventMapper':
-        return cls(event_types)
+    def from_list(cls, handlers: List[ServiceEventHandler]) -> 'ServiceEventHandlerMapper':
+        return cls(handlers)

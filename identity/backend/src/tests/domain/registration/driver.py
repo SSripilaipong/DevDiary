@@ -7,8 +7,8 @@ from domain.identity.value_object.email import Email
 from domain.identity.value_object.password import Password
 from domain.identity.value_object.username import Username
 from domain.registry import Registry
-from event.subscription import subscribe_for_messages
-from event.publication import whitelist_messages
+from app.event.subscription import subscribe_for_messages
+from app.event.publication import whitelist_messages
 from in_memory_email_service import EmailServiceInMemory
 from in_memory_persistence.identity.registration.repository import AllRegistrationsInMemory
 from in_memory_persistence.identity.user.repository import AllUsersInMemory

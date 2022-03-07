@@ -1,16 +1,28 @@
 from typing import Dict, Any
-import json
+
+from api_gateway.endpoint import Endpoint
+from api_gateway.service_event import ApiGatewayServiceEvent
+from lambda_handler.service_event.handler import ServiceEventHandler
 
 
-def handle_event(method: str, operation: str, headers: Dict[str, str],
-                 query_string_parameters: Dict[str, Any], body: str) -> Dict:
-    print(repr(method), repr(operation), repr(headers), repr(query_string_parameters), repr(body))
-    return {
-        "statusCode": 200,
-        "headers": {
-            "Content-Type": "application/json",
-        },
-        "body": json.dumps({
-            "message": "OK!",
-        }),
-    }
+class ApiGatewayServiceEventHandler(ServiceEventHandler):
+    def __init__(self, endpoint_mapper: Dict[str, Endpoint], default_endpoint: Endpoint = None):
+        self._endpoint_mapper = endpoint_mapper
+        self._default_endpoint = default_endpoint
+
+    def _get_endpoint(self, route_key: str) -> Endpoint:
+        return self._endpoint_mapper.get(route_key, self._default_endpoint)
+
+    def handle(self, raw_event: Dict) -> Any:
+        event = ApiGatewayServiceEvent(**raw_event)
+        route_key = self._extract_route_key(event)
+        endpoint = self._get_endpoint(route_key)
+        return endpoint.process(event.headers, event.query_string_parameters, event.body)
+
+    @classmethod
+    def match(cls, raw_event: Dict) -> bool:
+        return raw_event.get('headers', {}).get('x-service-endpoint', None) is not None
+
+    @staticmethod
+    def _extract_route_key(event: ApiGatewayServiceEvent):
+        return event.headers['x-service-endpoint']
