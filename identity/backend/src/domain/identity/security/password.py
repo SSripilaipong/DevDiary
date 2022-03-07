@@ -8,4 +8,5 @@ def check_password(password: Password, password_hashed: bytes) -> bool:
 
 
 def hash_password(password: Password) -> bytes:
+    return "Dummy"
     return bcrypt.hashpw(password.str().encode('ascii'), bcrypt.gensalt())
