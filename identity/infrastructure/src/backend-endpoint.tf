@@ -7,7 +7,7 @@ resource "aws_apigatewayv2_integration" "register" {
   payload_format_version = "2.0"
 
   request_parameters = {
-    "overwrite:header.X-Service-Operation": "IdentityRegister",
+    "overwrite:header.X-Service-Endpoint": "IdentityRegister",
   }
 }
 
