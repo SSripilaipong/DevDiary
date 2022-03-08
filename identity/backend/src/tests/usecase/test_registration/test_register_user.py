@@ -29,6 +29,13 @@ def test_should_generate_confirmation_code():
     assert all_registrations.confirmation_code_generated
 
 
+def test_should_save_registration_with_generated_confirmation_code():
+    all_registrations = get_all_registrations(generate_confirmation_code_return="CONFIRM_CODE!!!")
+    Registry().all_registrations = all_registrations
+    register_user(Username.as_is(""), Password.as_is(""), "", Email.as_is(""))
+    all_registrations.created_registration.confirm("CONFIRM_CODE!!!")
+
+
 def test_should_not_allow_duplicate_username():
     Registry().all_registrations = get_all_registrations(create_exception=UsernameAlreadyRegisteredException())
     with raises(UsernameAlreadyRegisteredException):
@@ -41,28 +48,31 @@ def test_should_not_allow_duplicate_email():
         register_user(Username.as_is(""), Password.as_is(""), "", Email.as_is(""))
 
 
-def get_all_registrations(*, create_exception=None) -> 'AllRegistrationsDummy':
-    return AllRegistrationsDummy(create_exception=create_exception)
+def get_all_registrations(*, create_exception=None, generate_confirmation_code_return=None) -> 'AllRegistrationsDummy':
+    return AllRegistrationsDummy(create_exception=create_exception,
+                                 generate_confirmation_code_return=generate_confirmation_code_return)
 
 
 class AllRegistrationsDummy(AllRegistrations):
-    def __init__(self, create_exception=None):
+    def __init__(self, create_exception=None, generate_confirmation_code_return=None):
         self._create_exception = create_exception
+        self._generate_confirmation_code_return = generate_confirmation_code_return
 
         self.created_registration = None
         self.confirmation_code_generated = False
 
     def generate_confirmation_code(self) -> str:
         self.confirmation_code_generated = True
+        return self._generate_confirmation_code_return
 
     def create(self, registration: Registration) -> Registration:
         if self._create_exception:
             raise self._create_exception
         self.created_registration = registration
+        return registration
 
     def from_email(self, email: Email) -> Registration:
         pass
 
     def save(self, registration: Registration):
         pass
-
