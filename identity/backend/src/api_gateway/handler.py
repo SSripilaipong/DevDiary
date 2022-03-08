@@ -1,3 +1,4 @@
+from abc import abstractmethod, ABC
 from typing import Dict, Any
 
 from api_gateway.endpoint import Endpoint
@@ -5,7 +6,7 @@ from api_gateway.service_event import ApiGatewayServiceEvent
 from lambda_handler.service_event.handler import ServiceEventHandler
 
 
-class ApiGatewayServiceEventHandler(ServiceEventHandler):
+class ApiGatewayServiceEventHandler(ServiceEventHandler, ABC):
     def __init__(self, endpoint_mapper: Dict[str, Endpoint], default_endpoint: Endpoint = None):
         self._endpoint_mapper = endpoint_mapper
         self._default_endpoint = default_endpoint
@@ -15,14 +16,15 @@ class ApiGatewayServiceEventHandler(ServiceEventHandler):
 
     def handle(self, raw_event: Dict) -> Any:
         event = ApiGatewayServiceEvent(**raw_event)
-        route_key = self._extract_route_key(event)
+        route_key = self.extract_route_key(event)
         endpoint = self._get_endpoint(route_key)
         return endpoint.process(event.headers, event.query_string_parameters, event.body)
 
     @classmethod
+    @abstractmethod
     def match(cls, raw_event: Dict) -> bool:
-        return raw_event.get('headers', {}).get('x-service-endpoint', None) is not None
+        pass
 
-    @staticmethod
-    def _extract_route_key(event: ApiGatewayServiceEvent):
-        return event.headers['x-service-endpoint']
+    @abstractmethod
+    def extract_route_key(self, event: ApiGatewayServiceEvent) -> str:
+        pass
