@@ -3,3 +3,6 @@ test-functional:
 
 test-unit:
 	pytest src/tests/unit/
+
+test-usecase:
+	pytest src/tests/usecase
