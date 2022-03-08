@@ -1,5 +1,5 @@
 from api_gateway.handler import ApiGatewayServiceEventHandler
-from app.api_gateway.endpoint.ok import AlwaysOkEndpoint
+from app.api_gateway.endpoint.default import AlwaysOkEndpoint
 from app.api_gateway.endpoint.register import RegisterEndpoint
 
 
