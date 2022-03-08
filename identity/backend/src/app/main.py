@@ -1,5 +1,5 @@
 from app import dependency
-from app.api_gateway.handler import get_api_gateway_handler
+from app.api.handler import get_api_gateway_handler
 from lambda_handler.mapper import ServiceEventHandlerMapper
 
 
