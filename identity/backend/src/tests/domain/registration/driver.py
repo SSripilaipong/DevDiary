@@ -13,7 +13,7 @@ from in_memory_email_service import EmailServiceInMemory
 from in_memory_persistence.identity.registration.repository import AllRegistrationsInMemory
 from in_memory_persistence.identity.user.repository import AllUsersInMemory
 from random_secret_manager import RandomSecretManager
-from synchronous_message_bus import SynchronousMessageBus
+from chamber.message.bus.synchronous import SynchronousMessageBus
 
 
 class DomainRegistrationDriver(RegistrationDriver):
