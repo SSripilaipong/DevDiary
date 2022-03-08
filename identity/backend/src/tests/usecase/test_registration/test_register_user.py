@@ -21,6 +21,12 @@ def test_should_create_registration():
            and registration.email.str() == "email"
 
 
+def test_should_not_allow_duplicate_username():
+    Registry().all_registrations = get_all_registrations(create_exception=UsernameAlreadyRegisteredException())
+    with raises(UsernameAlreadyRegisteredException):
+        register_user(Username.as_is(""), Password.as_is(""), "", Email.as_is(""))
+
+
 def get_all_registrations(*, create_exception=None) -> 'AllRegistrationsDummy':
     return AllRegistrationsDummy(create_exception=create_exception)
 
