@@ -1,7 +1,7 @@
 import json
 from typing import Dict, Any
 
-from api_gateway.endpoint import Endpoint
+from lambler.api_gateway.endpoint import Endpoint
 
 
 class AlwaysOkEndpoint(Endpoint):

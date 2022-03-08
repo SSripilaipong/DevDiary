@@ -1,7 +1,7 @@
 from typing import Dict
 
-from api_gateway.handler import ApiGatewayServiceEventHandler
-from api_gateway.service_event import ApiGatewayServiceEvent
+from lambler.api_gateway.handler import ApiGatewayServiceEventHandler
+from lambler.api_gateway.service_event import ApiGatewayServiceEvent
 from app.api.endpoint.default import AlwaysOkEndpoint
 from app.api.endpoint.register import RegisterEndpoint
 

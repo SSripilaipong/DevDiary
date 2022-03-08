@@ -1,9 +1,9 @@
 from abc import abstractmethod, ABC
 from typing import Dict, Any
 
-from api_gateway.endpoint import Endpoint
-from api_gateway.service_event import ApiGatewayServiceEvent
-from lambda_handler.service_event.handler import ServiceEventHandler
+from lambler.api_gateway.endpoint import Endpoint
+from lambler.api_gateway.service_event import ApiGatewayServiceEvent
+from lambler.base.handler import ServiceEventHandler
 
 
 class ApiGatewayServiceEventHandler(ServiceEventHandler, ABC):

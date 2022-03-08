@@ -1,7 +1,7 @@
 from typing import Dict, List
 
-from lambda_handler.mapper.exception import NoHandlerMatchedException
-from lambda_handler.service_event.handler import ServiceEventHandler
+from lambler.base.handler.exception import NoHandlerMatchedException
+from lambler.base.handler.handler import ServiceEventHandler
 
 
 class ServiceEventHandlerMapper:

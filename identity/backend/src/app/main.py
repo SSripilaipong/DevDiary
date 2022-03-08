@@ -1,6 +1,6 @@
 from app import dependency
 from app.api.handler import get_api_gateway_handler
-from lambda_handler.mapper import ServiceEventHandlerMapper
+from lambler.base.handler.mapper import ServiceEventHandlerMapper
 
 
 event_handler_mapper = ServiceEventHandlerMapper.from_list([
