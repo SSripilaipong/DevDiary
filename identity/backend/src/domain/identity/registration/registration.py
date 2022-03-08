@@ -58,3 +58,6 @@ class Registration(Aggregate):
     @property
     def email(self) -> Email:
         return self._email
+
+    def is_confirmed(self) -> bool:
+        return self._is_confirmed
