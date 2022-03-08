@@ -1,6 +1,8 @@
 from pytest import raises
 
-from domain.identity.registration.exception import RegistrationNotFoundException
+from chamber.aggregate.version import AggregateVersion
+from domain.identity.registration.exception import RegistrationNotFoundException, \
+    RegistrationCanNotBeConfirmedTwiceException
 from domain.identity.registration.registration import Registration
 from domain.identity.registration.repository import AllRegistrations
 from domain.identity.usecase.registration import confirm_registration
@@ -29,6 +31,15 @@ def test_should_raise_RegistrationNotFoundException():
     Registry().all_registrations = AllRegistrationsDummy(from_email_exception=RegistrationNotFoundException())
     with raises(RegistrationNotFoundException):
         confirm_registration(Email.as_is(""), "")
+
+
+def test_should_raise_RegistrationCanNotBeConfirmedTwiceException():
+    registration = Registration.create(Username.as_is(""), b"", "", Email.as_is("aaa@amail.com"), "xxx")
+    registration.confirm("xxx")
+
+    Registry().all_registrations = AllRegistrationsDummy(from_email_return=registration)
+    with raises(RegistrationCanNotBeConfirmedTwiceException):
+        confirm_registration(Email.as_is("aaa@amail.com"), "")
 
 
 class AllRegistrationsDummy(AllRegistrations):
