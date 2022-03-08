@@ -13,9 +13,20 @@ def test_should_confirm_registration():
     assert registration.is_confirmed()
 
 
+def test_should_save_registration():
+    registration = Registration.create(Username.as_is(""), b"", "", Email.as_is("aaa@amail.com"), "CONFIRM!!!")
+    Registry().all_registrations = all_registrations = AllRegistrationsDummy(from_email_return=registration)
+    confirm_registration(Email.as_is("aaa@amail.com"), "CONFIRM!!!")
+
+    saved_registration = all_registrations.saved_registration
+    assert registration == saved_registration
+
+
 class AllRegistrationsDummy(AllRegistrations):
     def __init__(self, from_email_return=None):
         self._from_email_return = from_email_return
+
+        self.saved_registration = None
 
     def generate_confirmation_code(self) -> str:
         pass
@@ -27,5 +38,4 @@ class AllRegistrationsDummy(AllRegistrations):
         return self._from_email_return
 
     def save(self, registration: Registration):
-        pass
-
+        self.saved_registration = registration
