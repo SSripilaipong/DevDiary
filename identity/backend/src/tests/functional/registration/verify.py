@@ -3,7 +3,7 @@ import sys
 from respec import Verification
 from devdiary.specification.registration import RegistrationSpecification
 
-from tests.domain.registration.driver import DomainRegistrationDriver
+from tests.functional.registration.driver import DomainRegistrationDriver
 
 
 def main():
