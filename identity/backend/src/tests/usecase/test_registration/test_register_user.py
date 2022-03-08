@@ -1,5 +1,6 @@
 from pytest import raises
 
+from domain.identity.registration.exception import EmailAlreadyRegisteredException
 from domain.identity.registration.registration import Registration
 from domain.identity.registration.repository import AllRegistrations
 from domain.identity.usecase.registration import register_user
@@ -24,6 +25,12 @@ def test_should_create_registration():
 def test_should_not_allow_duplicate_username():
     Registry().all_registrations = get_all_registrations(create_exception=UsernameAlreadyRegisteredException())
     with raises(UsernameAlreadyRegisteredException):
+        register_user(Username.as_is(""), Password.as_is(""), "", Email.as_is(""))
+
+
+def test_should_not_allow_duplicate_email():
+    Registry().all_registrations = get_all_registrations(create_exception=EmailAlreadyRegisteredException())
+    with raises(EmailAlreadyRegisteredException):
         register_user(Username.as_is(""), Password.as_is(""), "", Email.as_is(""))
 
 
