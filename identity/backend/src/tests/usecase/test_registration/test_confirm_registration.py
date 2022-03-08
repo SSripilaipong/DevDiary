@@ -1,3 +1,6 @@
+from pytest import raises
+
+from domain.identity.registration.exception import RegistrationNotFoundException
 from domain.identity.registration.registration import Registration
 from domain.identity.registration.repository import AllRegistrations
 from domain.identity.usecase.registration import confirm_registration
@@ -22,9 +25,16 @@ def test_should_save_registration():
     assert registration == saved_registration
 
 
+def test_should_raise_RegistrationNotFoundException():
+    Registry().all_registrations = AllRegistrationsDummy(from_email_exception=RegistrationNotFoundException())
+    with raises(RegistrationNotFoundException):
+        confirm_registration(Email.as_is(""), "")
+
+
 class AllRegistrationsDummy(AllRegistrations):
-    def __init__(self, from_email_return=None):
+    def __init__(self, from_email_return=None, from_email_exception=None):
         self._from_email_return = from_email_return
+        self._from_email_exception = from_email_exception
 
         self.saved_registration = None
 
@@ -35,6 +45,8 @@ class AllRegistrationsDummy(AllRegistrations):
         pass
 
     def from_email(self, email: Email) -> Registration:
+        if self._from_email_exception:
+            raise self._from_email_exception
         return self._from_email_return
 
     def save(self, registration: Registration):
