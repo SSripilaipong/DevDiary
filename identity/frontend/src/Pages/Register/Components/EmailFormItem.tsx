@@ -1,7 +1,11 @@
 import React from "react";
 import {Form, Input} from "antd";
 
-const EmailFormItem = (props) => {
+type Props = {
+    id: string
+}
+
+const EmailFormItem = (props: Props) => {
     const { id } = props;
 
     return (<Form.Item

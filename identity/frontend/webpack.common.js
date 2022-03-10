@@ -19,10 +19,18 @@ module.exports = {
                 },
             },
             {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
+            {
               test: /\.css$/i,
               use: ["style-loader", "css-loader"],
             },
         ],
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js'],
     },
     plugins: [
         new HtmlWebpackPlugin({

@@ -1,7 +1,12 @@
 import React from "react";
 import {Checkbox, Form} from "antd";
 
-const AgreementFormItem = (props) => {
+type Props = {
+    id: string
+    tailFormItemLayout: object
+}
+
+const AgreementFormItem = (props: Props) => {
     const { id } = props;
 
     return (<Form.Item

@@ -1,7 +1,11 @@
 import React from "react";
 import {Form, Input} from "antd";
 
-const DisplayNameFormItem = (props) => {
+type Props = {
+    id: string
+}
+
+const DisplayNameFormItem = (props: Props) => {
     const { id } = props;
 
     return (<Form.Item

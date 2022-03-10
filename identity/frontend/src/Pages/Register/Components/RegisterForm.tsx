@@ -33,12 +33,25 @@ const tailFormItemLayout = {
     },
 };
 
-export const RegisterForm = (props) => {
+type Props = {
+    idPrefix: string
+}
+
+type FormData = {
+    agreement: boolean
+    confirm: string
+    displayName: string
+    email: string
+    password: string
+    username: string
+}
+
+export const RegisterForm = (props: Props) => {
     const { idPrefix } = props;
 
     const [form] = Form.useForm();
 
-    const onFinish = (values) => {
+    const onFinish = (values: FormData) => {
         console.log('Received values of form: ', values);
     };
 
