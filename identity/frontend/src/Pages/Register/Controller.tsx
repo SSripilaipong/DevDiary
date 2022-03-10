@@ -19,6 +19,7 @@ export class RegisterPageController extends React.Component<Props, State> {
         super(props);
         this.registrationService = props.registrationService;
         this.state = {status: ""};
+        console.log(this.registrationService);
     }
 
     onFormFilled = (form: FormData) => {
