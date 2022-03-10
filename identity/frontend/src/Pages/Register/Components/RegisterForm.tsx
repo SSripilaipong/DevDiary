@@ -1,6 +1,5 @@
-import {Button, Form} from "antd";
+import {Button, Card, Form} from "antd";
 import React from "react";
-import { Card } from 'antd';
 
 import UsernameFormItem from "./UsernameFormItem";
 import PasswordFormItem from "./PasswordFormItem";
@@ -8,6 +7,7 @@ import PasswordConfirmFormItem from "./PasswordConfirmFormItem";
 import DisplayNameFormItem from "./DisplayNameFormItem";
 import EmailFormItem from "./EmailFormItem";
 import AgreementFormItem from "./AgreementFormItem";
+import {FormData} from "../FormData";
 
 const formItemLayout = {
     labelCol: {
@@ -33,17 +33,13 @@ const tailFormItemLayout = {
     },
 };
 
-type Props = {
-    idPrefix: string
+interface OnFormFilledCallback {
+    (form: FormData): any;
 }
 
-type FormData = {
-    agreement: boolean
-    confirm: string
-    displayName: string
-    email: string
-    password: string
-    username: string
+type Props = {
+    idPrefix: string
+    onFormFilled: OnFormFilledCallback
 }
 
 export const RegisterForm = (props: Props) => {
@@ -51,16 +47,12 @@ export const RegisterForm = (props: Props) => {
 
     const [form] = Form.useForm();
 
-    const onFinish = (values: FormData) => {
-        console.log('Received values of form: ', values);
-    };
-
     return (<Card title={<b>ลงทะเบียน</b>} style={{ margin: "auto", width: "33%"}}>
         <Form
             {...formItemLayout}
             form={form}
             name="register"
-            onFinish={onFinish}
+            onFinish={props.onFormFilled}
             scrollToFirstError
         >
             <UsernameFormItem id={`${idPrefix}-username`} />

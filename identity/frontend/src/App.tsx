@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 
 import { RegisterPage } from "./Pages/Register";
+import DummyRegistrationService from "./Service/Registration/Dummy";
+
 
 
 export default function App() {
@@ -18,8 +20,15 @@ export default function App() {
             </nav>
             <Routes>
                 <Route path="/" element={<div>Home</div>} />
-                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/register" element={getRegisterPage()} />
             </Routes>
         </BrowserRouter>
     );
+}
+
+function getRegisterPage(): JSX.Element {
+    return <RegisterPage
+        redirectUrlPath={"/"}
+        registrationService={new DummyRegistrationService()}
+    />;
 }
