@@ -11,7 +11,6 @@ module.exports = merge(common, {
             filename: 'remoteEntry.js',
             exposes: {
                 './Register': './src/Pages/Register',
-                './Service': './src/Service/Registration/Dummy',
             },
             shared: {
                 ...deps,
