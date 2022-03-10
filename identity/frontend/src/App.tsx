@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 
 import { RegisterPage } from "./Pages/Register";
-import DummyRegistrationService from "./Pages/Register/Service/Dummy";
+import DummyRegistrationService from "./Service/Registration/Dummy";
 
 
 
