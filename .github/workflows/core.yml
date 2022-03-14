@@ -27,9 +27,6 @@ jobs:
 
       - uses: actions/checkout@v1
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-
       - name: Apply Terraform
         uses: ./.github/actions/core/infrastructure/apply
         with:
