@@ -7,7 +7,7 @@ inputs:
   app-name:
     description: APP_NAME
     required: true
-  region :
+  region:
     description: AWS_REGION
     required: true
   tf-bucket:
