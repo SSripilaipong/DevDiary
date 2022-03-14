@@ -1,0 +1,11 @@
+name: 'identity-frontend-build'
+description: 'build identity.frontend'
+inputs:
+  frontend-directory:
+    description: frontend directory
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.frontend-directory }}
