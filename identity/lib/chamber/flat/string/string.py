@@ -1,8 +1,8 @@
 import re
 from typing import Dict, Union, Set, List, Type, TypeVar
 
-from chamber.flat.base import Flat
-from chamber.flat.string.validate_config import _validate_min_length_config, _validate_max_length_config, \
+from lib.chamber.flat.base import Flat
+from lib.chamber.flat.string.validate_config import _validate_min_length_config, _validate_max_length_config, \
     _validate_valid_characters_config, _validate_required_character_config, _validate_pattern_config
 
 F = TypeVar("F", bound="StringFlat")

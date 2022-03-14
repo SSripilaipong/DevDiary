@@ -1,7 +1,7 @@
 from typing import Any
 
-from chamber.aggregate.exception import InvalidAggregateVersionException
-from chamber.aggregate.version import AggregateVersion
+from lib.chamber.aggregate.exception import InvalidAggregateVersionException
+from lib.chamber.aggregate.version import AggregateVersion
 
 
 class AggregateVersionIncrease:

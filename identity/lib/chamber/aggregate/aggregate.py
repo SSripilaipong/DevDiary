@@ -1,8 +1,8 @@
 from typing import Any, List
 
-from chamber.aggregate.version import AggregateVersion
-from chamber.aggregate.version_increase import AggregateVersionIncrease
-from chamber.message import Message
+from lib.chamber.aggregate.version import AggregateVersion
+from lib.chamber.aggregate.version_increase import AggregateVersionIncrease
+from lib.chamber.message import Message
 
 
 class Aggregate:

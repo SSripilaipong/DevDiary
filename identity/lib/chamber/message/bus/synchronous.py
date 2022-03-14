@@ -1,8 +1,8 @@
 from typing import Type, Callable, Any, Dict, List, Set, TypeVar
 
-from chamber.message import Message
-from chamber.message.bus import MessageBus
-from chamber.message.exception import MessageTypeNotAllowedException
+from lib.chamber.message import Message
+from lib.chamber.message.bus import MessageBus
+from lib.chamber.message.exception import MessageTypeNotAllowedException
 
 
 M = TypeVar('M', bound=Message)
