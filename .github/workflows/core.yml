@@ -75,7 +75,7 @@ jobs:
           CONTEXT: core
         run: |
           zip -r ../frontend.zip .
-          aws s3 cp ../frontend.zip s3://"$ARTIFACT_BUCKET_NAME"/"$ENVIRONMENT"/"$CONTEXT"
+          aws s3 cp ../frontend.zip s3://"$ARTIFACT_BUCKET_NAME"/"$ENVIRONMENT"/"$CONTEXT"/frontend.zip
           rm ../frontend.zip
 
       - name: Invalidate Cache on Cloudfront if CLOUDFRONT_DISTRIBUTION_ID provided
