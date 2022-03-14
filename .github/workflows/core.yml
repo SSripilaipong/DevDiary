@@ -6,6 +6,7 @@ on:
     paths:
       - core/**
       - .github/workflows/core.yml
+      - .github/actions/core/**
 jobs:
   deploy-core-infrastructure:
     name: Deploy core.infrastructure to AWS
