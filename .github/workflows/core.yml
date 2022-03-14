@@ -71,7 +71,7 @@ jobs:
 
       - name: Build
         env:
-          APP_IDENTITY_REMOTE_ENTRY: devdiary.link/_s3/identity/remoteEntry.js
+          APP_IDENTITY_REMOTE_ENTRY: https://devdiary.link/_s3/identity/remoteEntry.js
           ASSETS_PUBLIC_PATH: /_s3/core/
         run: npm run build
 
