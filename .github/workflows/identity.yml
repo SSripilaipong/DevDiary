@@ -6,6 +6,8 @@ on:
     paths:
       - identity/**
       - .github/workflows/identity.yml
+      - .github/actions/identity-backend-setup/**
+      - .github/actions/identity-backend-unitTest/**
 jobs:
   deploy-identity-infrastructure:
     name: Deploy identity.infrastructure to AWS
