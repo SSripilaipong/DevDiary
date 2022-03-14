@@ -35,11 +35,11 @@ jobs:
 
       - uses: ./.github/actions/identity-backend-setup
         with:
-          backend-directory: ../backend/
+          backend-directory: ./identity/backend/
 
       - uses: ./.github/actions/identity-backend-unitTest
         with:
-          backend-directory: ../backend/
+          backend-directory: ./identity/backend/
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
