@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Type, Callable, TypeVar, Any
 
-from lib.chamber.message.message import Message
+from chamber.message.message import Message
 
 
 M = TypeVar('M', bound=Message)

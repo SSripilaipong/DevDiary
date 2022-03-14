@@ -1,4 +1,4 @@
-from lib.chamber.transaction import OptimisticLockFailed
+from chamber.transaction import OptimisticLockFailed
 
 
 class EntityOutdated(OptimisticLockFailed):

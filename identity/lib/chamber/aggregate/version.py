@@ -1,6 +1,6 @@
 from typing import Any
 
-from lib.chamber.aggregate.exception import InvalidAggregateVersionException
+from chamber.aggregate.exception import InvalidAggregateVersionException
 
 
 class AggregateVersion:
