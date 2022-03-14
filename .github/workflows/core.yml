@@ -68,14 +68,8 @@ jobs:
           UPLOAD_PATH: core
         run: aws s3 cp dist/ s3://"$FRONTEND_S3_BUCKET_NAME"/_s3/"$UPLOAD_PATH" --recursive
 
-      - name: Clear non-code Artifacts
+      - name: Clear non-code Artifacts (will upload artifacts to s3)
         run: rm -rf dist/ node_modules/
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: core.frontend
-          path: ./core/frontend/
 
       - name: Invalidate Cache on Cloudfront if CLOUDFRONT_DISTRIBUTION_ID provided
         env:
