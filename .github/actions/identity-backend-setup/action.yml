@@ -1,5 +1,11 @@
 name: 'identity-backend-setup'
 description: 'download online dependencies and copy local libs for identity.backend'
+inputs:
+  backend-directory:
+    description: backend directory
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  args:
+    - ${{ inputs.backend-directory }}
