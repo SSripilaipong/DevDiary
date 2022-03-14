@@ -24,7 +24,7 @@ runs:
     TF_BACKEND_BUCKET_NAME: ${{ inputs.tf-bucket }}
     TF_BACKEND_BUCKET_PATH: ${{ inputs.environment }}/core.tfstate
     TF_VAR_GLOBAL_PREFIX: ${{ inputs.environment }}
-    TF_VAR_FRONTEND_S3_BUCKET_NAME: ${{ inputs.APP_NAME }}
-    TF_VAR_RESOURCE_SHARING_BUCKET_NAME: ${{ inputs.APP_NAME }}-resource-sharing
+    TF_VAR_FRONTEND_S3_BUCKET_NAME: ${{ inputs.app-name }}
+    TF_VAR_RESOURCE_SHARING_BUCKET_NAME: ${{ inputs.app-name }}-resource-sharing
   args:
     - ${{ inputs.infrastructure-directory }}
