@@ -1,0 +1,5 @@
+name: 'identity-backend-unitTest'
+description: 'run unit tests for identity.backend'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

@@ -26,9 +26,13 @@ jobs:
 
       - uses: actions/checkout@v1
 
-      - uses: ./.github/workflows/identity-backend-setup.yml
+#      - uses: actions/setup-python@v2
+#        with:
+#          python-version: '3.9'
 
-      - uses: ./.github/workflows/identity-backend-unitTest.yml
+      - uses: ./.github/actions/identity-backend-setup
+
+      - uses: ./.github/actions/identity-backend-unitTest
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
