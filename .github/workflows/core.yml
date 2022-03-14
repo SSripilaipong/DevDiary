@@ -64,8 +64,9 @@ jobs:
       - name: Build Frontend
         uses: ./.github/actions/core/frontend/build
         with:
-          APP_IDENTITY_REMOTE_ENTRY: https://devdiary.link/_s3/identity/remoteEntry.js
-          ASSETS_PUBLIC_PATH: /_s3/core/
+          frontend-directory: ./core/frontend
+          identity-remote-entry-url: https://devdiary.link/_s3/identity/remoteEntry.js
+          public-path: /_s3/core/
 
       - name: Upload to S3
         env:
