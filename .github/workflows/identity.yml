@@ -28,6 +28,8 @@ jobs:
 
       - uses: ./.github/workflows/identity-backend-setup
 
+      - uses: ./.github/workflows/identity-backend-unitTest
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
