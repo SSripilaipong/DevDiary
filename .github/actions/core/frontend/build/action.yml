@@ -1,0 +1,20 @@
+name: 'core-frontend-build'
+description: 'build core.frontend'
+inputs:
+  frontend-directory:
+    description: frontend directory
+    required: true
+  identity-remote-entry-url:
+    description: APP_IDENTITY_REMOTE_ENTRY
+    required: true
+  public-path:
+    description: ASSETS_PUBLIC_PATH
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    APP_IDENTITY_REMOTE_ENTRY: ${{ inputs.identity-remote-entry-url }}
+    ASSETS_PUBLIC_PATH: ${{ inputs.public-path }}
+  args:
+    - ${{ inputs.frontend-directory }}
