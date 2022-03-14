@@ -2,7 +2,7 @@ test-functional:
 	PYTHONPATH=./src/ python -m tests.functional.registration.verify
 
 test-unit:
-	pytest src/tests/unit/
+	PYTHONPATH=./src/ pytest src/tests/unit/
 
 test-usecase:
-	pytest src/tests/usecase
+	PYTHONPATH=./src/ pytest src/tests/usecase
