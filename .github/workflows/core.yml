@@ -31,18 +31,14 @@ jobs:
         uses: hashicorp/setup-terraform@v1
 
       - name: Apply Terraform
-        working-directory: ./core/infrastructure/src
-        env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          TF_BACKEND_BUCKET_NAME: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
-          TF_BACKEND_BUCKET_PATH: prod/core.tfstate
-          TF_VAR_GLOBAL_PREFIX: prod
-          TF_VAR_FRONTEND_S3_BUCKET_NAME: ${{ secrets.APP_NAME }}
-          TF_VAR_RESOURCE_SHARING_BUCKET_NAME: ${{ secrets.APP_NAME }}-resource-sharing
-        run: |
-          chmod +x ../script/apply.sh
-          ../script/apply.sh
-        shell: bash
+        uses: ./.github/actions/core/infrastructure/apply
+        with:
+          infrastructure-directory: ./core/infrastructure/src
+          app-name: ${{ secrets.APP_NAME }}
+          region: ${{ secrets.AWS_REGION }}
+          tf-bucket: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
+          environment: prod
+
   deploy-core-frontend:
     name: Deploy core.frontend to AWS
     runs-on: ubuntu-latest
