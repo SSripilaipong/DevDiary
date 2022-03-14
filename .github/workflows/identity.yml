@@ -26,9 +26,9 @@ jobs:
 
       - uses: actions/checkout@v1
 
-      - uses: ./.github/workflows/identity-backend-setup
+      - uses: ./.github/workflows/identity-backend-setup.yml
 
-      - uses: ./.github/workflows/identity-backend-unitTest
+      - uses: ./.github/workflows/identity-backend-unitTest.yml
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
