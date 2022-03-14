@@ -68,6 +68,12 @@ jobs:
           identity-remote-entry-url: https://devdiary.link/_s3/identity/remoteEntry.js
           public-path: /_s3/core/
 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: core.frontend
+          path: ./core/frontend/dist/
+
       - name: Upload to S3
         env:
           FRONTEND_S3_BUCKET_NAME: ${{ secrets.APP_NAME }}
