@@ -36,6 +36,17 @@ jobs:
           tf-bucket: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
           environment: prod
 
+      - name: Upload Artifacts
+        env:
+          ARTIFACT_BUCKET_NAME: ${{ secrets.ARTIFACT_BUCKET_NAME }}
+          ENVIRONMENT: prod
+          CONTEXT: core
+        run: |
+          rm -rf .terraform/ .terraform.lock.hcl
+          zip -r ../infrastructure.zip .
+          aws s3 cp ../infrastructure.zip s3://"$ARTIFACT_BUCKET_NAME"/"$ENVIRONMENT"/"$CONTEXT"/infrastructure.zip
+          rm ../infrastructure.zip
+
   deploy-core-frontend:
     name: Deploy core.frontend to AWS
     runs-on: ubuntu-latest
