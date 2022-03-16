@@ -70,7 +70,7 @@ jobs:
         uses: ./.github/actions/core/frontend/build
         with:
           frontend-directory: ./core/frontend
-          identity-remote-entry-url: https://devdiary.link/_s3/identity/remoteEntry.js
+          identity-remote-entry-url: /_s3/identity/remoteEntry.js
           public-path: /_s3/core/
 
       - name: Upload to S3
