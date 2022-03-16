@@ -52,5 +52,5 @@ jobs:
           app-name: ${{ secrets.app-name }}
           region: ${{ secrets.aws-region }}
           tf-bucket: ${{ secrets.tf-bucket }}
-          frontend-bucket: ${{ secrets.app-name }}-${{ secrets.environment }}
+          frontend-bucket: ${{ secrets.app-name }}-${{ inputs.environment }}
           environment: ${{ inputs.environment }}
