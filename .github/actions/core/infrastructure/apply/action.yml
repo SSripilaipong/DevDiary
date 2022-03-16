@@ -16,6 +16,9 @@ inputs:
   frontend-bucket:
     description: TF_VAR_FRONTEND_S3_BUCKET_NAME
     required: true
+  resource-sharing-bucket:
+    description: TF_VAR_RESOURCE_SHARING_BUCKET_NAME
+    required: true
   environment:
     description: prod, test, COMMIT_ID
     required: true
