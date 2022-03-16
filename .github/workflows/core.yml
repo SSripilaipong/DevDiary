@@ -43,8 +43,7 @@ jobs:
           ENVIRONMENT: prod
           CONTEXT: core
         run: |
-          rm -rf .terraform/ .terraform.lock.hcl
-          zip -r ../infrastructure.zip .
+          zip -r ../infrastructure.zip . -x "./terraform**" "./terraform.lock.hcl"
           aws s3 cp ../infrastructure.zip s3://"$ARTIFACT_BUCKET_NAME"/"$ENVIRONMENT"/"$CONTEXT"/infrastructure.zip
           rm ../infrastructure.zip
 
