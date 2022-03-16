@@ -37,6 +37,7 @@ jobs:
           environment: prod
 
       - name: Upload Artifacts
+        working-directory: ./core/infrastructure/src
         env:
           ARTIFACT_BUCKET_NAME: ${{ secrets.ARTIFACT_BUCKET_NAME }}
           ENVIRONMENT: prod
