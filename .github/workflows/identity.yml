@@ -38,7 +38,7 @@ jobs:
           backend-directory: ./identity/backend/
 
   deploy-identity-backend:
-    name: Deploy identity.infrastructure to AWS
+    name: Deploy identity.backend to AWS
     needs:
       - test-identity-unitTest
     runs-on: ubuntu-latest
