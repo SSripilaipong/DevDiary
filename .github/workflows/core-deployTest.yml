@@ -40,8 +40,13 @@ jobs:
           unzip infrastructure.zip
           rm infrastructure.zip
 
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: ./_repo/
+
       - name: Apply Terraform
-        uses: ./.github/actions/core/infrastructure/apply
+        uses: ./_repo/.github/actions/core/infrastructure/apply
         with:
           infrastructure-directory: ./
           app-name: ${{ secrets.app-name }}

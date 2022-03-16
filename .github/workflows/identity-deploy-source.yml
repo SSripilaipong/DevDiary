@@ -30,6 +30,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
           aws-region: ${{ secrets.aws-region }}
 
+      - uses: actions/checkout@v1
+
       - name: Setup Python and Dependencies
         uses: ./.github/actions/identity-backend-setup
         with:
