@@ -53,4 +53,5 @@ jobs:
           region: ${{ secrets.aws-region }}
           tf-bucket: ${{ secrets.tf-bucket }}
           frontend-bucket: ${{ secrets.app-name }}-${{ inputs.environment }}
+          resource-sharing-bucket: ${{ secrets.APP_NAME }}-resource-sharing-${{ inputs.environment }}
           environment: ${{ inputs.environment }}

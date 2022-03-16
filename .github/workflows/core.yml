@@ -35,6 +35,7 @@ jobs:
           region: ${{ secrets.AWS_REGION }}
           tf-bucket: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
           frontend-bucket: ${{ secrets.APP_NAME }}
+          resource-sharing-bucket: ${{ secrets.APP_NAME }}-resource-sharing
           environment: prod
 
       - name: Upload Artifacts
