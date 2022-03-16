@@ -42,6 +42,9 @@ jobs:
     needs:
       - test-identity-unitTest
     uses: ./.github/workflows/core-deployTest.yml
+    permissions:
+      id-token: write
+      contents: read
     with:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -56,6 +59,9 @@ jobs:
     needs:
       - test-deploy-core-acceptance
     uses: ./.github/workflows/identity-deploy-source.yml
+    permissions:
+      id-token: write
+      contents: read
     with:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -69,6 +75,9 @@ jobs:
     uses: ./.github/workflows/identity-deploy-source.yml
     needs:
       - test-deploy-identity-acceptance
+    permissions:
+      id-token: write
+      contents: read
     with:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
