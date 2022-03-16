@@ -26,9 +26,9 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ inputs.aws-access-key-id }}
-          aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
-          aws-region: ${{ inputs.aws-region }}
+          aws-access-key-id: ${{ secrets.aws-access-key-id }}
+          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+          aws-region: ${{ secrets.aws-region }}
 
       - name: Setup Python and Dependencies
         uses: ./.github/actions/identity-backend-setup
@@ -41,10 +41,10 @@ jobs:
       - name: Apply Terraform
         working-directory: ./identity/infrastructure/src
         env:
-          AWS_REGION: ${{ inputs.aws-region }}
-          TF_VAR_APP_NAME: ${{ inputs.app-name }}
+          AWS_REGION: ${{ secrets.aws-region }}
+          TF_VAR_APP_NAME: ${{ secrets.app-name }}
           TF_VAR_GLOBAL_PREFIX: ${{ inputs.environment }}
-          TF_BACKEND_BUCKET_NAME: ${{ inputs.tf-bucket }}
+          TF_BACKEND_BUCKET_NAME: ${{ secrets.tf-bucket }}
           TF_BACKEND_BUCKET_PATH: ${{ inputs.environment }}/identity.tfstate
         run: |
           chmod +x ../script/apply.sh
@@ -64,9 +64,9 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ inputs.aws-access-key-id }}
-          aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
-          aws-region: ${{ inputs.aws-region }}
+          aws-access-key-id: ${{ secrets.aws-access-key-id }}
+          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+          aws-region: ${{ secrets.aws-region }}
 
       - uses: actions/checkout@v1
 
@@ -77,6 +77,6 @@ jobs:
 
       - name: Upload to S3
         env:
-          FRONTEND_S3_BUCKET_NAME: ${{ inputs.frontend-bucket }}
+          FRONTEND_S3_BUCKET_NAME: ${{ secrets.frontend-bucket }}
           UPLOAD_PATH: identity
         run: aws s3 cp dist/ s3://"$FRONTEND_S3_BUCKET_NAME"/_s3/"$UPLOAD_PATH" --recursive

@@ -26,13 +26,13 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ inputs.aws-access-key-id }}
-          aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
-          aws-region: ${{ inputs.aws-region }}
+          aws-access-key-id: ${{ secrets.aws-access-key-id }}
+          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+          aws-region: ${{ secrets.aws-region }}
 
       - name: Download Artifacts
         env:
-          ARTIFACT_BUCKET_NAME: ${{ inputs.artifact-bucket-name }}
+          ARTIFACT_BUCKET_NAME: ${{ secrets.artifact-bucket-name }}
           ENVIRONMENT: prod
           CONTEXT: core
         run: |
@@ -44,7 +44,7 @@ jobs:
         uses: ./.github/actions/core/infrastructure/apply
         with:
           infrastructure-directory: ./
-          app-name: ${{ inputs.app-name }}
-          region: ${{ inputs.aws-region }}
-          tf-bucket: ${{ inputs.tf-bucket }}
+          app-name: ${{ secrets.app-name }}
+          region: ${{ secrets.aws-region }}
+          tf-bucket: ${{ secrets.tf-bucket }}
           environment: ${{ inputs.environment }}
