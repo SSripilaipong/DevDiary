@@ -38,7 +38,7 @@ jobs:
         run: |
           aws s3 cp s3://"$ARTIFACT_BUCKET_NAME"/"$ENVIRONMENT"/"$CONTEXT"/infrastructure.zip ./infrastructure.zip
           unzip infrastructure.zip
-          rm ../infrastructure.zip
+          rm infrastructure.zip
 
       - name: Apply Terraform
         uses: ./.github/actions/core/infrastructure/apply
