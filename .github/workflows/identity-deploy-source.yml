@@ -1,0 +1,87 @@
+name: deploy Identity from source
+on:
+  workflow_call:
+    inputs:
+      aws-access-key-id:
+        type: string
+        required: true
+      aws-secret-access-key:
+        type: string
+        required: true
+      aws-region:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true
+      app-name:
+        type: string
+        required: true
+      tf-bucket:
+        type: string
+        required: true
+      frontend-bucket:
+        type: string
+        required: true
+jobs:
+  deploy-identity-backend:
+    name: Deploy identity.backend to AWS for acceptance test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ inputs.aws-access-key-id }}
+          aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+          aws-region: ${{ inputs.aws-region }}
+
+      - name: Setup Python and Dependencies
+        uses: ./.github/actions/identity-backend-setup
+        with:
+          backend-directory: ./identity/backend/
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Apply Terraform
+        working-directory: ./identity/infrastructure/src
+        env:
+          AWS_REGION: ${{ inputs.aws-region }}
+          TF_VAR_APP_NAME: ${{ inputs.app-name }}
+          TF_VAR_GLOBAL_PREFIX: ${{ inputs.environment }}
+          TF_BACKEND_BUCKET_NAME: ${{ inputs.tf-bucket }}
+          TF_BACKEND_BUCKET_PATH: ${{ inputs.environment }}/identity.tfstate
+        run: |
+          chmod +x ../script/apply.sh
+          ../script/apply.sh
+        shell: bash
+
+  deploy-identity-frontend:
+    name: Deploy identity.frontend to AWS for acceptance test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./identity/frontend
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ inputs.aws-access-key-id }}
+          aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+          aws-region: ${{ inputs.aws-region }}
+
+      - uses: actions/checkout@v1
+
+      - name: Build Frontend
+        uses: ./.github/actions/identity-frontend-build
+        with:
+          frontend-directory: ./identity/frontend/
+
+      - name: Upload to S3
+        env:
+          FRONTEND_S3_BUCKET_NAME: ${{ inputs.frontend-bucket }}
+          UPLOAD_PATH: identity
+        run: aws s3 cp dist/ s3://"$FRONTEND_S3_BUCKET_NAME"/_s3/"$UPLOAD_PATH" --recursive

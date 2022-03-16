@@ -37,79 +37,56 @@ jobs:
         with:
           backend-directory: ./identity/backend/
 
-  deploy-identity-backend:
-    name: Deploy identity.backend to AWS
+  test-deploy-core-acceptance:
+    name: Deploy core from artifact to run acceptance test
     needs:
       - test-identity-unitTest
+    uses: ./.github/workflows/core-deployTest.yml
+    with:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws-region: ap-southeast-1
+      environment: test
+      artifact-bucket-name: ${{ secrets.ARTIFACT_BUCKET_NAME }}
+      app-name: ${{ secrets.APP_NAME }}
+      tf-bucket: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
+
+  test-deploy-identity-acceptance:
+    name: Deploy identity to run acceptance test
+    needs:
+      - test-deploy-core-acceptance
+    uses: ./.github/workflows/identity-deploy-source.yml
+    with:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws-region: ap-southeast-1
+      environment: test
+      app-name: ${{ secrets.APP_NAME }}
+      tf-bucket: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
+      frontend-bucket: ${{ secrets.APP_NAME }}
+
+  deploy-identity:
+    uses: ./.github/workflows/identity-deploy-source.yml
+    needs:
+      - test-deploy-identity-acceptance
+    with:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws-region: ap-southeast-1
+      environment: prod
+      app-name: ${{ secrets.APP_NAME }}
+      tf-bucket: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
+      frontend-bucket: ${{ secrets.APP_NAME }}
+
+  update-cdn:
+    name: Update CDN for identity.frontend on CloudFront
+    needs:
+      - deploy-identity
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./identity/infrastructure
     permissions:
       id-token: write
       contents: read
     steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-southeast-1
-
-      - uses: actions/checkout@v1
-
-      - uses: ./.github/actions/identity-backend-setup
-        with:
-          backend-directory: ./identity/backend/
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-
-      - name: Apply Terraform
-        working-directory: ./identity/infrastructure/src
-        env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          TF_VAR_APP_NAME: ${{ secrets.APP_NAME }}
-          TF_VAR_GLOBAL_PREFIX: prod
-          TF_BACKEND_BUCKET_NAME: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
-          TF_BACKEND_BUCKET_PATH: prod/identity.tfstate
-        run: |
-          chmod +x ../script/apply.sh
-          ../script/apply.sh
-        shell: bash
-
-  deploy-identity-frontend:
-    name: Deploy identity.frontend to AWS
-    needs:
-      - test-identity-unitTest
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./identity/frontend
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-southeast-1
-
-      - uses: actions/checkout@v1
-
-      - name: Build Frontend
-        uses: ./.github/actions/identity-frontend-build
-        with:
-          frontend-directory: ./identity/frontend/
-
-      - name: Upload to S3
-        env:
-          FRONTEND_S3_BUCKET_NAME: ${{ secrets.APP_NAME }}
-          UPLOAD_PATH: identity
-        run: aws s3 cp dist/ s3://"$FRONTEND_S3_BUCKET_NAME"/_s3/"$UPLOAD_PATH" --recursive
-
       - name: Invalidate Cache on Cloudfront if CLOUDFRONT_DISTRIBUTION_ID provided
         env:
           CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}

@@ -1,0 +1,55 @@
+name: deploy Core from artifacts for other services to run acceptance test
+on:
+  workflow_call:
+    inputs:
+      aws-access-key-id:
+        type: string
+        required: true
+      aws-secret-access-key:
+        type: string
+        required: true
+      aws-region:
+        type: string
+        required: true
+      artifact-bucket-name:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true
+      app-name:
+        type: string
+        required: true
+      tf-bucket:
+        type: string
+        required: true
+jobs:
+  deploy-core-infrastructure-from-artifact:
+    name: Deploy core.infrastructure from artifact to AWS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ inputs.aws-access-key-id }}
+          aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+          aws-region: ${{ inputs.aws-region }}
+
+      - name: Download Artifacts
+        env:
+          ARTIFACT_BUCKET_NAME: ${{ inputs.artifact-bucket-name }}
+          ENVIRONMENT: prod
+          CONTEXT: core
+        run: |
+          aws s3 cp s3://"$ARTIFACT_BUCKET_NAME"/"$ENVIRONMENT"/"$CONTEXT"/infrastructure.zip ./infrastructure.zip
+          unzip infrastructure.zip
+          rm ../infrastructure.zip
+
+      - name: Apply Terraform
+        uses: ./.github/actions/core/infrastructure/apply
+        with:
+          infrastructure-directory: ./
+          app-name: ${{ inputs.app-name }}
+          region: ${{ secrets.aws-region }}
+          tf-bucket: ${{ secrets.tf-bucket }}
+          environment: ${{ inputs.environment }}
