@@ -2,26 +2,21 @@ name: deploy Identity from source
 on:
   workflow_call:
     inputs:
-      aws-access-key-id:
-        type: string
-        required: true
-      aws-secret-access-key:
-        type: string
-        required: true
-      aws-region:
-        type: string
-        required: true
       environment:
         type: string
         required: true
+    secrets:
+      aws-access-key-id:
+        required: true
+      aws-secret-access-key:
+        required: true
+      aws-region:
+        required: true
       app-name:
-        type: string
         required: true
       tf-bucket:
-        type: string
         required: true
       frontend-bucket:
-        type: string
         required: true
 jobs:
   deploy-identity-backend:

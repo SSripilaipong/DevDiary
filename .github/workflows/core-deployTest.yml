@@ -2,26 +2,21 @@ name: deploy Core from artifacts for other services to run acceptance test
 on:
   workflow_call:
     inputs:
-      aws-access-key-id:
-        type: string
-        required: true
-      aws-secret-access-key:
-        type: string
-        required: true
-      aws-region:
-        type: string
-        required: true
-      artifact-bucket-name:
-        type: string
-        required: true
       environment:
         type: string
         required: true
+    secrets:
+      aws-region:
+        required: true
+      aws-access-key-id:
+        required: true
+      aws-secret-access-key:
+        required: true
+      artifact-bucket-name:
+        required: true
       app-name:
-        type: string
         required: true
       tf-bucket:
-        type: string
         required: true
 jobs:
   deploy-core-infrastructure-from-artifact:

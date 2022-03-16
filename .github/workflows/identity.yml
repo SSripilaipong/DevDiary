@@ -46,10 +46,11 @@ jobs:
       id-token: write
       contents: read
     with:
-      aws-access-key-id: "${{ secrets.AWS_ACCESS_KEY_ID }}"
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      aws-region: ap-southeast-1
       environment: test
+    secrets:
+      aws-region: ap-southeast-1
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       artifact-bucket-name: ${{ secrets.ARTIFACT_BUCKET_NAME }}
       app-name: ${{ secrets.APP_NAME }}
       tf-bucket: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
@@ -63,10 +64,11 @@ jobs:
       id-token: write
       contents: read
     with:
+      environment: test
+    secrets:
+      aws-region: ap-southeast-1
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      aws-region: ap-southeast-1
-      environment: test
       app-name: ${{ secrets.APP_NAME }}
       tf-bucket: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
       frontend-bucket: ${{ secrets.APP_NAME }}
@@ -79,10 +81,11 @@ jobs:
       id-token: write
       contents: read
     with:
+      environment: prod
+    secrets:
+      aws-region: ap-southeast-1
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      aws-region: ap-southeast-1
-      environment: prod
       app-name: ${{ secrets.APP_NAME }}
       tf-bucket: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
       frontend-bucket: ${{ secrets.APP_NAME }}
