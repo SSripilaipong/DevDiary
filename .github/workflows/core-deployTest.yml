@@ -50,6 +50,6 @@ jobs:
         with:
           infrastructure-directory: ./
           app-name: ${{ inputs.app-name }}
-          region: ${{ secrets.aws-region }}
-          tf-bucket: ${{ secrets.tf-bucket }}
+          region: ${{ inputs.aws-region }}
+          tf-bucket: ${{ inputs.tf-bucket }}
           environment: ${{ inputs.environment }}
