@@ -48,7 +48,7 @@ jobs:
       - name: Apply Terraform
         uses: ./_repo/.github/actions/core/infrastructure/apply
         with:
-          infrastructure-directory: ./
+          infrastructure-directory: ./src/
           app-name: ${{ secrets.app-name }}
           region: ${{ secrets.aws-region }}
           tf-bucket: ${{ secrets.tf-bucket }}
