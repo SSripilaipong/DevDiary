@@ -44,6 +44,13 @@ resource "aws_lambda_function" "backend" {
   handler = "app.main.handler"
   timeout = 5
 
+  environment {
+    variables = merge({},
+      length(aws_lambda_function.fakeEmail) != 0 ?
+      { FAKE_EMAIL_LAMBDA_NAME = aws_lambda_function.fakeEmail[0].function_name } : {},
+    )
+  }
+
   role = aws_iam_role.backend-exec.arn
 
   depends_on = [
