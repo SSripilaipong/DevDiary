@@ -41,7 +41,7 @@ jobs:
     name: Deploy core from artifact to run acceptance test
     needs:
       - test-identity-unitTest
-    uses: ./.github/workflows/core-deployTest.yml
+    uses: ./.github/workflows/core-deploy-artifacts.yml
     permissions:
       id-token: write
       contents: read
