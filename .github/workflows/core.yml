@@ -36,6 +36,7 @@ jobs:
       contents: read
     steps:
       - name: Invalidate Cache on Cloudfront if CLOUDFRONT_DISTRIBUTION_ID provided
+        shell: bash
         env:
           CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
           S3_PATH: /_s3/core/*
