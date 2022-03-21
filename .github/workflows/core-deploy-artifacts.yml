@@ -59,6 +59,9 @@ jobs:
       - name: Deploy Frontend
         shell: bash
         env:
+          ARTIFACT_BUCKET_NAME: ${{ secrets.artifact-bucket-name }}
+          ENVIRONMENT: prod
+          CONTEXT: core
           FRONTEND_S3_BUCKET_NAME: ${{ secrets.app-name }}-${{ inputs.environment }}
           UPLOAD_PATH: core
         run: |
