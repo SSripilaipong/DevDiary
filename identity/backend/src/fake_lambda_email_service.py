@@ -18,7 +18,7 @@ except ImportError:
     botocore = None
 
 
-class EmailServiceInMemory(EmailService):
+class FakeLambdaEmailService(EmailService):
     def __init__(self):
         self.lambda_client = boto3.client('lambda') if boto3 is not None else None
 
