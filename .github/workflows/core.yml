@@ -31,9 +31,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - deploy-core
-    defaults:
-      run:
-        working-directory: ./core/frontend
     permissions:
       id-token: write
       contents: read
