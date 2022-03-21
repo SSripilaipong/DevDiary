@@ -55,3 +55,14 @@ jobs:
           frontend-bucket: ${{ secrets.app-name }}-${{ inputs.environment }}
           resource-sharing-bucket: ${{ secrets.app-name }}-resource-sharing-${{ inputs.environment }}
           environment: ${{ inputs.environment }}
+
+      - name: Deploy Frontend
+        shell: bash
+        env:
+          FRONTEND_S3_BUCKET_NAME: ${{ secrets.app-name }}-${{ inputs.environment }}
+          UPLOAD_PATH: core
+        run: |
+          mkdir _frontend
+          aws s3 cp s3://"$ARTIFACT_BUCKET_NAME"/"$ENVIRONMENT"/"$CONTEXT"/frontend.zip ./frontend.zip
+          unzip frontend.zip -d ./_frontend/
+          aws s3 cp ./_frontend/dist/ s3://"$FRONTEND_S3_BUCKET_NAME"/_s3/"$UPLOAD_PATH" --recursive
