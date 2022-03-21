@@ -66,7 +66,7 @@ def do_fake_read_confirmation_email(payload: Dict):
     return {
         "success": True,
         "payload": {
-            "confirmationCode": confirmation_code,
+            "confirmationCode": confirmation_code["S"],
         },
     }
 
