@@ -71,7 +71,7 @@ jobs:
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       app-name: ${{ secrets.APP_NAME }}
       tf-bucket: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
-      frontend-bucket: ${{ secrets.APP_NAME }}
+      frontend-bucket: ${{ secrets.APP_NAME }}-test
 
   deploy-identity:
     uses: ./.github/workflows/identity-deploy-source.yml
