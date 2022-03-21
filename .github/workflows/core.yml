@@ -8,50 +8,29 @@ on:
       - .github/workflows/core.yml
       - .github/actions/core/**
 jobs:
-  deploy-core-infrastructure:
-    name: Deploy core.infrastructure to AWS
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./core/infrastructure
+  deploy-core:
+    name: Deploy core
+    uses: ./.github/workflows/core-deploy-source.yml
     permissions:
       id-token: write
       contents: read
-    steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-southeast-1
+    with:
+      environment: prod
+    secrets:
+      aws-region: ap-southeast-1
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      app-name: ${{ secrets.APP_NAME }}
+      tf-bucket: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
+      frontend-bucket: ${{ secrets.APP_NAME }}
+      resource-sharing-bucket: ${{ secrets.APP_NAME }}-resource-sharing
+      artifact-bucket: ${{ secrets.APP_NAME }}-artifacts
 
-      - uses: actions/checkout@v1
-
-      - name: Apply Terraform
-        uses: ./.github/actions/core/infrastructure/apply
-        with:
-          infrastructure-directory: ./core/infrastructure/src
-          app-name: ${{ secrets.APP_NAME }}
-          region: ${{ secrets.AWS_REGION }}
-          tf-bucket: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
-          frontend-bucket: ${{ secrets.APP_NAME }}
-          resource-sharing-bucket: ${{ secrets.APP_NAME }}-resource-sharing
-          environment: prod
-
-      - name: Upload Artifacts
-        working-directory: ./core/infrastructure/src
-        env:
-          ARTIFACT_BUCKET_NAME: ${{ secrets.ARTIFACT_BUCKET_NAME }}
-          ENVIRONMENT: prod
-          CONTEXT: core
-        run: |
-          zip -r ../infrastructure.zip . -x /.terraform** /.terraform.lock.hcl
-          aws s3 cp ../infrastructure.zip s3://"$ARTIFACT_BUCKET_NAME"/"$ENVIRONMENT"/"$CONTEXT"/infrastructure.zip
-          rm ../infrastructure.zip
-
-  deploy-core-frontend:
-    name: Deploy core.frontend to AWS
+  update-cdn:
+    name: Update CDN
     runs-on: ubuntu-latest
+    needs:
+      - deploy-core
     defaults:
       run:
         working-directory: ./core/frontend
@@ -59,38 +38,6 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-southeast-1
-
-      - uses: actions/checkout@v1
-
-      - name: Build Frontend
-        uses: ./.github/actions/core/frontend/build
-        with:
-          frontend-directory: ./core/frontend
-          identity-remote-entry-url: /_s3/identity/remoteEntry.js
-          public-path: /_s3/core/
-
-      - name: Upload to S3
-        env:
-          FRONTEND_S3_BUCKET_NAME: ${{ secrets.APP_NAME }}
-          UPLOAD_PATH: core
-        run: aws s3 cp dist/ s3://"$FRONTEND_S3_BUCKET_NAME"/_s3/"$UPLOAD_PATH" --recursive
-
-      - name: Upload Artifacts
-        env:
-          ARTIFACT_BUCKET_NAME: ${{ secrets.ARTIFACT_BUCKET_NAME }}
-          ENVIRONMENT: prod
-          CONTEXT: core
-        run: |
-          zip -r ../frontend.zip .
-          aws s3 cp ../frontend.zip s3://"$ARTIFACT_BUCKET_NAME"/"$ENVIRONMENT"/"$CONTEXT"/frontend.zip
-          rm ../frontend.zip
-
       - name: Invalidate Cache on Cloudfront if CLOUDFRONT_DISTRIBUTION_ID provided
         env:
           CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}

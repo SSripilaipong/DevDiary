@@ -1,0 +1,101 @@
+name: deploy Core from source
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+    secrets:
+      aws-access-key-id:
+        required: true
+      aws-secret-access-key:
+        required: true
+      aws-region:
+        required: true
+      app-name:
+        required: true
+      tf-bucket:
+        required: true
+      frontend-bucket:
+        required: true
+      resource-sharing-bucket:
+        required: true
+      artifact-bucket:
+        required: true
+jobs:
+  deploy-core-infrastructure:
+    name: Deploy core.infrastructure to AWS from source
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./core/infrastructure
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.aws-access-key-id }}
+          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+          aws-region: ${{ secrets.aws-region }}
+
+      - uses: actions/checkout@v1
+
+      - name: Apply Terraform
+        uses: ./.github/actions/core/infrastructure/apply
+        with:
+          infrastructure-directory: ./core/infrastructure/src
+          app-name: ${{ secrets.app-name }}
+          region: ${{ secrets.aws-region }}
+          tf-bucket: ${{ secrets.tf-bucket }}
+          frontend-bucket: ${{ secrets.app-name }}
+          resource-sharing-bucket: ${{ secrets.resource-sharing-bucket }}
+          environment: ${{ inputs.environment }}
+
+      - name: Upload Artifacts
+        working-directory: ./core/infrastructure/src
+        env:
+          ARTIFACT_BUCKET_NAME: ${{ secrets.artifact-bucket }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          CONTEXT: core
+        run: |
+          zip -r ../infrastructure.zip . -x /.terraform** /.terraform.lock.hcl
+          aws s3 cp ../infrastructure.zip s3://"$ARTIFACT_BUCKET_NAME"/"$ENVIRONMENT"/"$CONTEXT"/infrastructure.zip
+          rm ../infrastructure.zip
+
+  deploy-core-frontend:
+    name: Deploy core.frontend to AWS from source
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./core/frontend
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.aws-access-key-id }}
+          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+          aws-region: ${{ secrets.aws-region }}
+
+      - uses: actions/checkout@v1
+
+      - name: Build Frontend
+        uses: ./.github/actions/core/frontend/build
+        with:
+          frontend-directory: ./core/frontend
+          identity-remote-entry-url: /_s3/identity/remoteEntry.js
+          public-path: /_s3/core/
+
+      - name: Upload to S3
+        env:
+          FRONTEND_S3_BUCKET_NAME: ${{ secrets.frontend-bucket }}
+          UPLOAD_PATH: core
+        run: aws s3 cp dist/ s3://"$FRONTEND_S3_BUCKET_NAME"/_s3/"$UPLOAD_PATH" --recursive
+
+      - name: Upload Artifacts
+        env:
+          ARTIFACT_BUCKET_NAME: ${{ secrets.artifact-bucket }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          CONTEXT: core
+        run: |
+          zip -r ../frontend.zip .
+          aws s3 cp ../frontend.zip s3://"$ARTIFACT_BUCKET_NAME"/"$ENVIRONMENT"/"$CONTEXT"/frontend.zip
+          rm ../frontend.zip
