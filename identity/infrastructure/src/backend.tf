@@ -1,5 +1,9 @@
 locals {
   BACKEND_NAME = "${var.GLOBAL_PREFIX}-identity-backend"
+  BACKEND_ENVIRONMENT_VARIABLES = coalesce([merge({},
+      length(aws_lambda_function.fakeEmail) != 0 ?
+      { FAKE_EMAIL_LAMBDA_NAME = aws_lambda_function.fakeEmail[0].function_name } : {},
+    )], [])
 }
 
 resource "aws_iam_role" "backend-exec" {
@@ -45,10 +49,13 @@ resource "aws_lambda_function" "backend" {
   timeout = 5
 
   environment {
-    variables = coalesce(merge({},
-      length(aws_lambda_function.fakeEmail) != 0 ?
-      { FAKE_EMAIL_LAMBDA_NAME = aws_lambda_function.fakeEmail[0].function_name } : {},
-    ), null)
+  }
+
+  dynamic environment {
+    for_each = local.BACKEND_ENVIRONMENT_VARIABLES
+    content {
+      variables = local.BACKEND_ENVIRONMENT_VARIABLES
+    }
   }
 
   role = aws_iam_role.backend-exec.arn
