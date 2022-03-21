@@ -48,13 +48,10 @@ resource "aws_lambda_function" "backend" {
   handler = "app.main.handler"
   timeout = 5
 
-  environment {
-  }
-
   dynamic environment {
     for_each = local.BACKEND_ENVIRONMENT_VARIABLES
     content {
-      variables = local.BACKEND_ENVIRONMENT_VARIABLES
+      variables = environment.value
     }
   }
 
