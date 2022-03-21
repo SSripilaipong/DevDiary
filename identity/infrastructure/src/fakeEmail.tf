@@ -39,10 +39,15 @@ resource "aws_lambda_function" "fakeEmail" {
   handler = "main.handler"
   timeout = 5
 
+  environment {
+    TABLE_NAME = aws_dynamodb_table.fakeEmail[0].name,
+  }
+
   role = aws_iam_role.fakeEmail-exec[0].arn
 
   depends_on = [
     aws_iam_role.fakeEmail-exec,
+    aws_dynamodb_table.fakeEmail,
     data.archive_file.fakeEmail,
   ]
 }
