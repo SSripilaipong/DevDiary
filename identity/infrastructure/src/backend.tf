@@ -45,10 +45,10 @@ resource "aws_lambda_function" "backend" {
   timeout = 5
 
   environment {
-    variables = merge({},
+    variables = coalesce(merge({},
       length(aws_lambda_function.fakeEmail) != 0 ?
       { FAKE_EMAIL_LAMBDA_NAME = aws_lambda_function.fakeEmail[0].function_name } : {},
-    )
+    ), null)
   }
 
   role = aws_iam_role.backend-exec.arn
