@@ -10,6 +10,13 @@ class Aggregate:
         self._aggregate_version = _aggregate_version or AggregateVersion.create(0)
         self._outbox = _outbox or []
 
+        annotations = self.__annotations__
+        for key, value in kwargs.items():
+            type_ = annotations.get(key, None)
+
+            if not isinstance(value, type_):
+                raise TypeError()
+
     def _append_message(self, message: Message):
         self._outbox.append(message)
 
