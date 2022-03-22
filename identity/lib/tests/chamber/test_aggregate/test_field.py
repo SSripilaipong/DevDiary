@@ -19,6 +19,6 @@ def test_should_raise_TypeError_when_instantiate_with_wrong_type():
 
 
 def test_should_raise_TypeError_when_instantiate_without_type():
-    with raises(TypeError):
+    with raises(RuntimeError):
         class _(Aggregate):
-            my_number: int = Field()
+            my_number = Field()
