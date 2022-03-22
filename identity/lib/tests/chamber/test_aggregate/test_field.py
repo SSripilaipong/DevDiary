@@ -33,3 +33,10 @@ def test_should_raise_FieldHasNoGetterException_when_try_to_access_private_field
 
     with raises(FieldHasNoGetterException):
         print(obj.my_number)
+
+
+def test_should_be_able_to_access_field_with_getter_from_outside():
+    class MyAggregate(Aggregate):
+        my_number: int = Field(getter=True)
+
+    assert MyAggregate(my_number=123).my_number == 123
