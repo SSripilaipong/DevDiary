@@ -11,8 +11,8 @@ from domain.registry import Registry
 from app.event.subscription import subscribe_for_messages
 from app.event.publication import whitelist_messages
 from emailling.in_memory import EmailServiceInMemory
-from in_memory_persistence.identity.registration.repository import AllRegistrationsInMemory
-from in_memory_persistence.identity.user.repository import AllUsersInMemory
+from persistence.in_memory.identity.registration.repository import AllRegistrationsInMemory
+from persistence.in_memory.identity.user.repository import AllUsersInMemory
 from random_secret_manager import RandomSecretManager
 from chamber.message.bus.synchronous import SynchronousMessageBus
 

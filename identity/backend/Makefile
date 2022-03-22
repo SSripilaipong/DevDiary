@@ -1,3 +1,5 @@
+test: | test-unit test-usecase test-functional
+
 test-functional:
 	PYTHONPATH=./src/:../lib/ python -m tests.functional.registration.verify
 
