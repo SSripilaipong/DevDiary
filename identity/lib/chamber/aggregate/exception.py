@@ -4,3 +4,7 @@ class InvalidAggregateVersionException(Exception):
 
 class FieldHasNoGetterException(Exception):
     pass
+
+
+class FieldHasNoSetterException(Exception):
+    pass

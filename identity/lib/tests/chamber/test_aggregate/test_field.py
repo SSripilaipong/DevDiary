@@ -1,6 +1,6 @@
 from pytest import raises
 from chamber.aggregate import Aggregate, Field, query
-from chamber.aggregate.exception import FieldHasNoGetterException
+from chamber.aggregate.exception import FieldHasNoGetterException, FieldHasNoSetterException
 
 
 def test_should_instantiate_aggregate_with_fields():
@@ -51,3 +51,13 @@ def test_should_be_able_to_access_field_without_getter_from_query_method():
             return self.my_number
 
     assert MyAggregate(my_number=123).get_my_number() == 123
+
+
+def test_should_raise_FieldHasNoSetterException_when_try_to_set_value_for_field_without_setter_from_outside():
+    class MyAggregate(Aggregate):
+        my_number: int = Field()
+
+    obj = MyAggregate(my_number=123)
+
+    with raises(FieldHasNoSetterException):
+        obj.my_number = 456
