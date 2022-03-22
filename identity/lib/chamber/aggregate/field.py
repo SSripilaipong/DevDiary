@@ -29,6 +29,9 @@ class Field:
         setattr(instance, self._name, value)
 
     def __get__(self, instance: Aggregate, owner: Type[Aggregate]):
+        if instance._field_controller.can_read:
+            return getattr(instance, self._name)
+
         if not self._has_getter:
             raise FieldHasNoGetterException()
 

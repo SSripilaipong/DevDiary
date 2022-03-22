@@ -1,5 +1,6 @@
 from typing import Any, List, Dict
 
+from chamber.aggregate.field_controller import FieldController
 from chamber.aggregate.version import AggregateVersion
 from chamber.aggregate.version_increase import AggregateVersionIncrease
 from chamber.message import Message
@@ -9,6 +10,8 @@ class Aggregate:
     def __init__(self, _aggregate_version: AggregateVersion = None, _outbox: List[Message] = None, **kwargs):
         self._aggregate_version = _aggregate_version or AggregateVersion.create(0)
         self._outbox = _outbox or []
+
+        self._field_controller = FieldController()
 
         self._assign_fields(kwargs)
 
