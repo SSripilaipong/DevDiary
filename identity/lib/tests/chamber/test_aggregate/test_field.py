@@ -1,5 +1,5 @@
 from pytest import raises
-from chamber.aggregate import Aggregate, Field, query
+from chamber.aggregate import Aggregate, Field, query, command
 from chamber.aggregate.exception import FieldHasNoGetterException, FieldHasNoSetterException
 
 
@@ -71,3 +71,17 @@ def test_should_be_able_to_set_value_for_field_with_setter_from_outside():
     obj.my_number = 456
 
     assert obj.my_number == 456
+
+
+def test_should_be_able_to_set_value_for_field_without_setter_from_command_method():
+    class MyAggregate(Aggregate):
+        my_number: int = Field(getter=True)
+
+        @command
+        def modify_my_number(self, x):
+            self.my_number += x
+
+    obj = MyAggregate(my_number=123)
+    obj.modify_my_number(876)
+
+    assert obj.my_number == 999
