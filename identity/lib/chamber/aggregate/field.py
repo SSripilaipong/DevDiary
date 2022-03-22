@@ -10,8 +10,6 @@ class Field:
     def __init__(self, getter=False):
         self._has_getter = getter
 
-        self._value = None
-
     def __set_name__(self, owner: Type[Aggregate], name: str):
         try:
             annotations = owner.__annotations__
@@ -22,14 +20,16 @@ class Field:
         if self._type is None:
             raise TypeError(FIELD_MUST_HAVE_TYPE_MSG)
 
+        self._name = f'_{name}'
+
     def __set__(self, instance: Aggregate, value):
         if not isinstance(value, self._type):
             raise TypeError()
 
-        self._value = value
+        setattr(instance, self._name, value)
 
     def __get__(self, instance: Aggregate, owner: Type[Aggregate]):
         if not self._has_getter:
             raise FieldHasNoGetterException()
 
-        return self._value
+        return getattr(instance, self._name)
