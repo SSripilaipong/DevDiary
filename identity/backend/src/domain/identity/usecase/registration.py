@@ -3,13 +3,14 @@ from typing import TYPE_CHECKING
 from chamber.transaction import transaction
 from domain.identity.security.password import hash_password
 from domain.identity.registration.registration import Registration
+from domain.identity.value_object.display_name import DisplayName
 from domain.identity.value_object.email import Email
 from domain.identity.value_object.password import Password
 from domain.identity.value_object.username import Username
 from domain.registry import Registry
 
 
-def register_user(username: Username, password: Password, display_name: str, email: Email) -> Registration:
+def register_user(username: Username, password: Password, display_name: DisplayName, email: Email) -> Registration:
     """
     :raises:
         EmailAlreadyRegisteredException

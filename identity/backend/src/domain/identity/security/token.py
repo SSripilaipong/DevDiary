@@ -25,7 +25,7 @@ def generate_user_token(user: User) -> str:
         "aud": _audience(),
         "exp": registry.clock.get_current_timestamp() + _EXPIRE_SECONDS,
         "sub": user.username.str(),
-        "display_name": user.display_name,
+        "display_name": user.display_name.str(),
     }
 
     return jwt.encode(payload, registry.secret_manager.get_private_key(), algorithm="RS512")

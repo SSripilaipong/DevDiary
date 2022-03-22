@@ -3,6 +3,7 @@ from devdiary.specification.registration import RegistrationDriver
 from domain.identity.usecase.registration import register_user, confirm_registration
 from domain.identity.usecase.login import login_with_username_and_password
 from domain.identity.usecase.user import get_username_from_user_token
+from domain.identity.value_object.display_name import DisplayName
 from domain.identity.value_object.email import Email
 from domain.identity.value_object.password import Password
 from domain.identity.value_object.username import Username
@@ -34,10 +35,11 @@ class DomainRegistrationDriver(RegistrationDriver):
             InvalidUsernameException
             InvalidPasswordException
             InvalidEmailException
+            InvalidDisplayNameException
             EmailAlreadyRegisteredException
             UsernameAlreadyRegisteredException
         """
-        register_user(Username(username), Password(password), display_name, Email(email))
+        register_user(Username(username), Password(password), DisplayName(display_name), Email(email))
 
     def get_confirmation_code_from_email(self, email: str) -> str:
         """
