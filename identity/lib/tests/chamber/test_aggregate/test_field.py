@@ -61,3 +61,13 @@ def test_should_raise_FieldHasNoSetterException_when_try_to_set_value_for_field_
 
     with raises(FieldHasNoSetterException):
         obj.my_number = 456
+
+
+def test_should_be_able_to_set_value_for_field_with_setter_from_outside():
+    class MyAggregate(Aggregate):
+        my_number: int = Field(getter=True, setter=True)
+
+    obj = MyAggregate(my_number=123)
+    obj.my_number = 456
+
+    assert obj.my_number == 456
