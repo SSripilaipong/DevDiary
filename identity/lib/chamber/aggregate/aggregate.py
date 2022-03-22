@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Dict
 
 from chamber.aggregate.version import AggregateVersion
 from chamber.aggregate.version_increase import AggregateVersionIncrease
@@ -10,12 +10,11 @@ class Aggregate:
         self._aggregate_version = _aggregate_version or AggregateVersion.create(0)
         self._outbox = _outbox or []
 
-        annotations = self.__annotations__
-        for key, value in kwargs.items():
-            type_ = annotations.get(key, None)
+        self._assign_fields(kwargs)
 
-            if not isinstance(value, type_):
-                raise TypeError()
+    def _assign_fields(self, data: Dict[str, Any]):
+        for key, value in data.items():
+            setattr(self, key, value)
 
     def _append_message(self, message: Message):
         self._outbox.append(message)
