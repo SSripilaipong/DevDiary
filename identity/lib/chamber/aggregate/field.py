@@ -27,7 +27,10 @@ class Field:
         if not isinstance(value, self._type):
             raise TypeError()
 
-        if hasattr(instance, self._name) and not self._has_setter:
+        if instance._field_controller.can_write:
+            return setattr(instance, self._name, value)
+
+        if not self._has_setter:
             raise FieldHasNoSetterException()
 
         setattr(instance, self._name, value)

@@ -16,8 +16,9 @@ class Aggregate:
         self._assign_fields(kwargs)
 
     def _assign_fields(self, data: Dict[str, Any]):
-        for key, value in data.items():
-            setattr(self, key, value)
+        with self._field_controller.allow_read_write():
+            for key, value in data.items():
+                setattr(self, key, value)
 
     def _append_message(self, message: Message):
         self._outbox.append(message)
