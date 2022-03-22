@@ -6,9 +6,9 @@ from chamber.message import Message
 
 
 class Aggregate:
-    def __init__(self, aggregate_version: AggregateVersion, outbox: List[Message] = None):
-        self._aggregate_version = aggregate_version
-        self._outbox = outbox or []
+    def __init__(self, _aggregate_version: AggregateVersion = None, _outbox: List[Message] = None, **kwargs):
+        self._aggregate_version = _aggregate_version or AggregateVersion.create(0)
+        self._outbox = _outbox or []
 
     def _append_message(self, message: Message):
         self._outbox.append(message)
