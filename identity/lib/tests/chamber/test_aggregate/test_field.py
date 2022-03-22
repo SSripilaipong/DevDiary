@@ -1,5 +1,5 @@
 from pytest import raises
-from chamber.aggregate import Aggregate, Field
+from chamber.aggregate import Aggregate, Field, query
 from chamber.aggregate.exception import FieldHasNoGetterException
 
 
@@ -40,3 +40,14 @@ def test_should_be_able_to_access_field_with_getter_from_outside():
         my_number: int = Field(getter=True)
 
     assert MyAggregate(my_number=123).my_number == 123
+
+
+def test_should_be_able_to_access_field_without_getter_from_query_method():
+    class MyAggregate(Aggregate):
+        my_number: int = Field()
+
+        @query
+        def get_my_number(self):
+            return self.my_number
+
+    assert MyAggregate(my_number=123).get_my_number() == 123
