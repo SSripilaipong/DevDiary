@@ -16,3 +16,9 @@ def test_should_raise_TypeError_when_instantiate_with_wrong_type():
 
     with raises(TypeError):
         MyAggregate(my_number="123")
+
+
+def test_should_raise_TypeError_when_instantiate_without_type():
+    with raises(TypeError):
+        class _(Aggregate):
+            my_number: int = Field()
