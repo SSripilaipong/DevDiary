@@ -16,7 +16,7 @@ class Aggregate:
 
         self.__chamber_field_controller = FieldController()
 
-        self._assign_fields(kwargs)
+        self.__chamber_assign_fields(kwargs)
 
     def to_dict(self) -> Dict:
         result = {}
@@ -25,7 +25,7 @@ class Aggregate:
                 result[name] = getattr(self, name)
         return result
 
-    def _assign_fields(self, data: Dict[str, Any]):
+    def __chamber_assign_fields(self, data: Dict[str, Any]):
         from chamber.aggregate import Field
         provided_keys = set(data)
         required_keys = set(name for name in getattr(self, '__annotations__', {}).keys()
