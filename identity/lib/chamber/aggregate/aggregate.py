@@ -51,4 +51,5 @@ def _is_integer(number: Any) -> bool:
 def _validate_initial_values(provided_keys, required_keys):
     exceeded_keys = provided_keys - required_keys
     if exceeded_keys != set():
-        raise AttributeError("Unknown fields named:", ', '.join(list(exceeded_keys)))
+        message = "Unknown fields named: " + ', '.join(list(exceeded_keys))
+        raise AttributeError(message)
