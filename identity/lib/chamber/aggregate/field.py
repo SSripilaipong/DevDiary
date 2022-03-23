@@ -31,32 +31,45 @@ class Field:
             owner._Aggregate__chamber_registered_fields = {}
         owner._Aggregate__chamber_registered_fields[name] = self
 
-        self._name = f'_{name}'
+        if not hasattr(owner, '_Aggregate__chamber_registered_alias_fields'):
+            owner._Aggregate__chamber_registered_alias_fields = {}
+        owner._Aggregate__chamber_registered_alias_fields[self.alias] = self
+
+        self._value_name = f'_{name}'
+        self._name = name
 
     def __set__(self, instance: Aggregate, value):
         if not isinstance(value, self._type):
             raise TypeError()
 
         if instance._Aggregate__chamber_field_controller.can_write:
-            return setattr(instance, self._name, value)
+            return setattr(instance, self._value_name, value)
 
         if not self._has_setter:
             raise FieldHasNoSetterException()
 
-        setattr(instance, self._name, value)
+        setattr(instance, self._value_name, value)
 
     def __get__(self, instance: Aggregate, owner: Type[Aggregate]):
         if instance._Aggregate__chamber_field_controller.can_read:
-            return getattr(instance, self._name)
+            return getattr(instance, self._value_name)
 
         if not self._has_getter:
             raise FieldHasNoGetterException()
 
-        return getattr(instance, self._name)
+        return getattr(instance, self._value_name)
 
     @property
     def alias(self) -> str:
         return self._alias
+
+    @property
+    def type_(self) -> Type:
+        return self._type
+
+    @property
+    def name(self) -> str:
+        return self._name
 
     @property
     def should_serialize(self) -> bool:

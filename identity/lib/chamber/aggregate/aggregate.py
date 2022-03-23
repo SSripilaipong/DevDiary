@@ -11,6 +11,7 @@ T = TypeVar('T', bound='Aggregate')
 
 class Aggregate:
     __chamber_registered_fields: Dict
+    __chamber_registered_alias_fields: Dict
     _Aggregate__chamber_field_controller: FieldController
 
     def __init__(self, *, _aggregate_version: AggregateVersion = None, _outbox: List[Message] = None, **kwargs):
@@ -27,17 +28,24 @@ class Aggregate:
         types = getattr(cls, "__annotations__", {})
 
         for key, value in data.items():
-            if key not in types:
-                raise NotImplementedError()  # TODO: implement this
+            field = cls.__chamber_registered_alias_fields.get(key, None)
+            if field is not None:
+                name = field.name
+                type_ = field.type_
+            else:
+                if key not in types:
+                    raise NotImplementedError()  # TODO: implement this
 
-            type_ = types[key]
+                name = key
+                type_ = types[key]
+
             if not isinstance(value, type_):
                 if hasattr(type_, 'deserialize'):
                     value = type_.deserialize(value)
                 else:
                     raise NotImplementedError()  # TODO: implement this
 
-            params[key] = value
+            params[name] = value
         return cls(**params)
 
     def to_dict(self) -> Dict:
