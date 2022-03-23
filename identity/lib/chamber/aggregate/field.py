@@ -15,6 +15,7 @@ class Field:
         self._alias = alias
         self._has_getter = getter
         self._has_setter = setter
+        self._should_serialize = serialize
 
     def __set_name__(self, owner: Type[Aggregate], name: str):
         try:
@@ -56,3 +57,7 @@ class Field:
     @property
     def alias(self) -> str:
         return self._alias
+
+    @property
+    def should_serialize(self) -> bool:
+        return self._should_serialize

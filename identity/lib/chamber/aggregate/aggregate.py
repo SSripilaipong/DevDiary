@@ -22,6 +22,9 @@ class Aggregate:
         result = {}
         with self.__chamber_field_controller.allow_read():
             for name, field in self.__chamber_registered_fields.items():
+                if not field.should_serialize:
+                    continue
+
                 value = getattr(self, name)
                 if hasattr(value, 'serialize'):
                     value = value.serialize()
