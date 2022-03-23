@@ -7,7 +7,7 @@ FIELD_MUST_HAVE_TYPE_MSG = "A field must be annotated with a type."
 
 
 class Field:
-    def __init__(self, alias: str = None, *, getter=False, setter=False):
+    def __init__(self, alias: str = None, *, getter=False, setter=False, serialize=True):
         assert alias is None or isinstance(alias, str)
         assert isinstance(getter, bool)
         assert isinstance(setter, bool)

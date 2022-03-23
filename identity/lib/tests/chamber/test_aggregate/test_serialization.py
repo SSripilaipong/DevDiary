@@ -22,3 +22,10 @@ def test_should_use_alias():
         my_number: int = Field("myNumber")
 
     assert MyAggregate(my_number=123).to_dict() == {'myNumber': 123}
+
+
+def test_should_not_serialize_none_serialize_field():
+    class MyAggregate(Aggregate):
+        my_number: int = Field(serialize=False)
+
+    assert MyAggregate(my_number=123).to_dict() == {}
