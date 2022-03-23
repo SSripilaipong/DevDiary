@@ -27,8 +27,8 @@ class Aggregate:
     def _assign_fields(self, data: Dict[str, Any]):
         from chamber.aggregate import Field
         provided_keys = set(data)
-        required_keys = set(name for name, field in getattr(self, '__annotations__', {}).items()
-                            if isinstance(field, Field))
+        required_keys = set(name for name in getattr(self, '__annotations__', {}).keys()
+                            if isinstance(vars(self.__class__).get(name, None), Field))
         _validate_initial_values(provided_keys, required_keys)
 
         with self._field_controller.allow_read_write():
