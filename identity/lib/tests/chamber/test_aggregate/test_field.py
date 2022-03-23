@@ -11,6 +11,14 @@ def test_should_instantiate_aggregate_with_fields():
     MyAggregate(my_number=123, my_string="Copy Paste Engineer")
 
 
+def test_should_raise_AttributeError_when_instantiate_with_unknown_attribute():
+    class MyAggregate(Aggregate):
+        pass
+
+    with raises(AttributeError):
+        MyAggregate(something=1234)
+
+
 def test_should_raise_TypeError_when_instantiate_with_wrong_type():
     class MyAggregate(Aggregate):
         my_number: int = Field()
