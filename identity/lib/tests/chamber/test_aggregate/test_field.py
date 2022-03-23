@@ -19,6 +19,14 @@ def test_should_raise_AttributeError_when_instantiate_with_unknown_attribute():
         MyAggregate(something=1234)
 
 
+def test_should_raise_AttributeError_when_instantiate_without_required_attribute():
+    class MyAggregate(Aggregate):
+        my_number: int = Field()
+
+    with raises(AttributeError):
+        MyAggregate()
+
+
 def test_should_raise_TypeError_when_instantiate_with_wrong_type():
     class MyAggregate(Aggregate):
         my_number: int = Field()
