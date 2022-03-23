@@ -31,7 +31,7 @@ class Field:
         if not isinstance(value, self._type):
             raise TypeError()
 
-        if instance._field_controller.can_write:
+        if instance._Aggregate__chamber_field_controller.can_write:
             return setattr(instance, self._name, value)
 
         if not self._has_setter:
@@ -40,7 +40,7 @@ class Field:
         setattr(instance, self._name, value)
 
     def __get__(self, instance: Aggregate, owner: Type[Aggregate]):
-        if instance._field_controller.can_read:
+        if instance._Aggregate__chamber_field_controller.can_read:
             return getattr(instance, self._name)
 
         if not self._has_getter:

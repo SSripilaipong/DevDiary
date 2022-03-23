@@ -9,7 +9,7 @@ class _CommandMethod:
         self._func = func
 
     def __call__(self, *args, **kwargs):
-        with self._instance._field_controller.allow_read_write():
+        with self._instance._Aggregate__chamber_field_controller.allow_read_write():
             return self._func(self._instance, *args, **kwargs)
 
 

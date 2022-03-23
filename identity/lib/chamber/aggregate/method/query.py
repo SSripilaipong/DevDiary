@@ -9,7 +9,7 @@ class _QueryMethod:
         self._func = func
 
     def __call__(self, *args, **kwargs):
-        with self._instance._field_controller.allow_read():
+        with self._instance._Aggregate__chamber_field_controller.allow_read():
             return self._func(self._instance, *args, **kwargs)
 
 

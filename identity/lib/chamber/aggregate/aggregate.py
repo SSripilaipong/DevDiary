@@ -8,18 +8,19 @@ from chamber.message import Message
 
 class Aggregate:
     __chamber_registered_fields: Dict
+    _Aggregate__chamber_field_controller: FieldController
 
     def __init__(self, _aggregate_version: AggregateVersion = None, _outbox: List[Message] = None, **kwargs):
         self._aggregate_version = _aggregate_version or AggregateVersion.create(0)
         self.__chamber_outbox = _outbox or []
 
-        self._field_controller = FieldController()
+        self.__chamber_field_controller = FieldController()
 
         self._assign_fields(kwargs)
 
     def to_dict(self) -> Dict:
         result = {}
-        with self._field_controller.allow_read():
+        with self.__chamber_field_controller.allow_read():
             for name in self.__chamber_registered_fields.keys():
                 result[name] = getattr(self, name)
         return result
@@ -31,7 +32,7 @@ class Aggregate:
                             if isinstance(vars(self.__class__).get(name, None), Field))
         _validate_initial_values(provided_keys, required_keys)
 
-        with self._field_controller.allow_read_write():
+        with self.__chamber_field_controller.allow_read_write():
             for key, value in data.items():
                 setattr(self, key, value)
 
