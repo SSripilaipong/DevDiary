@@ -50,6 +50,12 @@ def _is_integer(number: Any) -> bool:
 
 def _validate_initial_values(provided_keys, required_keys):
     exceeded_keys = provided_keys - required_keys
+    lacked_keys = required_keys - provided_keys
+
     if exceeded_keys != set():
         message = "Unknown fields named: " + ', '.join(list(exceeded_keys))
+        raise AttributeError(message)
+
+    if lacked_keys != set():
+        message = "Required fields not provided: " + ', '.join(list(lacked_keys))
         raise AttributeError(message)
