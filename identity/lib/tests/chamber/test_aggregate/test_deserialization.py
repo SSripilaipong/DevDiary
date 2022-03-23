@@ -35,3 +35,10 @@ def test_should_raise_AttributeError_when_field_name_is_unknown():
     with raises(AttributeError):
         MyAggregate.from_dict({"my_number": 123, "Copy": "Paste"})
 
+
+def test_should_raise_TypeError_when_type_is_wrong_and_no_deserialize_function():
+    class MyAggregate(Aggregate):
+        my_string: str = Field()
+
+    with raises(TypeError):
+        MyAggregate.from_dict({"my_string": 123})
