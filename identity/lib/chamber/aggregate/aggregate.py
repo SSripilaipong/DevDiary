@@ -25,7 +25,6 @@ class Aggregate:
     @classmethod
     def from_dict(cls: Type[T], data: Dict) -> T:
         params = {}
-        types = getattr(cls, "__annotations__", {})
 
         for key, value in data.items():
             field = cls.__chamber_registered_alias_fields.get(key, None)
@@ -33,11 +32,12 @@ class Aggregate:
                 name = field.name
                 type_ = field.type_
             else:
-                if key not in types:
+                field = cls.__chamber_registered_fields.get(key, None)
+                if field is None:
                     raise NotImplementedError()  # TODO: implement this
 
                 name = key
-                type_ = types[key]
+                type_ = field.type_
 
             if not isinstance(value, type_):
                 if hasattr(type_, 'deserialize'):
