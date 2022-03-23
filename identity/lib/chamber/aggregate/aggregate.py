@@ -11,7 +11,7 @@ class Aggregate:
 
     def __init__(self, _aggregate_version: AggregateVersion = None, _outbox: List[Message] = None, **kwargs):
         self._aggregate_version = _aggregate_version or AggregateVersion.create(0)
-        self._outbox = _outbox or []
+        self.__chamber_outbox = _outbox or []
 
         self._field_controller = FieldController()
 
@@ -36,13 +36,13 @@ class Aggregate:
                 setattr(self, key, value)
 
     def _append_message(self, message: Message):
-        self._outbox.append(message)
+        self.__chamber_outbox.append(message)
 
     def get_aggregate_outbox_messages(self) -> List[Message]:
-        return list(self._outbox)
+        return list(self.__chamber_outbox)
 
     def clear_aggregate_outbox_messages(self):
-        self._outbox = []
+        self.__chamber_outbox = []
 
     @property
     def aggregate_version(self) -> AggregateVersion:
