@@ -21,11 +21,11 @@ class Aggregate:
     def to_dict(self) -> Dict:
         result = {}
         with self.__chamber_field_controller.allow_read():
-            for name in self.__chamber_registered_fields.keys():
+            for name, field in self.__chamber_registered_fields.items():
                 value = getattr(self, name)
                 if hasattr(value, 'serialize'):
                     value = value.serialize()
-                result[name] = value
+                result[field.alias or name] = value
         return result
 
     def __chamber_assign_fields(self, data: Dict[str, Any]):

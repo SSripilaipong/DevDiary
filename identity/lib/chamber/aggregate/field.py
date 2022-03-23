@@ -7,7 +7,12 @@ FIELD_MUST_HAVE_TYPE_MSG = "A field must be annotated with a type."
 
 
 class Field:
-    def __init__(self, getter=False, setter=False):
+    def __init__(self, alias: str = None, *, getter=False, setter=False):
+        assert alias is None or isinstance(alias, str)
+        assert isinstance(getter, bool)
+        assert isinstance(setter, bool)
+
+        self._alias = alias
         self._has_getter = getter
         self._has_setter = setter
 
@@ -47,3 +52,7 @@ class Field:
             raise FieldHasNoGetterException()
 
         return getattr(instance, self._name)
+
+    @property
+    def alias(self) -> str:
+        return self._alias
