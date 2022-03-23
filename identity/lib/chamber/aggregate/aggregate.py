@@ -11,7 +11,7 @@ class Aggregate:
     _Aggregate__chamber_field_controller: FieldController
 
     def __init__(self, _aggregate_version: AggregateVersion = None, _outbox: List[Message] = None, **kwargs):
-        self._aggregate_version = _aggregate_version or AggregateVersion.create(0)
+        self.__chamber_aggregate_version = _aggregate_version or AggregateVersion.create(0)
         self.__chamber_outbox = _outbox or []
 
         self.__chamber_field_controller = FieldController()
@@ -47,10 +47,10 @@ class Aggregate:
 
     @property
     def aggregate_version(self) -> AggregateVersion:
-        return self._aggregate_version
+        return self.__chamber_aggregate_version
 
     def increase_aggregate_version_by(self, increase: AggregateVersionIncrease):
-        self._aggregate_version = increase.apply_to(self._aggregate_version)
+        self.__chamber_aggregate_version = increase.apply_to(self.__chamber_aggregate_version)
 
 
 def _is_integer(number: Any) -> bool:
