@@ -34,7 +34,7 @@ class Aggregate:
             else:
                 field = cls.__chamber_registered_fields.get(key, None)
                 if field is None:
-                    raise NotImplementedError()  # TODO: implement this
+                    raise AttributeError(f'Invalid field name: {key}')
 
                 name = key
                 type_ = field.type_
