@@ -1,9 +1,12 @@
-from typing import Any, List, Dict
+from typing import Any, List, Dict, TypeVar, Type
 
 from chamber.aggregate.field_controller import FieldController
 from chamber.aggregate.version import AggregateVersion
 from chamber.aggregate.version_increase import AggregateVersionIncrease
 from chamber.message import Message
+
+
+T = TypeVar('T', bound='Aggregate')
 
 
 class Aggregate:
@@ -17,6 +20,10 @@ class Aggregate:
         self.__chamber_field_controller = FieldController()
 
         self.__chamber_assign_fields(kwargs)
+
+    @classmethod
+    def from_dict(cls: Type[T], data: Dict) -> T:
+        pass
 
     def to_dict(self) -> Dict:
         result = {}
