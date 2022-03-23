@@ -13,7 +13,7 @@ from domain.identity.value_object.username import Username
 class Registration(Aggregate):
     def __init__(self, username: Username, password_hashed: bytes, display_name: DisplayName, email: Email, is_confirmed: bool,
                  confirmation_code: str, _version: AggregateVersion):
-        super().__init__(aggregate_version=_version)
+        super().__init__(_aggregate_version=_version)
         self._username = username
         self._password_hashed = password_hashed
         self._display_name = display_name
