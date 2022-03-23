@@ -1,3 +1,5 @@
+from pytest import raises
+
 from chamber.aggregate import Aggregate, Field
 from chamber.flat.string import StringFlat
 
@@ -24,3 +26,12 @@ def test_should_create_aggregate_with_field_in_alias_name():
 
     obj = MyAggregate.from_dict({"myNumber": 123})
     assert obj.my_number == 123
+
+
+def test_should_raise_AttributeError_when_field_name_is_unknown():
+    class MyAggregate(Aggregate):
+        my_number: int = Field()
+
+    with raises(AttributeError):
+        MyAggregate.from_dict({"my_number": 123, "Copy": "Paste"})
+
