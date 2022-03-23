@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from typing import Callable, Any
+from typing import Callable, Any, TypeVar, Type
 
 
 class FlatMeta(type):
@@ -13,11 +13,19 @@ class FlatMeta(type):
         return x
 
 
+T = TypeVar("T", bound='Flat')
+
+
 class Flat(metaclass=FlatMeta):
     CAST: Callable[[Any], str] = None
 
     @abstractmethod
     def serialize(self) -> Any:
+        pass
+
+    @classmethod
+    @abstractmethod
+    def deserialize(cls: Type[T], value: Any) -> T:
         pass
 
     class InvalidTypeException(Exception):

@@ -93,6 +93,10 @@ class StringFlat(Flat):
     def str(self) -> str:
         return str(self._value)
 
+    @classmethod
+    def deserialize(cls: Type[F], value: str) -> F:
+        return cls(value)
+
     def __str__(self) -> str:
         return self.str()
 

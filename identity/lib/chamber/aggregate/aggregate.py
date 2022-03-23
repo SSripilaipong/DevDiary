@@ -23,7 +23,22 @@ class Aggregate:
 
     @classmethod
     def from_dict(cls: Type[T], data: Dict) -> T:
-        return cls(**data)
+        params = {}
+        types = getattr(cls, "__annotations__", {})
+
+        for key, value in data.items():
+            if key not in types:
+                raise NotImplementedError()  # TODO: implement this
+
+            type_ = types[key]
+            if not isinstance(value, type_):
+                if hasattr(type_, 'deserialize'):
+                    value = type_.deserialize(value)
+                else:
+                    raise NotImplementedError()  # TODO: implement this
+
+            params[key] = value
+        return cls(**params)
 
     def to_dict(self) -> Dict:
         result = {}

@@ -15,4 +15,4 @@ def test_should_convert_primitive_to_flat():
         my_string: StringFlat = Field(getter=True)
 
     obj = MyAggregate.from_dict({"my_string": "Copy Paste Engineer"})
-    assert obj.my_string == "Copy Paste Engineer"
+    assert obj.my_string == StringFlat("Copy Paste Engineer")
