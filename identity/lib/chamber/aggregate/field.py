@@ -21,6 +21,10 @@ class Field:
         if self._type is None:
             raise TypeError(FIELD_MUST_HAVE_TYPE_MSG)
 
+        if not hasattr(owner, '_Aggregate__chamber_registered_fields'):
+            owner._Aggregate__chamber_registered_fields = {}
+        owner._Aggregate__chamber_registered_fields[name] = self
+
         self._name = f'_{name}'
 
     def __set__(self, instance: Aggregate, value):

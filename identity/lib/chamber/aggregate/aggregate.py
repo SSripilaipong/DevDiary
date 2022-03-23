@@ -7,6 +7,8 @@ from chamber.message import Message
 
 
 class Aggregate:
+    __chamber_registered_fields: Dict
+
     def __init__(self, _aggregate_version: AggregateVersion = None, _outbox: List[Message] = None, **kwargs):
         self._aggregate_version = _aggregate_version or AggregateVersion.create(0)
         self._outbox = _outbox or []
@@ -16,7 +18,11 @@ class Aggregate:
         self._assign_fields(kwargs)
 
     def to_dict(self) -> Dict:
-        pass  # TODO: implement this
+        result = {}
+        with self._field_controller.allow_read():
+            for name in self.__chamber_registered_fields.keys():
+                result[name] = getattr(self, name)
+        return result
 
     def _assign_fields(self, data: Dict[str, Any]):
         provided_keys = set(data)
