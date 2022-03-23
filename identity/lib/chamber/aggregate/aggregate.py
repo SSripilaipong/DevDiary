@@ -10,7 +10,7 @@ class Aggregate:
     __chamber_registered_fields: Dict
     _Aggregate__chamber_field_controller: FieldController
 
-    def __init__(self, _aggregate_version: AggregateVersion = None, _outbox: List[Message] = None, **kwargs):
+    def __init__(self, *, _aggregate_version: AggregateVersion = None, _outbox: List[Message] = None, **kwargs):
         self.__chamber_aggregate_version = _aggregate_version or AggregateVersion.create(0)
         self.__chamber_outbox = _outbox or []
 
