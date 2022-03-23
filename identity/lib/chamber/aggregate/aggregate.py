@@ -15,6 +15,9 @@ class Aggregate:
 
         self._assign_fields(kwargs)
 
+    def to_dict(self) -> Dict:
+        pass  # TODO: implement this
+
     def _assign_fields(self, data: Dict[str, Any]):
         provided_keys = set(data)
         required_keys = set(getattr(self, '__annotations__', {}).keys())
