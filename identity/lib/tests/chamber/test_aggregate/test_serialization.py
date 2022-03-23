@@ -15,3 +15,10 @@ def test_to_dict_with_flat_field():
         my_name: StringFlat = Field()
 
     assert MyAggregate(my_number=123, my_name=StringFlat('Hello')).to_dict() == {'my_number': 123, 'my_name': 'Hello'}
+
+
+def test_should_use_alias():
+    class MyAggregate(Aggregate):
+        my_number: int = Field("myName")
+
+    assert MyAggregate(my_number=123).to_dict() == {'myNumber': 123}
