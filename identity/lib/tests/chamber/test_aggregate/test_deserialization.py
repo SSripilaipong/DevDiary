@@ -16,3 +16,11 @@ def test_should_convert_primitive_to_flat():
 
     obj = MyAggregate.from_dict({"my_string": "Copy Paste Engineer"})
     assert obj.my_string == StringFlat("Copy Paste Engineer")
+
+
+def test_should_create_aggregate_with_field_in_alias_name():
+    class MyAggregate(Aggregate):
+        my_number: int = Field("myNumber", getter=True)
+
+    obj = MyAggregate.from_dict({"myNumber": 123})
+    assert obj.my_number == 123
