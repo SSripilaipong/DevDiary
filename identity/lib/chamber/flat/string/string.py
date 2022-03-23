@@ -87,6 +87,9 @@ class StringFlat(Flat):
         for field_name, validator in validators.items():
             dct[field_name] = validator(dct.get(field_name, None))
 
+    def serialize(self) -> str:
+        return self.str()
+
     def str(self) -> str:
         return str(self._value)
 

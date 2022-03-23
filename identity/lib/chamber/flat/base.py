@@ -1,3 +1,5 @@
+from abc import abstractmethod
+
 from typing import Callable, Any
 
 
@@ -13,6 +15,10 @@ class FlatMeta(type):
 
 class Flat(metaclass=FlatMeta):
     CAST: Callable[[Any], str] = None
+
+    @abstractmethod
+    def serialize(self) -> Any:
+        pass
 
     class InvalidTypeException(Exception):
         pass

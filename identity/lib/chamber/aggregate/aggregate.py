@@ -22,7 +22,10 @@ class Aggregate:
         result = {}
         with self.__chamber_field_controller.allow_read():
             for name in self.__chamber_registered_fields.keys():
-                result[name] = getattr(self, name)
+                value = getattr(self, name)
+                if hasattr(value, 'serialize'):
+                    value = value.serialize()
+                result[name] = value
         return result
 
     def __chamber_assign_fields(self, data: Dict[str, Any]):
