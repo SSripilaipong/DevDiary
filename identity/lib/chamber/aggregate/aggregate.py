@@ -18,9 +18,7 @@ class Aggregate:
     def _assign_fields(self, data: Dict[str, Any]):
         provided_keys = set(data)
         required_keys = set(getattr(self, '__annotations__', {}).keys())
-        exceeded_keys = provided_keys - required_keys
-        if exceeded_keys != set():
-            raise AttributeError("Unknown fields named:", ', '.join(list(exceeded_keys)))
+        _validate_initial_values(provided_keys, required_keys)
 
         with self._field_controller.allow_read_write():
             for key, value in data.items():
@@ -48,3 +46,9 @@ def _is_integer(number: Any) -> bool:
         return number == int(number)
     except ValueError:
         return False
+
+
+def _validate_initial_values(provided_keys, required_keys):
+    exceeded_keys = provided_keys - required_keys
+    if exceeded_keys != set():
+        raise AttributeError("Unknown fields named:", ', '.join(list(exceeded_keys)))
