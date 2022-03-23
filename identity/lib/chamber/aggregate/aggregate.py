@@ -23,7 +23,7 @@ class Aggregate:
 
     @classmethod
     def from_dict(cls: Type[T], data: Dict) -> T:
-        pass
+        return cls(**data)
 
     def to_dict(self) -> Dict:
         result = {}
