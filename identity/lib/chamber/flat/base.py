@@ -19,6 +19,9 @@ T = TypeVar("T", bound='Flat')
 class Flat(metaclass=FlatMeta):
     CAST: Callable[[Any], str] = None
 
+    def __init__(self, value: Any, type_: Type):
+        pass
+
     @abstractmethod
     def serialize(self) -> Any:
         pass
