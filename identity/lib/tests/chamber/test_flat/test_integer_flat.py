@@ -39,3 +39,10 @@ def test_should_raise_TypeError_when_config_MAX_VALUE_with_non_integer():
     with raises(TypeError):
         class MyFlat(IntegerFlat):
             MAX_VALUE = 5.9
+
+
+def test_should_support_negative_value():
+    class MyFlat(IntegerFlat):
+        pass
+
+    assert MyFlat(-999).int() == -999
