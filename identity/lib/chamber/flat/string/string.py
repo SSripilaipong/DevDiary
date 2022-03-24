@@ -1,5 +1,5 @@
 import re
-from typing import Dict, Union, Set, List, Type, TypeVar
+from typing import Dict, Union, Set, List, Type, TypeVar, Callable, Any
 
 from chamber.flat.base import Flat
 from chamber.flat.string.validate_config import _validate_min_length_config, _validate_max_length_config, \
@@ -9,6 +9,7 @@ F = TypeVar("F", bound="StringFlat")
 
 
 class StringFlat(Flat):
+    CAST: Callable[[Any], str] = None
     MIN_LENGTH: int = None
     MAX_LENGTH: int = None
     VALID_CHARACTERS: Union[str, Set[str]] = None
