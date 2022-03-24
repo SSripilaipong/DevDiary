@@ -33,3 +33,9 @@ def test_should_allow_config_MAX_VALUE():
 
     with raises(MyFlat.TooHighException):
         MyFlat(10)
+
+
+def test_should_raise_TypeError_when_config_MAX_VALUE_with_non_integer():
+    with raises(TypeError):
+        class MyFlat(IntegerFlat):
+            MAX_VALUE = 5.9
