@@ -16,7 +16,7 @@ def test_should_confirm_registration():
                                        "CONFIRM!!!")
     Registry().all_registrations = AllRegistrationsDummy(from_email_return=registration)
     confirm_registration(Email.as_is("aaa@amail.com"), "CONFIRM!!!")
-    assert registration.is_confirmed()
+    assert registration.is_confirmed
 
 
 def test_should_save_registration():

@@ -15,12 +15,12 @@ class Registration(Aggregate):
     password_hashed: bytes = Field("passwordHashed", getter=True)
     display_name: DisplayName = Field("displayName", getter=True)
     email: Email = Field("email", getter=True)
+    is_confirmed: bool = Field("isConfirmed", getter=True)
 
-    def __init__(self, username: Username, password_hashed: bytes, display_name: DisplayName, email: Email, is_confirmed: bool,
-                 confirmation_code: str, _version: AggregateVersion):
+    def __init__(self, username: Username, password_hashed: bytes, display_name: DisplayName, email: Email,
+                 is_confirmed: bool, confirmation_code: str, _version: AggregateVersion):
         super().__init__(username=username, password_hashed=password_hashed, display_name=display_name, email=email,
-                         _aggregate_version=_version)
-        self._is_confirmed = is_confirmed
+                         is_confirmed=is_confirmed, _aggregate_version=_version)
         self._confirmation_code = confirmation_code
 
     @classmethod
@@ -39,13 +39,10 @@ class Registration(Aggregate):
             RegistrationCanNotBeConfirmedTwiceException
             RegistrationConfirmationCodeNotMatchedException
         """
-        if self._is_confirmed:
+        if self.is_confirmed:
             raise RegistrationCanNotBeConfirmedTwiceException()
         if self._confirmation_code != confirmation_code:
             raise RegistrationConfirmationCodeNotMatchedException()
 
-        self._is_confirmed = True
+        self.is_confirmed = True
         self._append_message(RegistrationConfirmedEvent(self.username, self.display_name, self.email))
-
-    def is_confirmed(self) -> bool:
-        return self._is_confirmed
