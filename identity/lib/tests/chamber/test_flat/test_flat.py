@@ -15,3 +15,8 @@ def test_should_raise_CastingFailedException_when_type_is_wrong_and_cast_failed(
 def test_should_raise_InvalidTypeException_when_type_is_wrong_and_no_cast_function():
     with raises(Flat.InvalidTypeException):
         Flat("Hello", int)
+
+
+def test_should_raise_CastingFailedException_when_type_is_still_wrong_after_casting():
+    with raises(Flat.CastingFailedException):
+        Flat("123", bool, int)
