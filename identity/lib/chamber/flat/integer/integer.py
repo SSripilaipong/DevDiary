@@ -23,11 +23,11 @@ class IntegerFlat(Flat):
     @classmethod
     def _validate(cls, value: int, *args, **kwargs) -> int:
         value = super()._validate(value, *args, **kwargs)
-        cls._flat_validate_range(value)
+        cls.__flat_validate_range(value)
         return value
 
     @classmethod
-    def _flat_validate_range(cls, value: int):
+    def __flat_validate_range(cls, value: int):
         if value < cls.MIN_VALUE:
             raise cls.TooLowException(f"Value must be at least {cls.MIN_VALUE} (got {value}).")
         if cls.MAX_VALUE < value:
