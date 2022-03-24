@@ -1,4 +1,4 @@
-from typing import Dict, Type, TypeVar
+from typing import Dict, Type, TypeVar, Callable, Any
 
 from chamber.flat.base import Flat
 from chamber.flat.integer.validate_config import _validate_min_value_config, _validate_max_value_config
@@ -7,14 +7,12 @@ F = TypeVar("F", bound="IntegerFlat")
 
 
 class IntegerFlat(Flat):
+    CAST: Callable[[Any], int]
     MIN_VALUE: int = None
     MAX_VALUE: int = None
 
     def __init__(self, value: int):
-        if value is None:
-            self._value = None
-        else:
-            self._value = self._validate(value)
+        super().__init__(value, int, int)
 
     @classmethod
     def as_is(cls: Type[F], value: int) -> F:
@@ -23,22 +21,9 @@ class IntegerFlat(Flat):
         return flat
 
     @classmethod
-    def _validate(cls, value: int) -> int:
-        value = cls._flat_ensure_integer(value)
+    def _validate(cls, value: int, *args, **kwargs) -> int:
+        value = super()._validate(value, *args, **kwargs)
         cls._flat_validate_range(value)
-        return value
-
-    @classmethod
-    def _flat_ensure_integer(cls, value) -> int:
-        if not isinstance(value, int):
-            if cls.CAST is None:
-                raise cls.InvalidTypeException(f"Only integer value is accepted unless CAST function is specified.")
-            try:
-                value = cls.CAST(value)
-            except Exception:
-                raise cls.CastingFailedException(f"Casting with the provided CAST function failed.")
-            if not isinstance(value, int):
-                raise cls.CastingFailedException(f"CAST function should return integer value.")
         return value
 
     @classmethod

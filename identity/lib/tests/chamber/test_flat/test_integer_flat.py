@@ -50,6 +50,6 @@ def test_should_support_negative_value():
 
 def test_should_cast_to_integer():
     class MyFlat(IntegerFlat):
-        pass
+        CAST = int
 
     assert MyFlat('-999').int() == -999
