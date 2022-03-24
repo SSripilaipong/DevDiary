@@ -53,3 +53,10 @@ def test_should_cast_to_integer():
         CAST = int
 
     assert MyFlat('-999').int() == -999
+
+
+def test_should_create_as_is():
+    class MyFlat(IntegerFlat):
+        pass
+
+    assert MyFlat.as_is("Hello World").int() == "Hello World"
