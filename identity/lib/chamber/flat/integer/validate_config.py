@@ -6,7 +6,7 @@ def _validate_min_value_config(min_value) -> Union[int, float]:
         if not isinstance(min_value, int):
             raise TypeError(f"MIN_VALUE config should be integer (got {min_value}).")
         return min_value
-    return 0
+    return float('-inf')
 
 
 def _validate_max_value_config(max_value) -> Union[int, float]:
