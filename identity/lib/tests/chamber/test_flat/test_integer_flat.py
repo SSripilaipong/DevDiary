@@ -17,3 +17,9 @@ def test_should_allow_config_MIN_VALUE():
 
     with raises(MyFlat.TooLowException):
         MyFlat(4)
+
+
+def test_should_raise_TypeError_when_config_MIN_VALUE_with_float():
+    with raises(TypeError):
+        class MyFlat(IntegerFlat):
+            MIN_VALUE = 5.9
