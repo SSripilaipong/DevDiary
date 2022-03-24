@@ -18,18 +18,19 @@ T = TypeVar("T", bound='Flat')
 
 class Flat(metaclass=FlatMeta):
     def __init__(self, value: Any, type_: Type, cast: Callable[[Any], Any]):
-        self._value = self._validate(value, type_)
-        self.__type = type_
-        self.__cast = cast
+        self._value = self._validate(value, type_, cast)
 
     @classmethod
-    def _validate(cls, value: Any, type_: Type) -> Any:
-        return cls.__flat_ensure_type(value, type_)
+    def _validate(cls, value: Any, type_: Type, cast: Callable[[Any], Any]) -> Any:
+        return cls.__flat_ensure_type(value, type_, cast)
 
     @classmethod
-    def __flat_ensure_type(cls, value: Any, type_: Type) -> Any:
+    def __flat_ensure_type(cls, value: Any, type_: Type, cast: Callable[[Any], Any]) -> Any:
         if not isinstance(value, type_):
-            raise cls.InvalidTypeException(f"Expect type {type_.__name__} (got {type(value).__name__})")
+            try:
+                value = cast(value)
+            except Exception:
+                raise cls.InvalidTypeException(f"Expect type {type_.__name__} (got {type(value).__name__})")
         return value
 
     @abstractmethod
