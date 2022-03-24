@@ -1,4 +1,4 @@
-from chamber.aggregate import Aggregate
+from chamber.aggregate import Aggregate, Field, command
 from chamber.aggregate.version import AggregateVersion
 from domain.identity.registration.event.confirmation_needed import RegistrationEmailNeededToBeConfirmedEvent
 from domain.identity.registration.event.confirmed import RegistrationConfirmedEvent
@@ -11,10 +11,11 @@ from domain.identity.value_object.username import Username
 
 
 class Registration(Aggregate):
+    username: Username = Field("username", getter=True)
+
     def __init__(self, username: Username, password_hashed: bytes, display_name: DisplayName, email: Email, is_confirmed: bool,
                  confirmation_code: str, _version: AggregateVersion):
-        super().__init__(_aggregate_version=_version)
-        self._username = username
+        super().__init__(username=username, _aggregate_version=_version)
         self._password_hashed = password_hashed
         self._display_name = display_name
         self._email = email
@@ -30,6 +31,7 @@ class Registration(Aggregate):
             RegistrationEmailNeededToBeConfirmedEvent(registration._email, registration._confirmation_code))
         return registration
 
+    @command
     def confirm(self, confirmation_code: str):
         """
         :raises:
@@ -42,11 +44,7 @@ class Registration(Aggregate):
             raise RegistrationConfirmationCodeNotMatchedException()
 
         self._is_confirmed = True
-        self._append_message(RegistrationConfirmedEvent(self._username, self._display_name, self._email))
-
-    @property
-    def username(self) -> Username:
-        return self._username
+        self._append_message(RegistrationConfirmedEvent(self.username, self._display_name, self._email))
 
     @property
     def display_name(self) -> DisplayName:
