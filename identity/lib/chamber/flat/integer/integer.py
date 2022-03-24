@@ -4,7 +4,6 @@ from chamber.flat.base import Flat
 from chamber.flat.integer.validate_config import _validate_min_value_config, _validate_max_value_config
 
 F = TypeVar("F", bound="IntegerFlat")
-int_ = int
 
 
 class IntegerFlat(Flat):
@@ -40,9 +39,6 @@ class IntegerFlat(Flat):
     def serialize(self) -> int:
         return self.int()
 
-    def int(self) -> int:
-        return int(self._value)
-
     @classmethod
     def deserialize(cls: Type[F], value: int) -> F:
         return cls(value)
@@ -67,5 +63,8 @@ class IntegerFlat(Flat):
 
     if TYPE_CHECKING:
         @classmethod
-        def as_is(cls: Type[F], value: int_) -> F:
+        def as_is(cls: Type[F], value: int) -> F:
             return cls()
+
+    def int(self) -> int:
+        return int(self._value)
