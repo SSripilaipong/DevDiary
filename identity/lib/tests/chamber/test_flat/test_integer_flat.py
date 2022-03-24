@@ -23,3 +23,13 @@ def test_should_raise_TypeError_when_config_MIN_VALUE_with_float():
     with raises(TypeError):
         class MyFlat(IntegerFlat):
             MIN_VALUE = 5.9
+
+
+def test_should_allow_config_MAX_VALUE():
+    class MyFlat(IntegerFlat):
+        MAX_VALUE = 9
+
+    assert MyFlat(9).int() == 9
+
+    with raises(MyFlat.TooHighException):
+        MyFlat(10)
