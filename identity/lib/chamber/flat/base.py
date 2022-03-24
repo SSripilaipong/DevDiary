@@ -27,10 +27,12 @@ class Flat(metaclass=FlatMeta):
     @classmethod
     def __flat_ensure_type(cls, value: Any, type_: Type, cast: Callable[[Any], Any]) -> Any:
         if not isinstance(value, type_):
+            if cast is None:
+                raise cls.InvalidTypeException(f"Expect type {type_.__name__} (got {type(value).__name__})")
             try:
                 value = cast(value)
             except Exception:
-                raise cls.InvalidTypeException(f"Expect type {type_.__name__} (got {type(value).__name__})")
+                raise cls.CastingFailedException(f"Casting with the provided cast function raises error.")
         return value
 
     @abstractmethod
