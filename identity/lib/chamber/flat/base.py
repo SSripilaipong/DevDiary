@@ -20,7 +20,18 @@ class Flat(metaclass=FlatMeta):
     CAST: Callable[[Any], str] = None
 
     def __init__(self, value: Any, type_: Type):
-        pass
+        self._value = self._validate(value, type_)
+        self.__type = type_
+
+    @classmethod
+    def _validate(cls, value: Any, type_: Type) -> Any:
+        return cls.__flat_ensure_type(value, type_)
+
+    @classmethod
+    def __flat_ensure_type(cls, value: Any, type_: Type) -> Any:
+        if not isinstance(value, type_):
+            raise cls.InvalidTypeException(f"Expect type {type_.__name__} (got {type(value).__name__})")
+        return value
 
     @abstractmethod
     def serialize(self) -> Any:
