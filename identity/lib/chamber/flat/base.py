@@ -33,6 +33,9 @@ class Flat(metaclass=FlatMeta):
                 value = cast(value)
             except Exception:
                 raise cls.CastingFailedException(f"Casting with the provided cast function raises error.")
+            if not isinstance(value, type_):
+                raise cls.CastingFailedException(f"Casting doesn't return with type {type_.__name__} "
+                                                 f"(got {type(value).__name__}).")
         return value
 
     @abstractmethod
