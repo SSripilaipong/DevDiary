@@ -1,5 +1,5 @@
 import re
-from typing import Dict, Union, Set, List, Type, TypeVar, Callable, Any
+from typing import Dict, Union, Set, List, Type, TypeVar, Callable, Any, TYPE_CHECKING
 
 from chamber.flat.base import Flat
 from chamber.flat.string.validate_config import _validate_min_length_config, _validate_max_length_config, \
@@ -17,15 +17,7 @@ class StringFlat(Flat):
     PATTERN: Union[str, re.Pattern] = None
 
     def __init__(self, value: str, _as_is=False):
-        if _as_is:
-            self._value = value
-        else:
-            super().__init__(value, str, self.CAST)
-
-    @classmethod
-    def as_is(cls: Type[F], value: str) -> F:
-        flat = cls(value, _as_is=True)
-        return flat
+        super().__init__(value, type_=str, cast=self.CAST, _as_is=_as_is)
 
     @classmethod
     def _validate(cls, value: str, *args, **kwargs) -> str:
@@ -110,3 +102,8 @@ class StringFlat(Flat):
 
     class PatternNotMatchedException(Exception):
         pass
+
+    if TYPE_CHECKING:
+        @classmethod
+        def as_is(cls: Type[F], value: str) -> F:
+            pass
