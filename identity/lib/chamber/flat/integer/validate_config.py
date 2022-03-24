@@ -9,8 +9,10 @@ def _validate_min_value_config(min_value) -> Union[int, float]:
     return 0
 
 
-def _validate_max_value_config(max_length) -> Union[int, float]:
-    if max_length is not None:
-        assert isinstance(max_length, int)
-        return max_length
+def _validate_max_value_config(max_value) -> Union[int, float]:
+    if max_value is not None:
+        if not isinstance(max_value, int):
+            raise TypeError(f"MAX_VALUE config should be integer (got {max_value}).")
+        assert isinstance(max_value, int)
+        return max_value
     return float('inf')
