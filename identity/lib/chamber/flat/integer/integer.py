@@ -7,18 +7,12 @@ F = TypeVar("F", bound="IntegerFlat")
 
 
 class IntegerFlat(Flat):
-    CAST: Callable[[Any], int]
+    CAST: Callable[[Any], int] = None
     MIN_VALUE: int = None
     MAX_VALUE: int = None
 
-    def __init__(self, value: int):
-        super().__init__(value, int, int)
-
-    @classmethod
-    def as_is(cls: Type[F], value: int) -> F:
-        flat = cls(None)
-        flat._value = value
-        return flat
+    def __init__(self, value: int, _as_is=False):
+        super().__init__(value, type_=int, cast=self.CAST, _as_is=_as_is)
 
     @classmethod
     def _validate(cls, value: int, *args, **kwargs) -> int:

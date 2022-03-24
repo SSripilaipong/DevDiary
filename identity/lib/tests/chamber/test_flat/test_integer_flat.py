@@ -57,6 +57,6 @@ def test_should_cast_to_integer():
 
 def test_should_create_as_is():
     class MyFlat(IntegerFlat):
-        pass
+        MAX_VALUE = 0
 
-    assert MyFlat.as_is("Hello World").int() == "Hello World"
+    assert MyFlat.as_is(9999).int() == 9999
