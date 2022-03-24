@@ -17,7 +17,7 @@ T = TypeVar("T", bound='Flat')
 
 
 class Flat(metaclass=FlatMeta):
-    def __init__(self, value: Any, type_: Type, cast: Callable[[Any], Any]):
+    def __init__(self, value: Any, type_: Type, cast: Callable[[Any], Any] = None):
         self._value = self._validate(value, type_, cast)
 
     @classmethod
