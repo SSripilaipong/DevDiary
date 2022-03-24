@@ -50,7 +50,7 @@ def test_should_not_allow_duplicate_email():
         register_user(Username.as_is(""), Password.as_is(""), DisplayName.as_is(""), Email.as_is(""))
 
 
-def get_all_registrations(*, create_exception=None, generate_confirmation_code_return=None) -> 'AllRegistrationsDummy':
+def get_all_registrations(*, create_exception=None, generate_confirmation_code_return="") -> 'AllRegistrationsDummy':
     return AllRegistrationsDummy(create_exception=create_exception,
                                  generate_confirmation_code_return=generate_confirmation_code_return)
 

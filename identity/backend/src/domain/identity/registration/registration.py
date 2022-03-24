@@ -16,20 +16,15 @@ class Registration(Aggregate):
     display_name: DisplayName = Field("displayName", getter=True)
     email: Email = Field("email", getter=True)
     is_confirmed: bool = Field("isConfirmed", getter=True)
-
-    def __init__(self, username: Username, password_hashed: bytes, display_name: DisplayName, email: Email,
-                 is_confirmed: bool, confirmation_code: str, _version: AggregateVersion):
-        super().__init__(username=username, password_hashed=password_hashed, display_name=display_name, email=email,
-                         is_confirmed=is_confirmed, _aggregate_version=_version)
-        self._confirmation_code = confirmation_code
+    _confirmation_code: str = Field("confirmationCode")
 
     @classmethod
     def create(cls, username: Username, password_hashed: bytes, display_name: DisplayName, email: Email,
                confirmation_code: str) -> 'Registration':
-        registration = cls(username, password_hashed, display_name, email,
-                           is_confirmed=False, confirmation_code=confirmation_code, _version=AggregateVersion.create(0))
-        registration._append_message(
-            RegistrationEmailNeededToBeConfirmedEvent(registration.email, registration._confirmation_code))
+        registration = cls(username=username, password_hashed=password_hashed, display_name=display_name, email=email,
+                           is_confirmed=False, _confirmation_code=confirmation_code,
+                           _aggregate_version=AggregateVersion.create(0))
+        registration._append_message(RegistrationEmailNeededToBeConfirmedEvent(email, confirmation_code))
         return registration
 
     @command
