@@ -6,6 +6,7 @@ from chamber.flat.string.validate_config import _validate_min_length_config, _va
     _validate_valid_characters_config, _validate_required_character_config, _validate_pattern_config
 
 F = TypeVar("F", bound="StringFlat")
+str_ = str
 
 
 class StringFlat(Flat):
@@ -105,5 +106,5 @@ class StringFlat(Flat):
 
     if TYPE_CHECKING:
         @classmethod
-        def as_is(cls: Type[F], value: str) -> F:
+        def as_is(cls: Type[F], value: str_) -> F:
             pass

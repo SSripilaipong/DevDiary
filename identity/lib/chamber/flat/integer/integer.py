@@ -1,9 +1,10 @@
-from typing import Dict, Type, TypeVar, Callable, Any
+from typing import Dict, Type, TypeVar, Callable, Any, TYPE_CHECKING
 
 from chamber.flat.base import Flat
 from chamber.flat.integer.validate_config import _validate_min_value_config, _validate_max_value_config
 
 F = TypeVar("F", bound="IntegerFlat")
+int_ = int
 
 
 class IntegerFlat(Flat):
@@ -63,3 +64,8 @@ class IntegerFlat(Flat):
 
     class TooHighException(Exception):
         pass
+
+    if TYPE_CHECKING:
+        @classmethod
+        def as_is(cls: Type[F], value: int_) -> F:
+            return cls()
