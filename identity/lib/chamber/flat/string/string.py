@@ -16,61 +16,47 @@ class StringFlat(Flat):
     REQUIRED_CHARACTER_SETS: Union[str, List[str], List[Set[str]]] = None
     PATTERN: Union[str, re.Pattern] = None
 
-    def __init__(self, value: str):
-        if value is None:
-            self._value = None
+    def __init__(self, value: str, _as_is=False):
+        if _as_is:
+            self._value = value
         else:
-            self._value = self._validate(value)
+            super().__init__(value, str, self.CAST)
 
     @classmethod
     def as_is(cls: Type[F], value: str) -> F:
-        flat = cls(None)
-        flat._value = value
+        flat = cls(value, _as_is=True)
         return flat
 
     @classmethod
-    def _validate(cls, value: str) -> str:
-        value = cls._flat_ensure_string(value)
-        cls._flat_validate_length(value)
-        cls._flat_validate_valid_characters(value)
-        cls._flat_validate_required_characters(value)
-        cls._flat_validate_pattern(value)
+    def _validate(cls, value: str, *args, **kwargs) -> str:
+        value = super()._validate(value, *args, **kwargs)
+        cls.__flat_validate_length(value)
+        cls.__flat_validate_valid_characters(value)
+        cls.__flat_validate_required_characters(value)
+        cls.__flat_validate_pattern(value)
         return value
 
     @classmethod
-    def _flat_ensure_string(cls, value) -> str:
-        if not isinstance(value, str):
-            if cls.CAST is None:
-                raise cls.InvalidTypeException(f"Only string value is accepted unless CAST function is specified.")
-            try:
-                value = cls.CAST(value)
-            except Exception:
-                raise cls.CastingFailedException(f"Casting with the provided CAST function failed.")
-            if not isinstance(value, str):
-                raise cls.CastingFailedException(f"CAST function should return string value.")
-        return value
-
-    @classmethod
-    def _flat_validate_length(cls, value: str):
+    def __flat_validate_length(cls, value: str):
         if len(value) < cls.MIN_LENGTH:
             raise cls.TooShortException(f"Value must be at least {cls.MIN_LENGTH} length (got {len(value)}).")
         if cls.MAX_LENGTH < len(value):
             raise cls.TooLongException(f"Value must be at most {cls.MAX_LENGTH} length (got {len(value)}).")
 
     @classmethod
-    def _flat_validate_valid_characters(cls, value: str):
+    def __flat_validate_valid_characters(cls, value: str):
         if cls.VALID_CHARACTERS != set() and set(value) - cls.VALID_CHARACTERS != set():
             raise cls.ContainsInvalidCharactersException(f"All characters must be a member of valid characters.")
 
     @classmethod
-    def _flat_validate_required_characters(cls, value: str):
+    def __flat_validate_required_characters(cls, value: str):
         for char_set in cls.REQUIRED_CHARACTER_SETS:  # type: Set[str]
             if set(value) & char_set == set():
                 required = [''.join(_char_set) for _char_set in cls.REQUIRED_CHARACTER_SETS]
                 raise cls.RequiredCharactersMissingException(f'Required characters are {required!r}.')
 
     @classmethod
-    def _flat_validate_pattern(cls, value: str):
+    def __flat_validate_pattern(cls, value: str):
         if cls.PATTERN is not None:
             pattern: re.Pattern = cls.PATTERN
             if not pattern.match(value):
