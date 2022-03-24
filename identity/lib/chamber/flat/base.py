@@ -21,6 +21,10 @@ class Flat(metaclass=FlatMeta):
         self._value = self._validate(value, type_, cast)
 
     @classmethod
+    def as_is(cls: Type[T], value: Any) -> T:
+        pass
+
+    @classmethod
     def _validate(cls, value: Any, type_: Type, cast: Callable[[Any], Any]) -> Any:
         return cls.__flat_ensure_type(value, type_, cast)
 
