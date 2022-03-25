@@ -15,3 +15,11 @@ def test_should_raise_InvalidAggregateVersionException_when_create_with_negative
 
 def test_should_allow_creating_with_0():
     AggregateVersion(0)
+
+
+def test_should_raise_InvalidAggregateVersionException_when_create_with_wrong_type():
+    with raises(InvalidAggregateVersionException):
+        AggregateVersion("123")
+
+    with raises(InvalidAggregateVersionException):
+        AggregateVersion(123.5)
