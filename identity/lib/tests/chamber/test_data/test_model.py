@@ -18,3 +18,11 @@ def test_should_raise_AttributeError_when_instantiate_with_unknown_attribute():
 
     with raises(AttributeError):
         MyModel(something=1234)
+
+
+def test_should_raise_AttributeError_when_instantiate_without_required_attribute():
+    class MyModel(DataModel):
+        my_number: int = Field()
+
+    with raises(AttributeError):
+        MyModel()
