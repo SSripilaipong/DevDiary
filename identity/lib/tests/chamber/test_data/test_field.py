@@ -16,10 +16,10 @@ def test_should_raise_FieldHasNoGetterException_when_try_to_access_private_field
 
 
 def test_should_be_able_to_access_field_with_getter_from_outside():
-    class MyAggregate(Aggregate):
+    class MyModel(DataModel):
         my_number: int = Field(getter=True)
 
-    assert MyAggregate(my_number=123).my_number == 123
+    assert MyModel(my_number=123).my_number == 123
 
 
 def test_should_be_able_to_access_field_without_getter_from_query_method():
