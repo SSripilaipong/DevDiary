@@ -1,11 +1,14 @@
 from typing import Dict, Set
 
+from chamber.data.access import AccessController
+
 
 class DataModel:
     def __init__(self, **kwargs):
         provided_keys = set(kwargs)
         required_keys = self.__chamber_get_keys_from_annotations()
         _validate_initial_values(provided_keys, required_keys)
+        self.__chamber_access_controller = AccessController()
         self.__chamber_assign_fields(kwargs)
 
     def __chamber_assign_fields(self, data: Dict):
@@ -16,6 +19,9 @@ class DataModel:
         from chamber.data.field import Field
         return set(name for name in getattr(self, '__annotations__', {}).keys()
                    if isinstance(vars(self.__class__).get(name, None), Field))
+
+    def __chamber_can_read(self) -> bool:
+        return self.__chamber_access_controller.can_read()
 
 
 def _validate_initial_values(provided_keys, required_keys):
