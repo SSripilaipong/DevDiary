@@ -34,3 +34,10 @@ def test_should_raise_TypeError_when_instantiate_with_wrong_type():
 
     with raises(TypeError):
         MyModel(my_number="123")
+
+
+def test_should_retrieve_value():
+    class MyModel(DataModel):
+        my_number: int = Field(getter=True)
+
+    assert MyModel(my_number=123).my_number == 123
