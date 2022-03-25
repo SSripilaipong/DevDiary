@@ -14,8 +14,9 @@ class DataModel:
         self.__chamber_assign_fields(kwargs)
 
     def __chamber_assign_fields(self, data: Dict):
-        for key, value in data.items():
-            setattr(self, key, value)
+        with self.__chamber_request_read_write_access():
+            for key, value in data.items():
+                setattr(self, key, value)
 
     def __chamber_get_keys_from_annotations(self) -> Set[str]:
         from chamber.data.field import Field
@@ -28,8 +29,17 @@ class DataModel:
         yield
         self.__chamber_access_controller.prevent_read()
 
+    @contextmanager
+    def __chamber_request_read_write_access(self):
+        self.__chamber_access_controller.allow_read_write()
+        yield
+        self.__chamber_access_controller.prevent_read_write()
+
     def __chamber_can_read(self) -> bool:
         return self.__chamber_access_controller.can_read()
+
+    def __chamber_can_write(self) -> bool:
+        return self.__chamber_access_controller.can_write()
 
 
 def _validate_initial_values(provided_keys, required_keys):

@@ -51,7 +51,10 @@ class Field:
         if not isinstance(value, self._type):
             raise TypeError()
 
-        if isinstance(instance, DataModel) or instance._Aggregate__chamber_field_controller.can_write:
+        if isinstance(instance, DataModel):
+            if instance._DataModel__chamber_can_write():
+                return setattr(instance, self._value_name, value)
+        elif instance._Aggregate__chamber_field_controller.can_write:
             return setattr(instance, self._value_name, value)
 
         if not self._has_setter:
