@@ -36,10 +36,10 @@ def test_should_be_able_to_access_field_without_getter_from_query_method():
 
 
 def test_should_raise_FieldHasNoSetterException_when_try_to_set_value_for_field_without_setter_from_outside():
-    class MyAggregate(Aggregate):
+    class MyModel(DataModel):
         my_number: int = Field()
 
-    obj = MyAggregate(my_number=123)
+    obj = MyModel(my_number=123)
 
     with raises(FieldHasNoSetterException):
         obj.my_number = 456
