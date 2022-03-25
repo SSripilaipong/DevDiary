@@ -7,6 +7,7 @@ class AggregateVersionIncrease(IntegerFlat):
     MIN_VALUE = 0
 
     TooLowException = InvalidAggregateVersionException
+    InvalidTypeException = InvalidAggregateVersionException
 
     def apply_to(self, version: AggregateVersion) -> AggregateVersion:
         return AggregateVersion(version.int() + self._value)
