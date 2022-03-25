@@ -1,2 +1,3 @@
 class DataModel:
-    pass
+    def __init__(self, **kwargs):
+        pass
