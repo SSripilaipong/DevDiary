@@ -4,3 +4,7 @@ class FieldHasNoSetterException(Exception):
 
 class FieldHasNoGetterException(Exception):
     pass
+
+
+class DeserializationFailedException(Exception):
+    pass
