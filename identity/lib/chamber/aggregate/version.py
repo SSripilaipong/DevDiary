@@ -6,3 +6,4 @@ class AggregateVersion(IntegerFlat):
     MIN_VALUE = 0
 
     TooLowException = InvalidAggregateVersionException
+    InvalidTypeException = InvalidAggregateVersionException
