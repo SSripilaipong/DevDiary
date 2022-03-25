@@ -52,6 +52,9 @@ class IntegerFlat(Flat):
         assert isinstance(other, IntegerFlat)
         return self._value == other._value
 
+    def __lt__(self, other):
+        return self._value < other._value
+
     def __hash__(self):
         return self._value.__hash__()
 
