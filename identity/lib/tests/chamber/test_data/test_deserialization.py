@@ -1,5 +1,6 @@
 from pytest import raises
 
+from chamber.data.exception import DeserializationFailedException
 from chamber.data.field import Field
 from chamber.data.model import DataModel
 from chamber.flat.string import StringFlat
@@ -29,11 +30,11 @@ def test_should_create_aggregate_with_field_in_alias_name():
     assert obj.my_number == 123
 
 
-def test_should_raise_AttributeError_when_field_name_is_unknown():
+def test_should_raise_DeserializationFailedException_when_field_name_is_unknown():
     class MyModel(DataModel):
         my_number: int = Field()
 
-    with raises(AttributeError):
+    with raises(DeserializationFailedException):
         MyModel.from_dict({"my_number": 123, "Copy": "Paste"})
 
 
