@@ -64,3 +64,7 @@ def test_should_create_as_is():
 
 def test_should_support_equal_operator():
     assert IntegerFlat(1) == IntegerFlat(1)
+
+
+def test_should_support_less_than_operator():
+    assert IntegerFlat(1) < IntegerFlat(2)
