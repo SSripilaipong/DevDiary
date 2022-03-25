@@ -1,6 +1,6 @@
 from typing import Dict, Set
 
-from chamber.data.access import AccessController
+from chamber.data.access.controller import AccessController
 
 
 class DataModel:
