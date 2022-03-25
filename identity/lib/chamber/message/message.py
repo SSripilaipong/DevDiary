@@ -20,4 +20,8 @@ class Message(DataModel):
         if name != cls.__name__:
             raise DeserializationFailedException(f"Cannot deserialize data with name {name}")
 
+        body = data.get('body', None)
+        if body is None:
+            raise DeserializationFailedException("Cannot deserialize data without body")
+
         return super().from_dict(data['body'])
