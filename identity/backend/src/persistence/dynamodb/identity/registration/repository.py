@@ -100,7 +100,7 @@ class AllRegistrationsInDynamodb(AllRegistrations):
         data = registration.to_dict()
         item = {key: self.__serializer.serialize(value) for key, value in data.items()}
         current_version = registration.aggregate_version.int()
-        registration.increase_aggregate_version_by(AggregateVersionIncrease.create(1))
+        registration.increase_aggregate_version_by(AggregateVersionIncrease(1))
 
         item['_Partition'] = f"registration#{registration.username.str()}"
         item['_SortKey'] = f"registration#{registration.username.str()}"

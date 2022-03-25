@@ -54,7 +54,7 @@ class AllRegistrationsInMemory(AllRegistrations):
             raise RegistrationNotFoundException()
         if registration.aggregate_version < matched.aggregate_version:
             raise EntityOutdated()
-        registration.increase_aggregate_version_by(AggregateVersionIncrease.create(1))
+        registration.increase_aggregate_version_by(AggregateVersionIncrease(1))
         self._store_and_handle_outbox(registration)
 
     def generate_confirmation_code(self) -> str:
