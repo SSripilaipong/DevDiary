@@ -36,6 +36,12 @@ def test_should_raise_TypeError_when_instantiate_with_wrong_type():
         MyModel(my_number="123")
 
 
+def test_should_raise_RuntimeError_when_instantiate_without_type():
+    with raises(RuntimeError):
+        class _(DataModel):
+            my_number = Field()
+
+
 def test_should_retrieve_value():
     class MyModel(DataModel):
         my_number: int = Field(getter=True)
