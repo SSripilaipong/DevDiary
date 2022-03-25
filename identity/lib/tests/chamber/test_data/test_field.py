@@ -2,7 +2,7 @@ from pytest import raises
 
 from chamber.data.access import query, command
 from chamber.data.field import Field
-from chamber.data.access.exception import FieldHasNoSetterException, FieldHasNoGetterException
+from chamber.data.exception import FieldHasNoSetterException, FieldHasNoGetterException
 from chamber.data.model import DataModel
 
 

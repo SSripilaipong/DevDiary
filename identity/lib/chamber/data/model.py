@@ -1,8 +1,8 @@
 from contextlib import contextmanager
 
-from typing import Dict, Set
+from typing import Dict, Set, TYPE_CHECKING
 
-from chamber.data.access.controller import AccessController
+from chamber.data.access_controller import AccessController
 
 
 class DataModel:
@@ -40,6 +40,21 @@ class DataModel:
 
     def __chamber_can_write(self) -> bool:
         return self.__chamber_access_controller.can_write()
+
+    if TYPE_CHECKING:
+        def _DataModel__chamber_can_write(self) -> bool:
+            pass
+
+        def _DataModel__chamber_can_read(self) -> bool:
+            pass
+
+        @contextmanager
+        def _DataModel__chamber_request_read_access(self):
+            pass
+
+        @contextmanager
+        def _DataModel__chamber_request_read_write_access(self):
+            pass
 
 
 def _validate_initial_values(provided_keys, required_keys):

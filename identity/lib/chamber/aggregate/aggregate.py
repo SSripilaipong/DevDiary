@@ -1,4 +1,4 @@
-from typing import Any, List, Dict, TypeVar, Type
+from typing import List, Dict, TypeVar, Type
 
 from chamber.aggregate.version import AggregateVersion
 from chamber.aggregate.version_increase import AggregateVersionIncrease

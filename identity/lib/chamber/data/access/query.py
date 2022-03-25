@@ -1,18 +1,15 @@
-from typing import TypeVar, Type
+from typing import TypeVar
+
+from chamber.data.model import DataModel
 
 
 class _QueryMethod:
-    def __init__(self, instance, owner: Type, func):
+    def __init__(self, instance: DataModel, func):
         self._instance = instance
-        self._owner = owner
         self._func = func
 
     def __call__(self, *args, **kwargs):
-        from chamber.data.model import DataModel
-        if issubclass(self._owner, DataModel):
-            with self._instance._DataModel__chamber_request_read_access():
-                return self._func(self._instance, *args, **kwargs)
-        with self._instance._Aggregate__chamber_field_controller.allow_read():
+        with self._instance._DataModel__chamber_request_read_access():
             return self._func(self._instance, *args, **kwargs)
 
 
@@ -21,8 +18,8 @@ class _Query:
         self._func = func
 
     def __get__(self, instance, owner):
-        print(instance)
-        return _QueryMethod(instance, owner, self._func)
+        assert issubclass(owner, DataModel)
+        return _QueryMethod(instance, self._func)
 
 
 T = TypeVar("T")
