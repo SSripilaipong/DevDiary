@@ -1,5 +1,8 @@
+from chamber.aggregate.exception import InvalidAggregateVersionException
 from chamber.flat.integer import IntegerFlat
 
 
 class AggregateVersion(IntegerFlat):
-    pass
+    MIN_VALUE = 0
+
+    TooLowException = InvalidAggregateVersionException
