@@ -38,9 +38,9 @@ def test_should_raise_DeserializationFailedException_when_field_name_is_unknown(
         MyModel.from_dict({"my_number": 123, "Copy": "Paste"})
 
 
-def test_should_raise_TypeError_when_type_is_wrong_and_no_deserialize_function():
+def test_should_raise_DeserializationFailedException_when_type_is_wrong_and_no_deserialize_function():
     class MyModel(DataModel):
         my_string: str = Field()
 
-    with raises(TypeError):
+    with raises(DeserializationFailedException):
         MyModel.from_dict({"my_string": 123})
