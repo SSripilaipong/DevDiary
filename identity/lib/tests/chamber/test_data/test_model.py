@@ -41,3 +41,12 @@ def test_should_retrieve_value():
         my_number: int = Field(getter=True)
 
     assert MyModel(my_number=123).my_number == 123
+
+
+def test_should_set_value():
+    class MyModel(DataModel):
+        my_number: int = Field(getter=True, setter=True)
+
+    data = MyModel(my_number=123)
+    data.my_number = 456
+    assert data.my_number == 456
