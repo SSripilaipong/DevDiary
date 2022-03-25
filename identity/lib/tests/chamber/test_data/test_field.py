@@ -23,14 +23,14 @@ def test_should_be_able_to_access_field_with_getter_from_outside():
 
 
 def test_should_be_able_to_access_field_without_getter_from_query_method():
-    class MyAggregate(Aggregate):
+    class MyModel(DataModel):
         my_number: int = Field()
 
         @query
         def get_my_number(self):
             return self.my_number
 
-    assert MyAggregate(my_number=123).get_my_number() == 123
+    assert MyModel(my_number=123).get_my_number() == 123
 
 
 def test_should_raise_FieldHasNoSetterException_when_try_to_set_value_for_field_without_setter_from_outside():
