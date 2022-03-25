@@ -3,7 +3,7 @@ from contextlib import contextmanager
 from typing import Dict, Set, TYPE_CHECKING, Type, TypeVar
 
 from chamber.data.access_controller import AccessController
-
+from chamber.data.exception import DeserializationFailedException
 
 T = TypeVar('T', bound='DataModel')
 
@@ -44,7 +44,7 @@ class DataModel:
             else:
                 field = cls.__chamber_registered_fields.get(key, None)
                 if field is None:
-                    raise AttributeError(f'Invalid field name: {key}')
+                    raise DeserializationFailedException(f'Invalid field name: {key}')
 
                 name = key
                 type_ = field.type_
