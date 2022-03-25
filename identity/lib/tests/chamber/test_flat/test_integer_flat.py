@@ -60,3 +60,7 @@ def test_should_create_as_is():
         MAX_VALUE = 0
 
     assert MyFlat.as_is(9999).int() == 9999
+
+
+def test_should_support_equal_operator():
+    assert IntegerFlat(1) == IntegerFlat(1)
