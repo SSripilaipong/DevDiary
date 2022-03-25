@@ -1,6 +1,7 @@
 from pytest import raises
 
 from chamber.aggregate.exception import InvalidAggregateVersionException
+from chamber.aggregate.version import AggregateVersion
 from chamber.aggregate.version_increase import AggregateVersionIncrease
 
 
@@ -20,3 +21,12 @@ def test_should_raise_InvalidAggregateVersionException_when_create_with_wrong_ty
 
     with raises(InvalidAggregateVersionException):
         AggregateVersionIncrease(123.5)
+
+
+def test_should_apply_to_version():
+    version = AggregateVersion(2)
+    increase = AggregateVersionIncrease(3)
+    next_version = increase.apply_to(version)
+
+    assert version.int() == 2
+    assert next_version.int() == 5
