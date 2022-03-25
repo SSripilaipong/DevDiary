@@ -1,7 +1,7 @@
 from typing import Type
 
 from chamber.aggregate import Aggregate
-from chamber.aggregate.exception import FieldHasNoGetterException, FieldHasNoSetterException
+from chamber.data.access.exception import FieldHasNoSetterException, FieldHasNoGetterException
 from chamber.data.model import DataModel
 
 FIELD_MUST_HAVE_TYPE_MSG = "A field must be annotated with a type."
