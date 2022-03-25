@@ -17,7 +17,7 @@ class User(Aggregate):
 
     @classmethod
     def create(cls, username: Username, password_hashed: bytes, display_name: DisplayName, email: Email) -> 'User':
-        user = cls(username, password_hashed, display_name, email, AggregateVersion.create(0))
+        user = cls(username, password_hashed, display_name, email, AggregateVersion(0))
         user._append_message(UserCreatedEvent(user._username, user._display_name, user._email))
         return user
 

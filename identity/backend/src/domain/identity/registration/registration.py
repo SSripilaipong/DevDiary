@@ -23,7 +23,7 @@ class Registration(Aggregate):
                confirmation_code: str) -> 'Registration':
         registration = cls(username=username, password_hashed=password_hashed, display_name=display_name, email=email,
                            is_confirmed=False, _confirmation_code=confirmation_code,
-                           _aggregate_version=AggregateVersion.create(0))
+                           _aggregate_version=AggregateVersion(0))
         registration._append_message(RegistrationEmailNeededToBeConfirmedEvent(email, confirmation_code))
         return registration
 

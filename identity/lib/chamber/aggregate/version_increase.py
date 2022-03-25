@@ -26,7 +26,7 @@ class AggregateVersionIncrease:
         return self._version_increase
 
     def apply_to(self, version: AggregateVersion) -> AggregateVersion:
-        return AggregateVersion.create(version.int() + self._version_increase)
+        return AggregateVersion(version.int() + self._version_increase)
 
 
 def _is_integer(number: Any) -> bool:
