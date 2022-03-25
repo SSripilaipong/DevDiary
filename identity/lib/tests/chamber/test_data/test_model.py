@@ -26,3 +26,11 @@ def test_should_raise_AttributeError_when_instantiate_without_required_attribute
 
     with raises(AttributeError):
         MyModel()
+
+
+def test_should_raise_TypeError_when_instantiate_with_wrong_type():
+    class MyModel(DataModel):
+        my_number: int = Field()
+
+    with raises(TypeError):
+        MyModel(my_number="123")
