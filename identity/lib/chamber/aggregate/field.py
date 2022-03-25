@@ -60,7 +60,7 @@ class Field:
         setattr(instance, self._value_name, value)
 
     def __get__(self, instance: Aggregate, owner: Type[Aggregate]):
-        if instance._Aggregate__chamber_field_controller.can_read:
+        if isinstance(instance, DataModel) or instance._Aggregate__chamber_field_controller.can_read:
             return getattr(instance, self._value_name)
 
         if not self._has_getter:
