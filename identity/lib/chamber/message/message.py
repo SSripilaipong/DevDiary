@@ -1,25 +1,11 @@
-from abc import abstractmethod, ABC
-from typing import Dict, Type, TypeVar
+from typing import Dict
 
-M = TypeVar('M', bound='Message')
+from chamber.data.model import DataModel
 
 
-class Message(ABC):
+class Message(DataModel):
     def to_dict(self) -> Dict:
         return {
             'name': self.__class__.__name__,
-            'body': self._body_to_dict(),
+            'body': super().to_dict(),
         }
-
-    @classmethod
-    def from_dict(cls: Type[M], obj: Dict) -> M:
-        return cls._body_from_dict(obj['body'])
-
-    @abstractmethod
-    def _body_to_dict(self) -> Dict:
-        pass
-
-    @classmethod
-    @abstractmethod
-    def _body_from_dict(cls: Type[M], obj: Dict) -> M:
-        pass
