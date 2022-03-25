@@ -48,14 +48,21 @@ class IntegerFlat(Flat):
 
     def __eq__(self, other) -> bool:
         if type(self) != type(other):
-            return False
+            raise TypeError(f"'==' not supported between instances of '{type(self)}' and '{type(other)}'")
+        assert isinstance(other, IntegerFlat)
         assert isinstance(other, IntegerFlat)
         return self._value == other._value
 
     def __lt__(self, other):
+        if type(self) != type(other):
+            raise TypeError(f"'<' not supported between instances of '{type(self)}' and '{type(other)}'")
+        assert isinstance(other, IntegerFlat)
         return self._value < other._value
 
     def __le__(self, other):
+        if type(self) != type(other):
+            raise TypeError(f"'<=' not supported between instances of '{type(self)}' and '{type(other)}'")
+        assert isinstance(other, IntegerFlat)
         return self._value <= other._value
 
     def __hash__(self):
