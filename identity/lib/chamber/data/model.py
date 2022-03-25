@@ -53,7 +53,8 @@ class DataModel:
                 if hasattr(type_, 'deserialize'):
                     value = type_.deserialize(value)
                 else:
-                    raise TypeError(f'Expect type {type_.__name__} got: {value.__class__.__name__}')
+                    raise DeserializationFailedException(f'Expect type {type_.__name__} '
+                                                         f'got: {value.__class__.__name__}')
 
             params[name] = value
         return cls(**params)
