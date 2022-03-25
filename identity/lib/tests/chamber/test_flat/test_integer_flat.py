@@ -82,3 +82,26 @@ def test_should_support_greater_than_operator():
 def test_should_support_greater_than_or_equal_operator():
     assert IntegerFlat(2) >= IntegerFlat(-999)
     assert IntegerFlat(-999) >= IntegerFlat(-999)
+
+
+def test_should_raise_TypeError_for_comparison_with_different_type():
+    class MyFlat(IntegerFlat):
+        pass
+
+    with raises(TypeError):
+        _ = IntegerFlat(2) == 2
+
+    with raises(TypeError):
+        _ = IntegerFlat(2) == MyFlat(2)
+
+    with raises(TypeError):
+        _ = IntegerFlat(2) < 2
+
+    with raises(TypeError):
+        _ = IntegerFlat(2) <= MyFlat(2)
+
+    with raises(TypeError):
+        _ = IntegerFlat(2) > 2
+
+    with raises(TypeError):
+        _ = IntegerFlat(2) >= MyFlat(2)
