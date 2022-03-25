@@ -3,12 +3,14 @@ from typing import Dict, Set
 
 class DataModel:
     def __init__(self, **kwargs):
+        provided_keys = set(kwargs)
+        required_keys = self.__chamber_get_keys_from_annotations()
+        _validate_initial_values(provided_keys, required_keys)
         self.__chamber_assign_fields(kwargs)
 
     def __chamber_assign_fields(self, data: Dict):
-        provided_keys = set(data)
-        required_keys = self.__chamber_get_keys_from_annotations()
-        _validate_initial_values(provided_keys, required_keys)
+        for key, value in data.items():
+            setattr(self, key, value)
 
     def __chamber_get_keys_from_annotations(self) -> Set[str]:
         from chamber.aggregate import Field

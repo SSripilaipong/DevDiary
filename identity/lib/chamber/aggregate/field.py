@@ -2,6 +2,7 @@ from typing import Type
 
 from chamber.aggregate import Aggregate
 from chamber.aggregate.exception import FieldHasNoGetterException, FieldHasNoSetterException
+from chamber.data.model import DataModel
 
 FIELD_MUST_HAVE_TYPE_MSG = "A field must be annotated with a type."
 
@@ -27,13 +28,21 @@ class Field:
         if self._type is None:
             raise TypeError(FIELD_MUST_HAVE_TYPE_MSG)
 
-        if not hasattr(owner, '_Aggregate__chamber_registered_fields'):
-            owner._Aggregate__chamber_registered_fields = {}
-        owner._Aggregate__chamber_registered_fields[name] = self
+        if issubclass(owner, DataModel):
+            base_name = 'DataModel'
+        elif issubclass(owner, Aggregate):
+            base_name = 'Aggregate'
+        else:
+            raise NotImplementedError()
 
-        if not hasattr(owner, '_Aggregate__chamber_registered_alias_fields'):
-            owner._Aggregate__chamber_registered_alias_fields = {}
-        owner._Aggregate__chamber_registered_alias_fields[self.alias] = self
+        registered_fields = hasattr(owner, f'_{base_name}__chamber_registered_fields')
+        if not registered_fields:
+            setattr(owner, f'_{base_name}__chamber_registered_fields', {})
+        getattr(owner, f'_{base_name}__chamber_registered_fields')[name] = self
+
+        if not hasattr(owner, f'_{base_name}__chamber_registered_alias_fields'):
+            setattr(owner, f'_{base_name}__chamber_registered_alias_fields', {})
+        getattr(owner, f'_{base_name}__chamber_registered_alias_fields')[self.alias] = self
 
         self._value_name = f'_{name}'
         self._name = name
@@ -42,7 +51,7 @@ class Field:
         if not isinstance(value, self._type):
             raise TypeError()
 
-        if instance._Aggregate__chamber_field_controller.can_write:
+        if isinstance(instance, DataModel) or instance._Aggregate__chamber_field_controller.can_write:
             return setattr(instance, self._value_name, value)
 
         if not self._has_setter:
