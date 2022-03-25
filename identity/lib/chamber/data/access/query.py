@@ -1,10 +1,8 @@
 from typing import TypeVar, Type
 
-from chamber.aggregate import Aggregate
-
 
 class _QueryMethod:
-    def __init__(self, instance: Aggregate, owner: Type, func):
+    def __init__(self, instance, owner: Type, func):
         self._instance = instance
         self._owner = owner
         self._func = func
