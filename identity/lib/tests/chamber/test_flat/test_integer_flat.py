@@ -68,3 +68,8 @@ def test_should_support_equal_operator():
 
 def test_should_support_less_than_operator():
     assert IntegerFlat(1) < IntegerFlat(2)
+
+
+def test_should_support_less_than_or_equal_operator():
+    assert IntegerFlat(1) <= IntegerFlat(2)
+    assert IntegerFlat(1) <= IntegerFlat(1)
