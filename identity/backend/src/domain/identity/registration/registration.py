@@ -1,5 +1,6 @@
-from chamber.aggregate import Aggregate, Field, command
+from chamber.aggregate import Aggregate, command
 from chamber.aggregate.version import AggregateVersion
+from chamber.data.field import Field
 from domain.identity.registration.event.confirmation_needed import RegistrationEmailNeededToBeConfirmedEvent
 from domain.identity.registration.event.confirmed import RegistrationConfirmedEvent
 from domain.identity.registration.exception import (

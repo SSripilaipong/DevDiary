@@ -1,5 +1,6 @@
 from pytest import raises
-from chamber.aggregate import Aggregate, Field, query, command
+from chamber.data.field import Field
+from chamber.aggregate import Aggregate, query, command
 from chamber.aggregate.exception import FieldHasNoGetterException, FieldHasNoSetterException
 
 

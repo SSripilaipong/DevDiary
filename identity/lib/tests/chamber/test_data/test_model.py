@@ -1,6 +1,6 @@
 from pytest import raises
 
-from chamber.aggregate import Field
+from chamber.data.field import Field
 from chamber.data.model import DataModel
 
 

@@ -62,7 +62,7 @@ class Aggregate:
         return result
 
     def __chamber_assign_fields(self, data: Dict[str, Any]):
-        from chamber.aggregate import Field
+        from chamber.data.field import Field
         provided_keys = set(data)
         required_keys = set(name for name in getattr(self, '__annotations__', {}).keys()
                             if isinstance(vars(self.__class__).get(name, None), Field))

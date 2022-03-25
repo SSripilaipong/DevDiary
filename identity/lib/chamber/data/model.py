@@ -13,8 +13,7 @@ class DataModel:
             setattr(self, key, value)
 
     def __chamber_get_keys_from_annotations(self) -> Set[str]:
-        from chamber.aggregate import Field
-
+        from chamber.data.field import Field
         return set(name for name in getattr(self, '__annotations__', {}).keys()
                    if isinstance(vars(self.__class__).get(name, None), Field))
 

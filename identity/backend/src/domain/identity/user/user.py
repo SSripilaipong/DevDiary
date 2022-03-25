@@ -1,5 +1,6 @@
-from chamber.aggregate import Aggregate, Field
+from chamber.aggregate import Aggregate
 from chamber.aggregate.version import AggregateVersion
+from chamber.data.field import Field
 from domain.identity.user.event.created import UserCreatedEvent
 from domain.identity.value_object.display_name import DisplayName
 from domain.identity.value_object.email import Email

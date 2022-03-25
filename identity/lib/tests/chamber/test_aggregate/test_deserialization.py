@@ -1,6 +1,7 @@
 from pytest import raises
 
-from chamber.aggregate import Aggregate, Field
+from chamber.aggregate import Aggregate
+from chamber.data.field import Field
 from chamber.flat.string import StringFlat
 
 
