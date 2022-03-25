@@ -6,12 +6,27 @@ from chamber.data.access_controller import AccessController
 
 
 class DataModel:
+    __chamber_registered_fields: Dict
+
     def __init__(self, **kwargs):
         provided_keys = set(kwargs)
         required_keys = self.__chamber_get_keys_from_annotations()
         _validate_initial_values(provided_keys, required_keys)
         self.__chamber_access_controller = AccessController()
         self.__chamber_assign_fields(kwargs)
+
+    def to_dict(self) -> Dict:
+        result = {}
+        with self._DataModel__chamber_request_read_access():
+            for name, field in self.__chamber_registered_fields.items():
+                if not field.should_serialize:
+                    continue
+
+                value = getattr(self, name)
+                if hasattr(value, 'serialize'):
+                    value = value.serialize()
+                result[field.alias or name] = value
+        return result
 
     def __chamber_assign_fields(self, data: Dict):
         with self.__chamber_request_read_write_access():

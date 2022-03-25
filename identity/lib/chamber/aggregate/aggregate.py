@@ -41,19 +41,6 @@ class Aggregate(DataModel):
             params[name] = value
         return cls(**params)
 
-    def to_dict(self) -> Dict:
-        result = {}
-        with self._DataModel__chamber_request_read_access():
-            for name, field in self._DataModel__chamber_registered_fields.items():
-                if not field.should_serialize:
-                    continue
-
-                value = getattr(self, name)
-                if hasattr(value, 'serialize'):
-                    value = value.serialize()
-                result[field.alias or name] = value
-        return result
-
     def _append_message(self, message: Message):
         self.__chamber_outbox.append(message)
 
