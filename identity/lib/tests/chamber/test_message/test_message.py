@@ -30,3 +30,12 @@ def test_should_raise_DeserializationFailedException_when_deserializing_data_wit
 
     with raises(DeserializationFailedException):
         MyMessage.from_dict({"name": "NotMyMessage", "body": {"my_number": 123, "my_string": "abc"}})
+
+
+def test_should_raise_DeserializationFailedException_when_deserializing_data_without_body():
+    class MyMessage(Message):
+        my_number: int = Field(getter=True)
+        my_string: str = Field(getter=True)
+
+    with raises(DeserializationFailedException):
+        MyMessage.from_dict({"name": "MyMessage", "notBody": {"my_number": 123, "my_string": "abc"}})
