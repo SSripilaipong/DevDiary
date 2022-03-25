@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 from typing import Dict, Set
 
 from chamber.data.access.controller import AccessController
@@ -19,6 +21,12 @@ class DataModel:
         from chamber.data.field import Field
         return set(name for name in getattr(self, '__annotations__', {}).keys()
                    if isinstance(vars(self.__class__).get(name, None), Field))
+
+    @contextmanager
+    def __chamber_request_read_access(self):
+        self.__chamber_access_controller.allow_read()
+        yield
+        self.__chamber_access_controller.prevent_read()
 
     def __chamber_can_read(self) -> bool:
         return self.__chamber_access_controller.can_read()

@@ -4,3 +4,9 @@ class AccessController:
 
     def can_read(self) -> bool:
         return self.__can_read
+
+    def allow_read(self):
+        self.__can_read = True
+
+    def prevent_read(self):
+        self.__can_read = False
