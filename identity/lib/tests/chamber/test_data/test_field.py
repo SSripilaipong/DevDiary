@@ -2,13 +2,14 @@ from pytest import raises
 from chamber.data.field import Field
 from chamber.aggregate import Aggregate, query, command
 from chamber.aggregate.exception import FieldHasNoGetterException, FieldHasNoSetterException
+from chamber.data.model import DataModel
 
 
 def test_should_raise_FieldHasNoGetterException_when_try_to_access_private_field_from_outside():
-    class MyAggregate(Aggregate):
+    class MyModel(DataModel):
         my_number: int = Field()
 
-    obj = MyAggregate(my_number=123)
+    obj = MyModel(my_number=123)
 
     with raises(FieldHasNoGetterException):
         print(obj.my_number)
