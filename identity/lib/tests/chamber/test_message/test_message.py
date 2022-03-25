@@ -13,8 +13,8 @@ def test_should_serialize_to_dict_with_name_and_body():
 
 def test_should_deserialize_from_dict():
     class MyMessage(Message):
-        my_number: int = Field()
-        my_string: str = Field()
+        my_number: int = Field(getter=True)
+        my_string: str = Field(getter=True)
 
     msg = MyMessage.from_dict({"name": "MyMessage", "body": {"my_number": 123, "my_string": "abc"}})
     assert msg.my_number == 123 and msg.my_string == 'abc'
