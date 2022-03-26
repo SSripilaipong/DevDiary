@@ -88,13 +88,17 @@ class AllRegistrationsInDynamodb(AllRegistrations):
 
         item = {key: self.__serializer.serialize(value) for key, value in data.items()}
 
-        condition = f"attribute_not_exists(_Partition) OR attribute_not_exists(_SortKey)"
+        condition = f"attribute_not_exists(#Partition) OR attribute_not_exists(#SortKey)"
 
         try:
             self._client.put_item(
                 TableName=self._table_name,
                 Item=item,
                 ConditionExpression=condition,
+                ExpressionAttributeNames={
+                    "#Partition": "_Partition",
+                    "#SortKey": "_SortKey",
+                },
             )
         except self._client.exceptions.ConditionalCheckFailedException:
             raise NotImplementedError()  # should not happen
@@ -110,13 +114,16 @@ class AllRegistrationsInDynamodb(AllRegistrations):
         current_version = registration.aggregate_version.int()
         registration.increase_aggregate_version_by(AggregateVersionIncrease(1))
 
-        condition = f"_Version == {current_version}"
+        condition = f"#Version == {current_version}"
 
         try:
             self._client.put_item(
                 TableName=self._table_name,
                 Item=item,
                 ConditionExpression=condition,
+                ExpressionAttributeNames={
+                    "#Version": "_Version",
+                },
             )
         except self._client.exceptions.ConditionalCheckFailedException:
             raise EntityOutdated()
