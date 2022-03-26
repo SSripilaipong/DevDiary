@@ -9,6 +9,6 @@ resource "aws_lambda_event_source_mapping" "relay" {
   depends_on = [
     aws_dynamodb_table.db,
     aws_lambda_function.backend,
-    aws_iam_role.backend-exec,
+    aws_iam_role_policy.db-policy,
   ]
 }
