@@ -80,14 +80,10 @@ class AllRegistrationsInDynamodb(AllRegistrations):
         return self.__deserializer.deserialize(item)
 
     def __dynamodb_create_registration(self, registration: Registration):
-        data = registration.to_dict()
-        data['_Partition'] = f"registration#{registration.email.str()}"
-        data['_SortKey'] = f"registration#{registration.email.str()}"
-        data['_LatestEvents'] = [message.to_dict() for message in registration.get_aggregate_outbox_messages()]
-        data['_Version'] = registration.aggregate_version.int()
-
-        item = {key: self.__serializer.serialize(value) for key, value in data.items()}
-
+        item = self._dynamodb_registration_to_dynamodb_dict(
+            registration, partition=f"registration#{registration.email.str()}",
+            sort_key=f"registration#{registration.email.str()}",
+        )
         condition = f"attribute_not_exists(#Partition) OR attribute_not_exists(#SortKey)"
 
         try:
@@ -104,16 +100,13 @@ class AllRegistrationsInDynamodb(AllRegistrations):
             raise NotImplementedError()  # should not happen
 
     def __dynamodb_update_registration(self, registration: Registration):
-        data = registration.to_dict()
-        data['_Partition'] = f"registration#{registration.username.str()}"
-        data['_SortKey'] = f"registration#{registration.username.str()}"
-        data['_LatestEvents'] = [message.to_dict() for message in registration.get_aggregate_outbox_messages()]
-        data['_Version'] = registration.aggregate_version.int()
-        item = {key: self.__serializer.serialize(value) for key, value in data.items()}
+        item = self._dynamodb_registration_to_dynamodb_dict(
+            registration, partition=f"registration#{registration.username.str()}",
+            sort_key=f"registration#{registration.username.str()}",
+        )
 
         current_version = registration.aggregate_version.int()
         registration.increase_aggregate_version_by(AggregateVersionIncrease(1))
-
         condition = f"#Version == {current_version}"
 
         try:
@@ -127,6 +120,16 @@ class AllRegistrationsInDynamodb(AllRegistrations):
             )
         except self._client.exceptions.ConditionalCheckFailedException:
             raise EntityOutdated()
+
+    def _dynamodb_registration_to_dynamodb_dict(self, registration: Registration, partition: str, sort_key: str) \
+            -> Dict:
+        data = registration.to_dict()
+        data['_Partition'] = partition
+        data['_SortKey'] = sort_key
+        data['_LatestEvents'] = [message.to_dict() for message in registration.get_aggregate_outbox_messages()]
+        data['_Version'] = registration.aggregate_version.int()
+        item = {key: self.__serializer.serialize(value) for key, value in data.items()}
+        return item
 
     def __dynamodb_verify_unique_email_and_username(self, email: Email, username: Username):
         """
