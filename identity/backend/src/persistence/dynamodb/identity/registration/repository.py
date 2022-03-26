@@ -81,12 +81,12 @@ class AllRegistrationsInDynamodb(AllRegistrations):
 
     def __dynamodb_create_registration(self, registration: Registration):
         data = registration.to_dict()
-        item = {key: self.__serializer.serialize(value) for key, value in data.items()}
+        data['_Partition'] = f"registration#{registration.email.str()}"
+        data['_SortKey'] = f"registration#{registration.email.str()}"
+        data['_LatestEvents'] = [message.to_dict() for message in registration.get_aggregate_outbox_messages()]
+        data['_Version'] = registration.aggregate_version.int()
 
-        item['_Partition'] = f"registration#{registration.email.str()}"
-        item['_SortKey'] = f"registration#{registration.email.str()}"
-        item['_LatestEvents'] = [message.to_dict() for message in registration.get_aggregate_outbox_messages()]
-        item['_Version'] = registration.aggregate_version.int()
+        item = {key: self.__serializer.serialize(value) for key, value in data.items()}
 
         condition = f"attribute_not_exists(_Partition) OR attribute_not_exists(_SortKey)"
 
@@ -101,14 +101,14 @@ class AllRegistrationsInDynamodb(AllRegistrations):
 
     def __dynamodb_update_registration(self, registration: Registration):
         data = registration.to_dict()
+        data['_Partition'] = f"registration#{registration.username.str()}"
+        data['_SortKey'] = f"registration#{registration.username.str()}"
+        data['_LatestEvents'] = [message.to_dict() for message in registration.get_aggregate_outbox_messages()]
+        data['_Version'] = registration.aggregate_version.int()
         item = {key: self.__serializer.serialize(value) for key, value in data.items()}
+
         current_version = registration.aggregate_version.int()
         registration.increase_aggregate_version_by(AggregateVersionIncrease(1))
-
-        item['_Partition'] = f"registration#{registration.username.str()}"
-        item['_SortKey'] = f"registration#{registration.username.str()}"
-        item['_LatestEvents'] = [message.to_dict() for message in registration.get_aggregate_outbox_messages()]
-        item['_Version'] = registration.aggregate_version.int()
 
         condition = f"_Version == {current_version}"
 
