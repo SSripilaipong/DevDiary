@@ -55,7 +55,7 @@ resource "aws_iam_role_policy" "db-policy" {
         Resource = aws_dynamodb_table.db.arn
       },
       {
-        Sid = "SpecificTable"
+        Sid = "AllowReadStream"
         Effect = "Allow"
         Action = [
           "dynamodb:DescribeStream",
