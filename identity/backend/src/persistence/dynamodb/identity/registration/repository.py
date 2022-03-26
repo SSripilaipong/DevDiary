@@ -1,6 +1,7 @@
 import uuid
 from typing import Dict
 
+from chamber.aggregate.version import AggregateVersion
 from chamber.aggregate.version_increase import AggregateVersionIncrease
 from chamber.repository import EntityOutdated
 from domain.identity.registration.exception import (
@@ -43,7 +44,9 @@ class AllRegistrationsInDynamodb(AllRegistrations):
             RegistrationNotFoundException
         """
         data = self.__dynamodb_get_registration_by_email(email)
-        return Registration.from_dict(data)
+        del data["_Partition"], data["_SortKey"], data["_LatestEvents"]
+        version = AggregateVersion(data["_Version"])
+        return Registration.from_dict(data, _aggregate_version=version)
 
     def save(self, registration: Registration):
         """
