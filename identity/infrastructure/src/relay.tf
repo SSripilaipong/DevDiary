@@ -5,4 +5,9 @@ resource "aws_lambda_event_source_mapping" "relay" {
   function_response_types = ["ReportBatchItemFailures"]
   batch_size = 10
   maximum_retry_attempts = 1  # experimental
+
+  depends_on = [
+    aws_dynamodb_table.db,
+    aws_lambda_function.backend,
+  ]
 }
