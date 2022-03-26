@@ -19,10 +19,12 @@ def inject():
 
 
 def _inject_prod():
+    table_name = os.environ["DB_TABLE_NAME"]
+
     import boto3
     dynamodb_client = boto3.client("dynamodb")
     registry = Registry()
-    registry.all_registrations = AllRegistrationsInDynamodb(dynamodb_client, table_name="Identity")
+    registry.all_registrations = AllRegistrationsInDynamodb(dynamodb_client, table_name=table_name)
     registry.all_users = AllUsersInMemory()
     registry.message_bus = _get_message_bus()
     registry.secret_manager = RandomSecretManager()
