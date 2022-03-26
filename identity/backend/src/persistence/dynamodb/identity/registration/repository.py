@@ -82,7 +82,7 @@ class AllRegistrationsInDynamodb(AllRegistrations):
 
         item['_Partition'] = f"registration#{registration.email.str()}"
         item['_SortKey'] = f"registration#{registration.email.str()}"
-        item['_Events'] = [message.to_dict() for message in registration.get_aggregate_outbox_messages()]
+        item['_LatestEvents'] = [message.to_dict() for message in registration.get_aggregate_outbox_messages()]
         item['_Version'] = registration.aggregate_version.int()
 
         condition = f"attribute_not_exists(_Partition) OR attribute_not_exists(_SortKey)"
@@ -104,7 +104,7 @@ class AllRegistrationsInDynamodb(AllRegistrations):
 
         item['_Partition'] = f"registration#{registration.username.str()}"
         item['_SortKey'] = f"registration#{registration.username.str()}"
-        item['_Events'] = [message.to_dict() for message in registration.get_aggregate_outbox_messages()]
+        item['_LatestEvents'] = [message.to_dict() for message in registration.get_aggregate_outbox_messages()]
         item['_Version'] = registration.aggregate_version.int()
 
         condition = f"_Version == {current_version}"
