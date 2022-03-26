@@ -1,9 +1,11 @@
 locals {
   BACKEND_NAME = "${var.GLOBAL_PREFIX}-identity-backend"
-  BACKEND_ENVIRONMENT_VARIABLES = merge({},
-      length(aws_lambda_function.fakeEmail) != 0 ?
-      { FAKE_EMAIL_LAMBDA_NAME = aws_lambda_function.fakeEmail[0].function_name } : {},
-    )
+  BACKEND_ENVIRONMENT_VARIABLES = merge({
+    ENVIRONMENT = var.GLOBAL_PREFIX
+  },
+    length(aws_lambda_function.fakeEmail) != 0 ?
+    { FAKE_EMAIL_LAMBDA_NAME = aws_lambda_function.fakeEmail[0].function_name } : {},
+  )
 }
 
 resource "aws_iam_role" "backend-exec" {
