@@ -159,10 +159,10 @@ class AllRegistrationsInDynamodb(AllRegistrations):
         )
 
         for matched in response["Responses"].get(self._table_name, []):
-            entity_type = matched.get("EntityType", None)
-            if entity_type == "RegisteredEmail":
+            partition: str = matched.get("_Partition", "")
+            if partition == email_partition:
                 raise EmailAlreadyRegisteredException()
-            elif entity_type == "Registration":
+            elif partition == username_partition:
                 raise UsernameAlreadyRegisteredException()
             else:
                 raise NotImplementedError()
