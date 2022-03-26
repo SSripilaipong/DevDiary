@@ -3,6 +3,7 @@ from typing import Dict, Any
 
 from pydantic import BaseModel
 
+from domain.identity.value_object.display_name import DisplayName
 from lambler.api_gateway.endpoint import Endpoint
 from domain.identity.usecase.registration import register_user
 from domain.identity.value_object.email import Email
@@ -21,7 +22,8 @@ class RegisterEndpoint(Endpoint):
             return unprocessable_entity_response("cannot process body")
 
         _ = register_user(
-            Username(request.username), Password(request.password), request.display_name, Email(request.email),
+            Username(request.username), Password(request.password), DisplayName(request.display_name),
+            Email(request.email),
         )
         return created_response("ok")
 
