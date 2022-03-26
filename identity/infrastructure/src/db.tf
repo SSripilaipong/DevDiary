@@ -4,6 +4,9 @@ resource "aws_dynamodb_table" "db" {
   hash_key       = "_Partition"
   range_key       = "_SortKey"
 
+  stream_enabled = true
+  stream_view_type = "NEW_IMAGE"
+
   attribute {
     name = "_Partition"
     type = "S"
