@@ -54,6 +54,17 @@ resource "aws_iam_role_policy" "db-policy" {
         ]
         Resource = aws_dynamodb_table.db.arn
       },
+      {
+        Sid = "SpecificTable"
+        Effect = "Allow"
+        Action = [
+          "dynamodb:DescribeStream",
+          "dynamodb:GetRecords",
+          "dynamodb:GetShardIterator",
+          "dynamodb:ListStreams",
+        ]
+        Resource = "${aws_dynamodb_table.db.arn}/stream/*"
+      },
     ]
   })
 
