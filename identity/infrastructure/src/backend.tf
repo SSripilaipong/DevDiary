@@ -87,12 +87,3 @@ resource "aws_lambda_permission" "api-gateway" {
 
   source_arn = "${data.aws_apigatewayv2_api.core.execution_arn}/*/*"
 }
-
-resource "aws_lambda_event_source_mapping" "relay" {
-  event_source_arn  = aws_dynamodb_table.db.stream_arn
-  function_name     = aws_lambda_function.backend.arn
-  starting_position = "LATEST"
-  function_response_types = ["ReportBatchItemFailures"]
-  batch_size = 10
-  maximum_retry_attempts = 1  # experimental
-}
