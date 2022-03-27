@@ -1,6 +1,7 @@
 import json
 
 import inspect
+from pydantic import BaseModel
 
 from typing import Callable, Any, Dict
 
@@ -27,6 +28,8 @@ class RequestBodyInjection:
             if isinstance(default, JSONBody):
                 if annotation is dict or annotation is Dict:
                     params[name] = dict
+                elif isinstance(annotation, type) and issubclass(annotation, BaseModel):
+                    params[name] = annotation
                 else:
                     raise NotImplementedError()  # TODO: implement this
 
@@ -48,6 +51,8 @@ class RequestBodyInjection:
         for key, type_ in self._params.items():
             if type_ is dict:
                 params[key] = body
+            elif isinstance(type_, type) and issubclass(type_, BaseModel):
+                params[key] = type_(**body)
             else:
                 raise NotImplementedError()
 
