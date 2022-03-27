@@ -2,6 +2,8 @@ from typing import Dict, Any, Optional
 
 from pydantic import BaseModel, Field
 
+from lambler.api_gateway.event import APIGatewayEvent
+
 
 class HttpContext(BaseModel):
     path: str
@@ -22,3 +24,6 @@ class AWSAPIGatewayEventV2(BaseModel):
 
     query_string_parameters: Optional[Dict[str, Any]] = Field(default_factory=dict, alias="queryStringParameters")
     body: Optional[str] = ''
+
+    def normalize(self) -> APIGatewayEvent:
+        pass
