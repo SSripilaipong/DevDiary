@@ -14,7 +14,7 @@ class RequestContext(BaseModel):
     stage: str
 
 
-class APIGatewayEvent(BaseModel):
+class AWSAPIGatewayEventV2(BaseModel):
     raw_path: str = Field(..., alias="rawPath")
     raw_query_string: str = Field(..., alias="rawQueryString")
     request_context: RequestContext = Field(..., alias="requestContext")
