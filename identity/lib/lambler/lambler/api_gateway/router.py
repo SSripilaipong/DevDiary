@@ -3,7 +3,7 @@ import bisect
 import pydantic
 
 from lambler.api_gateway.endpoint import Endpoint
-from lambler.api_gateway.aws.event_v2 import AWSAPIGatewayEventV2
+from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
 from lambler.base.handler import HandlerMatcher, Handler
 
@@ -35,7 +35,7 @@ class APIGatewayRouter(HandlerMatcher):
 
     def match(self, event: Dict, context: Any) -> Optional[Handler]:
         try:
-            api_event = AWSAPIGatewayEventV2(**event)
+            api_event = APIGatewayEvent(**event)
         except pydantic.ValidationError:
             return None
         for wrapper in self._endpoints:
@@ -61,7 +61,7 @@ class APIGatewayRouter(HandlerMatcher):
 
 
 class APIGatewayEventHandler(Handler):
-    def __init__(self, endpoint: Endpoint, event: AWSAPIGatewayEventV2):
+    def __init__(self, endpoint: Endpoint, event: APIGatewayEvent):
         self._endpoint = endpoint
         self._event = event
 

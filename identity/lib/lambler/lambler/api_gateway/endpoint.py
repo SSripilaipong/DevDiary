@@ -1,6 +1,6 @@
 from typing import Callable
 
-from lambler.api_gateway.aws.event_v2 import AWSAPIGatewayEventV2
+from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
 
 
@@ -11,12 +11,12 @@ class Endpoint:
         self._path_length = len(path)
         self._handle = handle
 
-    def match(self, event: AWSAPIGatewayEventV2) -> bool:
-        if event.raw_path == self._path:
-            return event.request_context.http.method == self._method
+    def match(self, event: APIGatewayEvent) -> bool:
+        if event.path == self._path:
+            return event.method == self._method
         return False
 
-    def handle(self, event: AWSAPIGatewayEventV2):
+    def handle(self, event: APIGatewayEvent):
         self._handle()
 
     @property
