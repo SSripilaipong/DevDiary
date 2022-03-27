@@ -30,7 +30,7 @@ class EndpointSortWrapper:
 
 
 class APIGatewayRouter(HandlerMatcher):
-    def __init__(self):
+    def __init__(self, *, event_version=None):
         self._endpoints: List[EndpointSortWrapper] = []
 
     def match(self, event: Dict, context: Any) -> Optional[Handler]:
