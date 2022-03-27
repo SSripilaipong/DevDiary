@@ -4,8 +4,9 @@ from typing import Dict
 from lambler.api_gateway.method import RequestMethodEnum
 
 
-def simple_post_event(path: str, body_dict: Dict = None, headers: Dict[str, str] = None) -> Dict:
-    body = "" if body_dict is None else json.dumps(body_dict)
+def simple_post_event(path: str, body_dict: Dict = None, body: str = None, headers: Dict[str, str] = None) -> Dict:
+    if body is None:
+        body = "" if body_dict is None else json.dumps(body_dict)
     return {
         "path": path,
         "method": RequestMethodEnum.POST,

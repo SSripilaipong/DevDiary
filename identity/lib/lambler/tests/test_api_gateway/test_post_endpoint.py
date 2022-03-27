@@ -60,3 +60,15 @@ def test_should_pass_pydantic_BaseModel():
                               headers={"content-type": "application/json"})
     router.match(event, ...).handle()
     assert getattr(do_something, "data", "") == {"my_name": "Hello", "my_number": 123}
+
+
+def test_should_raise_InvalidParameterError_when_request_JSONBody_failed_to_convert_to_json():
+    router = APIGatewayRouter()
+
+    @router.post("/do/something")
+    def do_something(my_body: dict = JSONBody()):
+        pass
+
+    event = simple_post_event("/do/something", body="abc123", headers={"content-type": "application/json"})
+    with raises(InvalidParameterError):
+        router.match(event, ...).handle()
