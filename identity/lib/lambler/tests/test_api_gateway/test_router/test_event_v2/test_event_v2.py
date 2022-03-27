@@ -85,3 +85,22 @@ def test_should_select_endpoints_with_same_method_by_path():
 
     router.match(simple_get_event("/hello/two"), ...).handle()
     assert not getattr(hello_one, "is_called", False) and getattr(hello_two, "is_called", False)
+
+
+def test_should_select_endpoint_with_longest_path():
+    router = APIGatewayRouter()
+
+    @router.get("/hello")
+    def hello():
+        hello.is_called = True
+
+    @router.get("/hello/world")
+    def hello_world():
+        hello_world.is_called = True
+
+    router.match(simple_get_event("/hello"), ...).handle()
+    assert getattr(hello, "is_called", False) and not getattr(hello_world, "is_called", False)
+    hello.is_called = False
+
+    router.match(simple_get_event("/hello/world"), ...).handle()
+    assert not getattr(hello, "is_called", False) and getattr(hello_world, "is_called", False)
