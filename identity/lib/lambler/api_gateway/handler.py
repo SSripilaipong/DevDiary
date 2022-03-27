@@ -6,7 +6,7 @@ from lambler.api_gateway.event import ApiGatewayEvent
 from lambler.base.handler import HandlerMatcher
 
 
-class ApiGatewayServiceEventHandler(HandlerMatcher, ABC):
+class APIGatewayRouter(HandlerMatcher, ABC):
     def __init__(self, endpoint_mapper: Dict[str, Endpoint], default_endpoint: Endpoint = None):
         self._endpoint_mapper = endpoint_mapper
         self._default_endpoint = default_endpoint
