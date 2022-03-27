@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any
 
 
-class ServiceEventHandler(ABC):
+class HandlerMatcher(ABC):
 
     @classmethod
     @abstractmethod

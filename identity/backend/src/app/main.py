@@ -2,11 +2,11 @@ from typing import Dict, Any
 
 from app import dependency
 from app.api.handler import get_api_gateway_handler
-from lambler.base.handler import ServiceEventHandler
+from lambler.base.handler import HandlerMatcher
 from lambler.base.handler.mapper import ServiceEventHandlerMapper
 
 
-class PrintEventHandler(ServiceEventHandler):
+class PrintEventHandler(HandlerMatcher):
 
     @classmethod
     def match(cls, raw_event: Dict) -> bool:

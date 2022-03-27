@@ -3,10 +3,10 @@ from typing import Dict, Any
 
 from lambler.api_gateway.endpoint import Endpoint
 from lambler.api_gateway.service_event import ApiGatewayServiceEvent
-from lambler.base.handler import ServiceEventHandler
+from lambler.base.handler import HandlerMatcher
 
 
-class ApiGatewayServiceEventHandler(ServiceEventHandler, ABC):
+class ApiGatewayServiceEventHandler(HandlerMatcher, ABC):
     def __init__(self, endpoint_mapper: Dict[str, Endpoint], default_endpoint: Endpoint = None):
         self._endpoint_mapper = endpoint_mapper
         self._default_endpoint = default_endpoint
