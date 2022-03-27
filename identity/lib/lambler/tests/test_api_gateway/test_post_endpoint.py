@@ -72,3 +72,15 @@ def test_should_raise_InvalidParameterError_when_request_JSONBody_failed_to_conv
     event = simple_post_event("/do/something", body="abc123", headers={"content-type": "application/json"})
     with raises(InvalidParameterError):
         router.match(event, ...).handle()
+
+
+def test_should_raise_InvalidParameterError_when_request_JSONBody_is_not_dict():
+    router = APIGatewayRouter()
+
+    @router.post("/do/something")
+    def do_something(my_body: dict = JSONBody()):
+        pass
+
+    event = simple_post_event("/do/something", body='"Hello!"', headers={"content-type": "application/json"})
+    with raises(InvalidParameterError):
+        router.match(event, ...).handle()
