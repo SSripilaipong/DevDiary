@@ -45,7 +45,7 @@ class RequestBodyInjection:
         try:
             body = json.loads(event.body)
         except json.JSONDecodeError:
-            raise NotImplementedError()  # TODO: implement this
+            raise InvalidParameterError()
 
         params = {}
         for key, type_ in self._params.items():
