@@ -25,8 +25,8 @@ class RequestBodyInjection:
             if isinstance(default, type) and issubclass(default, JSONBody):
                 default = default()
             if isinstance(default, JSONBody):
-                if annotation == dict:
-                    params[name] = annotation
+                if annotation is dict or annotation is Dict:
+                    params[name] = dict
                 else:
                     raise NotImplementedError()  # TODO: implement this
 
