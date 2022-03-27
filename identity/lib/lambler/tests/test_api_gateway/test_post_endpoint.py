@@ -1,3 +1,5 @@
+from typing import Dict
+
 from pytest import raises
 
 from lambler.api_gateway.endpoint.exception import InvalidParameterError
@@ -11,6 +13,18 @@ def test_should_pass_json_body_as_dict():
 
     @router.post("/do/something")
     def do_something(my_body: dict = JSONBody()):
+        do_something.data = my_body["data"]
+
+    event = simple_post_event("/do/something", {"data": "Hello World"}, headers={"content-type": "application/json"})
+    router.match(event, ...).handle()
+    assert getattr(do_something, "data", "") == "Hello World"
+
+
+def test_should_pass_json_body_as_Dict():
+    router = APIGatewayRouter()
+
+    @router.post("/do/something")
+    def do_something(my_body: Dict = JSONBody()):
         do_something.data = my_body["data"]
 
     event = simple_post_event("/do/something", {"data": "Hello World"}, headers={"content-type": "application/json"})
