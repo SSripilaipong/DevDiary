@@ -16,6 +16,9 @@ def event() -> Dict:
 
 def test_should_match_api_gateway_event(event: Dict):
     router = APIGatewayRouter()
+
+    router.get("/default/something")(lambda: ...)
+
     assert isinstance(router.match(event, ...), APIGatewayEventHandler)
 
 
