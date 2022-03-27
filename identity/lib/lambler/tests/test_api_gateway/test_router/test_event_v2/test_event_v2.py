@@ -6,6 +6,7 @@ import os.path
 from pytest import fixture
 
 from lambler.api_gateway.router import APIGatewayRouter, APIGatewayEventHandler
+from .event_factory import simple_post_event
 
 
 @fixture
@@ -35,3 +36,14 @@ def test_should_handle_event_with_get_method(event):
 
     router.match(event, ...).handle()
     assert getattr(get_something, "is_called", False)
+
+
+def test_should_handle_event_with_post_method():
+    router = APIGatewayRouter()
+
+    @router.post("/default/something")
+    def post_something():
+        post_something.is_called = True
+
+    router.match(simple_post_event("/default/something"), ...).handle()
+    assert getattr(post_something, "is_called", False)

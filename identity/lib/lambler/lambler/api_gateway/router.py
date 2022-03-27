@@ -51,6 +51,9 @@ class APIGatewayRouter(HandlerMatcher):
             return func
         return decorator
 
+    def post(self, path):
+        return lambda f: ...
+
 
 class APIGatewayEventHandler(Handler):
     def __init__(self, endpoint: Endpoint, event: APIGatewayEvent):
