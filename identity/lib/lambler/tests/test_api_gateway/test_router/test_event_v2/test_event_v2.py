@@ -26,7 +26,7 @@ def test_should_return_None_for_random_event():
     assert APIGatewayRouter().match({"Hello": "World"}, ...) is None
 
 
-def test_should_handle_event_with_matched_method_and_path(event):
+def test_should_handle_event_with_get_method(event):
     router = APIGatewayRouter()
 
     @router.get("/default/something")
