@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 from typing import Dict, Any
 
 from lambler.api_gateway.endpoint import Endpoint
-from lambler.api_gateway.service_event import ApiGatewayServiceEvent
+from lambler.api_gateway.event import ApiGatewayEvent
 from lambler.base.handler import HandlerMatcher
 
 
@@ -15,16 +15,16 @@ class ApiGatewayServiceEventHandler(HandlerMatcher, ABC):
         return self._endpoint_mapper.get(route_key, self._default_endpoint)
 
     def handle(self, raw_event: Dict) -> Any:
-        event = ApiGatewayServiceEvent(**raw_event)
+        event = ApiGatewayEvent(**raw_event)
         route_key = self.extract_route_key(event)
         endpoint = self._get_endpoint(route_key)
         return endpoint.process(event.headers, event.query_string_parameters, event.body)
 
     @classmethod
     @abstractmethod
-    def match(cls, raw_event: Dict) -> bool:
+    def match(cls, event: Dict, context: Any) -> bool:
         pass
 
     @abstractmethod
-    def extract_route_key(self, event: ApiGatewayServiceEvent) -> str:
+    def extract_route_key(self, event: ApiGatewayEvent) -> str:
         pass

@@ -1,1 +1,1 @@
-from .handler import HandlerMatcher
+from .handler import HandlerMatcher, Handler

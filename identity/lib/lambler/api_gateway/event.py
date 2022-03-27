@@ -14,7 +14,7 @@ class RequestContext(BaseModel):
     stage: str
 
 
-class ApiGatewayServiceEvent(BaseModel):
+class ApiGatewayEvent(BaseModel):
     raw_path: str = Field(..., alias="rawPath")
     raw_query_string: str = Field(..., alias="rawQueryString")
     request_context: RequestContext = Field(..., alias="requestContext")

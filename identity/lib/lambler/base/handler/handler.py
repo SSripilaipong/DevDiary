@@ -2,13 +2,15 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any
 
 
-class HandlerMatcher(ABC):
+class Handler(ABC):
 
-    @classmethod
     @abstractmethod
-    def match(cls, raw_event: Dict) -> bool:
+    def handle(self) -> Any:
         pass
 
+
+class HandlerMatcher(ABC):
+
     @abstractmethod
-    def handle(self, raw_event: Dict) -> Any:
+    def match(self, event: Dict, context: Any) -> Handler:
         pass
