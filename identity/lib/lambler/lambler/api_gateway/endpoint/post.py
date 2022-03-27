@@ -1,6 +1,7 @@
 import json
 
 import inspect
+import pydantic
 from pydantic import BaseModel
 
 from typing import Callable, Any, Dict
@@ -55,7 +56,10 @@ class RequestBodyInjection:
             if type_ is dict:
                 params[key] = body
             elif isinstance(type_, type) and issubclass(type_, BaseModel):
-                params[key] = type_(**body)
+                try:
+                    params[key] = type_(**body)
+                except pydantic.ValidationError:
+                    raise InvalidParameterError()
             else:
                 raise NotImplementedError()
 
