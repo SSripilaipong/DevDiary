@@ -5,7 +5,7 @@ import os.path
 
 from pytest import fixture
 
-from lambler.api_gateway.router import APIGatewayRouter
+from lambler.api_gateway.router import APIGatewayRouter, APIGatewayEventHandler
 
 
 @fixture
@@ -16,7 +16,7 @@ def event() -> Dict:
 
 def test_should_match_api_gateway_event(event: Dict):
     router = APIGatewayRouter()
-    assert router.match(event, ...) is not None
+    assert isinstance(router.match(event, ...), APIGatewayEventHandler)
 
 
 def test_should_return_None_for_random_event():
