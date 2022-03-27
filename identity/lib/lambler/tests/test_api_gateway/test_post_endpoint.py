@@ -84,3 +84,22 @@ def test_should_raise_InvalidParameterError_when_request_JSONBody_is_not_dict():
     event = simple_post_event("/do/something", body='"Hello!"', headers={"content-type": "application/json"})
     with raises(InvalidParameterError):
         router.match(event, ...).handle()
+
+
+def test_should_raise_InvalidParameterError_when_request_JSONBody_not_fit_to_model():
+    router = APIGatewayRouter()
+
+    class MyModel(BaseModel):
+        my_name: str
+        my_number: int
+
+    @router.post("/do/something")
+    def do_something(input_data: MyModel = JSONBody()):
+        pass
+
+    event = simple_post_event("/do/something", {"Copy": "Paste", "Hello": "Engineer"},
+                              headers={"content-type": "application/json"})
+    with raises(InvalidParameterError):
+        router.match(event, ...).handle()
+
+
