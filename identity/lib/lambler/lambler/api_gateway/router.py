@@ -1,4 +1,4 @@
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, Optional, List, Tuple, Callable
 import bisect
 import pydantic
 
@@ -45,14 +45,19 @@ class APIGatewayRouter(HandlerMatcher):
         return None
 
     def get(self, path: str):
+        return self._request_decorator(path, method=RequestMethodEnum.GET)
+
+    def post(self, path: str):
+        return self._request_decorator(path, method=RequestMethodEnum.POST)
+
+    def _request_decorator(self, path, method: RequestMethodEnum):
         def decorator(func):
-            endpoint = Endpoint(path, method=RequestMethodEnum.GET, handle=func)
-            bisect.insort_right(self._endpoints, EndpointSortWrapper(endpoint))
+            self._append_endpoint(Endpoint(path, method=method, handle=func))
             return func
         return decorator
 
-    def post(self, path):
-        return lambda f: ...
+    def _append_endpoint(self, endpoint: Endpoint):
+        bisect.insort_right(self._endpoints, EndpointSortWrapper(endpoint))
 
 
 class APIGatewayEventHandler(Handler):
