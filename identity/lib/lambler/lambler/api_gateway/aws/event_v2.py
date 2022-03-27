@@ -26,4 +26,6 @@ class AWSAPIGatewayEventV2(BaseModel):
     body: Optional[str] = ''
 
     def normalize(self) -> APIGatewayEvent:
-        pass
+        return APIGatewayEvent(path=self.raw_path, method=self.request_context.http.method,
+                               query_string_parameters=self.query_string_parameters, body=self.body,
+                               headers=self.headers)
