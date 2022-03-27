@@ -19,6 +19,9 @@ class APIGatewayRouter(HandlerMatcher):
             return None
         return APIGatewayEventHandler()
 
+    def get(self, path: str):
+        return lambda func: ...
+
 
 class APIGatewayEventHandler(Handler):
     def handle(self) -> Any:

@@ -21,3 +21,14 @@ def test_should_match_api_gateway_event(event: Dict):
 
 def test_should_return_None_for_random_event():
     assert APIGatewayRouter().match({"Hello": "World"}, ...) is None
+
+
+def test_should_handle_event_with_matched_method_and_path(event):
+    router = APIGatewayRouter()
+
+    @router.get("/default/something")
+    def get_something():
+        get_something.is_called = True
+
+    router.match(event, ...).handle()
+    assert getattr(get_something, "is_called", False)
