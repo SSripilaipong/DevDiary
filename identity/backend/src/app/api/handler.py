@@ -1,6 +1,6 @@
 from typing import Dict, Any
 
-from lambler.api_gateway.handler import APIGatewayRouter
+from lambler.api_gateway.router import APIGatewayRouter
 from lambler.api_gateway.event import ApiGatewayEvent
 from app.api.endpoint.default import AlwaysOkEndpoint
 from app.api.endpoint.register import RegisterEndpoint

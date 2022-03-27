@@ -1,9 +1,9 @@
 from abc import abstractmethod, ABC
 from typing import Dict, Any
 
-from lambler.api_gateway import Endpoint
+from lambler.api_gateway.endpoint.base import Endpoint
 from lambler.api_gateway.event import ApiGatewayEvent
-from lambler.base import HandlerMatcher
+from lambler.base.handler import HandlerMatcher
 
 
 class APIGatewayRouter(HandlerMatcher, ABC):
