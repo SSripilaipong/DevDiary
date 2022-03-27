@@ -1,3 +1,4 @@
+from pydantic import BaseModel
 from typing import Dict
 
 from pytest import raises
@@ -42,3 +43,20 @@ def test_should_raise_InvalidParameterError_when_request_JSONBody_without_conten
     event = simple_post_event("/do/something", {"data": "Hello World"})
     with raises(InvalidParameterError):
         router.match(event, ...).handle()
+
+
+def test_should_pass_pydantic_BaseModel():
+    router = APIGatewayRouter()
+
+    class MyModel(BaseModel):
+        my_name: str
+        my_number: int
+
+    @router.post("/do/something")
+    def do_something(input_data: MyModel = JSONBody()):
+        do_something.data = {"my_name": input_data.my_name, "my_number": input_data.my_number}
+
+    event = simple_post_event("/do/something", {"my_name": "Hello", "my_number": 123},
+                              headers={"content-type": "application/json"})
+    router.match(event, ...).handle()
+    assert getattr(do_something, "data", "") == {"my_name": "Hello", "my_number": 123}
