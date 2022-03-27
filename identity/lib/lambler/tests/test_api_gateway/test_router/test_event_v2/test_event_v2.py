@@ -79,7 +79,7 @@ def test_should_select_endpoints_with_same_method_by_path():
     def hello_two():
         hello_two.is_called = True
 
-    router.match(simple_post_event("/hello/one"), ...).handle()
+    router.match(simple_get_event("/hello/one"), ...).handle()
     assert getattr(hello_one, "is_called", False) and not getattr(hello_two, "is_called", False)
     hello_one.is_called = False
 
