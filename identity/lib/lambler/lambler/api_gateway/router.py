@@ -1,9 +1,9 @@
-from typing import Dict, Any, Optional, List, Tuple, Callable
+from typing import Dict, Any, Optional, List
 import bisect
 import pydantic
 
 from lambler.api_gateway.endpoint import Endpoint
-from lambler.api_gateway.event import APIGatewayEvent
+from lambler.api_gateway.aws.event_v2 import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
 from lambler.base.handler import HandlerMatcher, Handler
 

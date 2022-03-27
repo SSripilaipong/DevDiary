@@ -1,6 +1,6 @@
 from typing import Callable
 
-from lambler.api_gateway.event import APIGatewayEvent
+from lambler.api_gateway.aws.event_v2 import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
 
 
