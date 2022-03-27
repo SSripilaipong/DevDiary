@@ -47,6 +47,9 @@ class RequestBodyInjection:
         except json.JSONDecodeError:
             raise InvalidParameterError()
 
+        if not isinstance(body, dict):
+            raise InvalidParameterError()
+
         params = {}
         for key, type_ in self._params.items():
             if type_ is dict:
