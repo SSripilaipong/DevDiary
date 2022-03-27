@@ -1,0 +1,2 @@
+class JSONBody:
+    pass
