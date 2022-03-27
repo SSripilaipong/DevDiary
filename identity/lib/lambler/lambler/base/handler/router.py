@@ -1,7 +1,7 @@
 from typing import Dict, List, Any
 
 from lambler.base.handler.exception import NoHandlerMatchedException
-from lambler.base.handler import HandlerMatcher, Handler
+from lambler.base import HandlerMatcher, Handler
 
 
 class HandlerRouter(HandlerMatcher):

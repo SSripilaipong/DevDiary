@@ -4,7 +4,7 @@ from typing import Dict, Any
 from pydantic import BaseModel
 
 from domain.identity.value_object.display_name import DisplayName
-from lambler.api_gateway.endpoint import Endpoint
+from lambler.api_gateway.endpoint.base import Endpoint
 from domain.identity.usecase.registration import register_user
 from domain.identity.value_object.email import Email
 from domain.identity.value_object.password import Password

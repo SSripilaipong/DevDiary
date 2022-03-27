@@ -1,4 +1,4 @@
-from chamber.data.field import Field
+from chamber.data import Field
 from chamber.message import Message
 from domain.identity.value_object.email import Email
 
