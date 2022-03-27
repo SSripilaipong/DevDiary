@@ -5,6 +5,7 @@ import pydantic
 from lambler.api_gateway.aws.event_v2 import AWSAPIGatewayEventV2
 from lambler.api_gateway.aws.version import AWSEventVersion
 from lambler.api_gateway.endpoint import Endpoint
+from lambler.api_gateway.endpoint.post import PostEndpoint
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
 from lambler.base.handler import HandlerMatcher, Handler
@@ -48,14 +49,14 @@ class APIGatewayRouter(HandlerMatcher):
         return None
 
     def get(self, path: str):
-        return self._request_decorator(path, method=RequestMethodEnum.GET)
+        def decorator(func):
+            self._append_endpoint(Endpoint(path, method=RequestMethodEnum.GET, handle=func))
+            return func
+        return decorator
 
     def post(self, path: str):
-        return self._request_decorator(path, method=RequestMethodEnum.POST)
-
-    def _request_decorator(self, path, method: RequestMethodEnum):
         def decorator(func):
-            self._append_endpoint(Endpoint(path, method=method, handle=func))
+            self._append_endpoint(PostEndpoint(path, method=RequestMethodEnum.POST, handle=func))
             return func
         return decorator
 
