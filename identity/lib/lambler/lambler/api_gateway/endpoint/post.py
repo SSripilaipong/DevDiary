@@ -5,6 +5,7 @@ import inspect
 from typing import Callable, Any, Dict
 
 from lambler.api_gateway.endpoint import Endpoint
+from lambler.api_gateway.endpoint.exception import InvalidParameterError
 from lambler.api_gateway.endpoint.marker import JSONBody
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
@@ -34,6 +35,9 @@ class RequestBodyInjection:
     def extract_params(self, event: APIGatewayEvent) -> Dict:
         if not self._params:
             return {}
+
+        if event.headers.get('content-type', None) != 'application/json':
+            raise InvalidParameterError()
 
         try:
             body = json.loads(event.body)

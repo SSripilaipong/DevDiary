@@ -18,7 +18,7 @@ def test_should_pass_json_body_as_dict():
     assert getattr(do_something, "data", "") == "Hello World"
 
 
-def test_should_raise_InvalidParameterError_when_request_without_content_type_json():
+def test_should_raise_InvalidParameterError_when_request_JSONBody_without_content_type_json():
     router = APIGatewayRouter()
 
     @router.post("/do/something")
