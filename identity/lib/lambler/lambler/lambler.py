@@ -13,7 +13,7 @@ class Lambler:
             if matched is not None:
                 break
         else:
-            return None  # TODO: must change
+            raise NotImplementedError()
 
         return matched.handle()
 
