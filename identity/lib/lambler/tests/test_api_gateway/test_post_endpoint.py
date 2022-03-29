@@ -55,6 +55,14 @@ def test_should_raise_InvalidParameterError_when_request_JSONBody_not_fit_to_mod
     _test_invalid_parameter(MyModel, {"Copy": "Paste", "Hello": "Engineer"})
 
 
+def test_should_raise_InvalidParameterError_when_request_JSONBody_not_fit_to_data_model():
+    class MyModel(DataModel):
+        my_name: str = Field(getter=True)
+        my_number: int = Field(getter=True)
+
+    _test_invalid_parameter(MyModel, {"Copy": "Paste", "Hello": "Engineer"})
+
+
 def _test_invalid_parameter(model: Type, data: Any, headers=None):
     if headers is None:
         headers = {"content-type": "application/json"}
