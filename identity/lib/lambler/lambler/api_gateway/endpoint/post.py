@@ -81,4 +81,4 @@ class PostEndpoint(Endpoint):
         self._body_injection = RequestBodyInjection.from_handle_function(handle)
 
     def handle(self, event: APIGatewayEvent):
-        self._handle(**self._body_injection.extract_params(event))
+        return self._handle(**self._body_injection.extract_params(event))
