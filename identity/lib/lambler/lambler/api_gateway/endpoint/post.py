@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 from typing import Callable, Any, Dict
 
-import chamber
+import chamber.data.exception
 from chamber.data.model import DataModel
 from lambler.api_gateway.endpoint import Endpoint
 from lambler.api_gateway.endpoint.exception import InvalidParameterError
@@ -67,7 +67,7 @@ class RequestBodyInjection:
             elif isinstance(type_, type) and issubclass(type_, DataModel):
                 try:
                     params[key] = type_.from_dict(body)
-                except:
+                except chamber.data.exception.DeserializationFailedException:
                     raise InvalidParameterError()
             else:
                 raise NotImplementedError()
