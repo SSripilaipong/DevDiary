@@ -3,6 +3,8 @@ from typing import Dict, Type, Callable
 
 from pytest import raises
 
+from chamber.data.field import Field
+from chamber.data.model import DataModel
 from lambler.api_gateway.endpoint.exception import InvalidParameterError
 from lambler.api_gateway.endpoint.marker import JSONBody
 from lambler.api_gateway.router import APIGatewayRouter
@@ -21,6 +23,14 @@ def test_should_pass_pydantic_BaseModel():
     class MyModel(BaseModel):
         my_name: str
         my_number: int
+
+    _test_passing_json_body(MyModel, lambda body, name: getattr(body, name))
+
+
+def test_should_pass_chamber_DataModel():
+    class MyModel(DataModel):
+        my_name: str = Field(getter=True)
+        my_number: int = Field(getter=True)
 
     _test_passing_json_body(MyModel, lambda body, name: getattr(body, name))
 
