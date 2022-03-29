@@ -39,6 +39,8 @@ class APIGatewayRouter(HandlerMatcher):
 
     def match(self, event: Dict, context: Any) -> Optional[Handler]:
         api_event = self._validate_event(event)
+        if api_event is None:
+            return None
         return self._match_event_with_endpoints(api_event)
 
     def _match_event_with_endpoints(self, api_event):
