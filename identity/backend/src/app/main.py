@@ -2,8 +2,11 @@ from typing import Dict, Any
 
 from app import dependency
 from app.api.router import router
+from lambler import Lambler
 from lambler.base.handler import PatternMatcher, Handler
-from lambler.base.handler.router import HandlerRouter
+
+
+dependency.inject()
 
 
 class PrintEventHandler(PatternMatcher, Handler):
@@ -17,15 +20,6 @@ class PrintEventHandler(PatternMatcher, Handler):
         print(self._value)
 
 
-event_handler_mapper = HandlerRouter.from_list([
-    router,
-    PrintEventHandler(),
-])
-
-
-dependency.inject()
-
-
-def handler(event, context):
-    event_handler = event_handler_mapper.match(event, context)
-    return event_handler.handle()
+handler = Lambler()
+handler.include_pattern(router)
+handler.include_pattern(PrintEventHandler())
