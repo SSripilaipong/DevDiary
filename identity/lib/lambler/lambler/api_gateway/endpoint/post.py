@@ -68,7 +68,7 @@ class RequestBodyInjection:
                 try:
                     params[key] = type_.from_dict(body)
                 except:
-                    raise NotImplementedError()
+                    raise InvalidParameterError()
             else:
                 raise NotImplementedError()
 
