@@ -6,6 +6,8 @@ from pydantic import BaseModel
 
 from typing import Callable, Any, Dict
 
+import chamber
+from chamber.data.model import DataModel
 from lambler.api_gateway.endpoint import Endpoint
 from lambler.api_gateway.endpoint.exception import InvalidParameterError
 from lambler.api_gateway.endpoint.marker import JSONBody
@@ -30,6 +32,8 @@ class RequestBodyInjection:
                 if annotation is dict or annotation is Dict:
                     params[name] = dict
                 elif isinstance(annotation, type) and issubclass(annotation, BaseModel):
+                    params[name] = annotation
+                elif isinstance(annotation, type) and issubclass(annotation, DataModel):
                     params[name] = annotation
                 else:
                     raise NotImplementedError()  # TODO: implement this
@@ -60,6 +64,11 @@ class RequestBodyInjection:
                     params[key] = type_(**body)
                 except pydantic.ValidationError:
                     raise InvalidParameterError()
+            elif isinstance(type_, type) and issubclass(type_, DataModel):
+                try:
+                    params[key] = type_.from_dict(body)
+                except:
+                    raise NotImplementedError()
             else:
                 raise NotImplementedError()
 
