@@ -1,7 +1,7 @@
 from typing import Dict, Any
 
 from app import dependency
-from app.api.handler import get_api_gateway_handler
+from app.api.router import router
 from lambler.base.handler import HandlerMatcher, Handler
 from lambler.base.handler.router import HandlerRouter
 
@@ -18,7 +18,7 @@ class PrintEventHandler(HandlerMatcher, Handler):
 
 
 event_handler_mapper = HandlerRouter.from_list([
-    get_api_gateway_handler(),
+    router,
     PrintEventHandler(),
 ])
 
@@ -26,6 +26,6 @@ event_handler_mapper = HandlerRouter.from_list([
 dependency.inject()
 
 
-def handler(event, _):
-    event_handler = event_handler_mapper.match(event)
+def handler(event, context):
+    event_handler = event_handler_mapper.match(event, context)
     return event_handler.handle()
