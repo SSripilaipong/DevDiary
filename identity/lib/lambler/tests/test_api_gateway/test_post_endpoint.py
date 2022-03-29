@@ -90,3 +90,13 @@ def _test_passing_json_body(model: Type, get_attr: Callable):
                               headers={"content-type": "application/json"})
     router.match(event, ...).handle()
     assert getattr(do_something, "data", "") == {"my_name": "Hello", "my_number": 123}
+
+
+def test_should_return_value_from_function():
+    router = APIGatewayRouter()
+
+    @router.post("/hello")
+    def hello():
+        return "OK!"
+
+    assert router.match(simple_post_event("/hello"), ...).handle() == "OK!"
