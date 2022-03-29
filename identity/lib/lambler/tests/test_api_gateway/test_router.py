@@ -97,3 +97,13 @@ def test_should_select_endpoint_with_longest_path():
 
     router.match(simple_get_event("/hello/world"), ...).handle()
     assert not getattr(hello, "is_called", False) and getattr(hello_world, "is_called", False)
+
+
+def test_should_return_value_from_function():
+    router = APIGatewayRouter()
+
+    @router.get("/hello")
+    def hello():
+        return "OK!"
+
+    assert router.match(simple_get_event("/hello"), ...).handle() == "OK!"
