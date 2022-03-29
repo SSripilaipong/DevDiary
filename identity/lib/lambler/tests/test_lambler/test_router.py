@@ -25,3 +25,30 @@ def test_should_return_from_matched_handler():
 
     assert lambler({}, ...) == "OK!"
 
+
+def test_should_return_from_matched_handler_among_many():
+    class MyHandler1(Handler):
+        def handle(self) -> Any:
+            return "OK!"
+
+    class MyPattern1(PatternMatcher):
+        def match(self, event: Dict, context: Any) -> MyHandler1:
+            if event["type"] == 1:
+                return MyHandler1()
+
+    class MyHandler2(Handler):
+        def handle(self) -> Any:
+            return "GREAT!"
+
+    class MyPattern2(PatternMatcher):
+        def match(self, event: Dict, context: Any) -> MyHandler2:
+            if event["type"] == 2:
+                return MyHandler2()
+
+    lambler = Lambler()
+    lambler.include_pattern(MyPattern1())
+    lambler.include_pattern(MyPattern2())
+
+    assert lambler({"type": 1}, ...) == "OK!"
+    assert lambler({"type": 2}, ...) == "GREAT!"
+
