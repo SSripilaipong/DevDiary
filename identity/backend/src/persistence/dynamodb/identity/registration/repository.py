@@ -159,7 +159,7 @@ class AllRegistrationsInDynamodb(AllRegistrations):
         )
 
         for matched in response["Responses"].get(self._table_name, []):
-            partition: str = matched.get("_Partition", "")
+            partition: str = matched.get("_Partition", {}).get("S", "")
             if partition == email_partition:
                 raise EmailAlreadyRegisteredException()
             elif partition == username_partition:
