@@ -3,6 +3,7 @@ from typing import Dict, Any
 
 from lambler import Lambler
 from lambler.base.handler import PatternMatcher, Handler
+from lambler.base.response import LamblerResponse
 
 
 def test_should_raise_NotImplementedError_when_no_matchers():
@@ -52,3 +53,21 @@ def test_should_return_from_matched_handler_among_many():
     assert lambler({"type": 1}, ...) == "OK!"
     assert lambler({"type": 2}, ...) == "GREAT!"
 
+
+def test_should_convert_LamblerResponse_to_dict():
+    class MyResponse(LamblerResponse):
+        def to_dict(self) -> Dict:
+            return {"Hello": "World"}
+
+    class MyHandler(Handler):
+        def handle(self) -> Any:
+            return MyResponse()
+
+    class MyPattern(PatternMatcher):
+        def match(self, event: Dict, context: Any) -> MyHandler:
+            return MyHandler()
+
+    lambler = Lambler()
+    lambler.include_pattern(MyPattern())
+
+    assert lambler({}, ...) == {"Hello": "World"}
