@@ -5,7 +5,7 @@ from lambler.base.handler import PatternMatcher, Handler
 
 
 def test_should_return_None_when_no_matchers():
-    assert Lambler()() is None
+    assert Lambler()({}, ...) is None
 
 
 def test_should_return_from_matched_handler():
