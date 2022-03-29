@@ -6,8 +6,9 @@ from lambler.base.handler import PatternMatcher, Handler
 
 
 def test_should_raise_NotImplementedError_when_no_matchers():
+    lambler = Lambler()
     with raises(NotImplementedError):
-        Lambler()({}, ...)
+        lambler({}, ...)
 
 
 def test_should_return_from_matched_handler():
