@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Dict, Type, Callable
+from typing import Dict, Type, Callable, Any
 
 from pytest import raises
 
@@ -36,54 +36,36 @@ def test_should_pass_chamber_DataModel():
 
 
 def test_should_raise_InvalidParameterError_when_request_JSONBody_without_content_type_json():
-    router = APIGatewayRouter()
-
-    @router.post("/do/something")
-    def do_something(my_body: dict = JSONBody()):
-        pass
-
-    event = simple_post_event("/do/something", {"data": "Hello World"})
-    with raises(InvalidParameterError):
-        router.match(event, ...).handle()
+    _test_invalid_parameter(dict, {"data": "Hello World"}, headers={})
 
 
 def test_should_raise_InvalidParameterError_when_request_JSONBody_failed_to_convert_to_json():
-    router = APIGatewayRouter()
-
-    @router.post("/do/something")
-    def do_something(my_body: dict = JSONBody()):
-        pass
-
-    event = simple_post_event("/do/something", body="abc123", headers={"content-type": "application/json"})
-    with raises(InvalidParameterError):
-        router.match(event, ...).handle()
+    _test_invalid_parameter(dict, "abc123")
 
 
 def test_should_raise_InvalidParameterError_when_request_JSONBody_is_not_dict():
-    router = APIGatewayRouter()
-
-    @router.post("/do/something")
-    def do_something(my_body: dict = JSONBody()):
-        pass
-
-    event = simple_post_event("/do/something", body='"Hello!"', headers={"content-type": "application/json"})
-    with raises(InvalidParameterError):
-        router.match(event, ...).handle()
+    _test_invalid_parameter(dict, '"Hello!"')
 
 
 def test_should_raise_InvalidParameterError_when_request_JSONBody_not_fit_to_model():
-    router = APIGatewayRouter()
-
     class MyModel(BaseModel):
         my_name: str
         my_number: int
 
+    _test_invalid_parameter(MyModel, {"Copy": "Paste", "Hello": "Engineer"})
+
+
+def _test_invalid_parameter(model: Type, data: Any, headers=None):
+    if headers is None:
+        headers = {"content-type": "application/json"}
+
+    router = APIGatewayRouter()
+
     @router.post("/do/something")
-    def do_something(input_data: MyModel = JSONBody()):
+    def do_something(input_data: model = JSONBody()):
         pass
 
-    event = simple_post_event("/do/something", {"Copy": "Paste", "Hello": "Engineer"},
-                              headers={"content-type": "application/json"})
+    event = simple_post_event("/do/something", data, headers=headers)
     with raises(InvalidParameterError):
         router.match(event, ...).handle()
 
