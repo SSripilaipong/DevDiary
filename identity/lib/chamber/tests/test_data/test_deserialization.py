@@ -44,3 +44,16 @@ def test_should_raise_DeserializationFailedException_when_type_is_wrong_and_no_d
 
     with raises(DeserializationFailedException):
         MyModel.from_dict({"my_string": 123})
+
+
+def test_should_raise_DeserializationFailedException_when_deserialize_function_raise_any_error():
+    class MyData:
+        @classmethod
+        def deserialize(cls, value):
+            raise Exception()
+
+    class MyModel(DataModel):
+        my_data: MyData = Field()
+
+    with raises(DeserializationFailedException):
+        MyModel.from_dict({"my_data": 123})
