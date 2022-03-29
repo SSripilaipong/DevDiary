@@ -11,7 +11,13 @@ def test_should_match_api_gateway_event():
 
 
 def test_should_return_None_for_random_event():
-    assert APIGatewayRouter().match({"Hello": "World"}, ...) is None
+    router = APIGatewayRouter()
+
+    @router.get("/")
+    def hello():
+        pass
+
+    assert router.match({"Hello": "World"}, ...) is None
 
 
 def test_should_handle_event_with_get_method():
