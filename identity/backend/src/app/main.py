@@ -2,11 +2,11 @@ from typing import Dict, Any
 
 from app import dependency
 from app.api.router import router
-from lambler.base.handler import HandlerMatcher, Handler
+from lambler.base.handler import PatternMatcher, Handler
 from lambler.base.handler.router import HandlerRouter
 
 
-class PrintEventHandler(HandlerMatcher, Handler):
+class PrintEventHandler(PatternMatcher, Handler):
     def __init__(self, value=None):
         self._value = value
 

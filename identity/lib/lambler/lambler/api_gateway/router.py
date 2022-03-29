@@ -8,7 +8,7 @@ from lambler.api_gateway.endpoint import Endpoint
 from lambler.api_gateway.endpoint.post import PostEndpoint
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
-from lambler.base.handler import HandlerMatcher, Handler
+from lambler.base.handler import PatternMatcher, Handler
 
 
 class EndpointSortWrapper:
@@ -32,7 +32,7 @@ class EndpointSortWrapper:
         return self._endpoint
 
 
-class APIGatewayRouter(HandlerMatcher):
+class APIGatewayRouter(PatternMatcher):
     def __init__(self, *, event_version=None):
         self._event_version = _validate_event_version(event_version)
         self._endpoints: List[EndpointSortWrapper] = []

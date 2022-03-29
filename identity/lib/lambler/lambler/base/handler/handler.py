@@ -9,7 +9,7 @@ class Handler(ABC):
         pass
 
 
-class HandlerMatcher(ABC):
+class PatternMatcher(ABC):
 
     @abstractmethod
     def match(self, event: Dict, context: Any) -> Handler:

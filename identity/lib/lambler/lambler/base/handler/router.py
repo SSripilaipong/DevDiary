@@ -1,11 +1,11 @@
 from typing import Dict, List, Any
 
 from lambler.base.handler.exception import NoHandlerMatchedException
-from lambler.base.handler import HandlerMatcher, Handler
+from lambler.base.handler import PatternMatcher, Handler
 
 
-class HandlerRouter(HandlerMatcher):
-    def __init__(self, handlers: List[HandlerMatcher]):
+class HandlerRouter(PatternMatcher):
+    def __init__(self, handlers: List[PatternMatcher]):
         self._matchers = handlers
 
     def match(self, event: Dict, context: Any) -> Handler:
@@ -16,5 +16,5 @@ class HandlerRouter(HandlerMatcher):
         raise NoHandlerMatchedException()
 
     @classmethod
-    def from_list(cls, handlers: List[HandlerMatcher]) -> 'HandlerRouter':
+    def from_list(cls, handlers: List[PatternMatcher]) -> 'HandlerRouter':
         return cls(handlers)
