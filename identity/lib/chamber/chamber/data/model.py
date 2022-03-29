@@ -51,7 +51,11 @@ class DataModel:
 
             if not isinstance(value, type_):
                 if hasattr(type_, 'deserialize'):
-                    value = type_.deserialize(value)
+                    try:
+                        value = type_.deserialize(value)
+                    except Exception:
+                        raise DeserializationFailedException(f"Function deserialize() of {type_.__name__} for {key} "
+                                                             f"raises error")
                 else:
                     raise DeserializationFailedException(f'Expect type {type_.__name__} '
                                                          f'got: {value.__class__.__name__}')
