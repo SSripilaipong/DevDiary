@@ -82,7 +82,7 @@ class APIGatewayEventHandler(Handler):
         self._event = event
 
     def handle(self) -> Any:
-        self._endpoint.handle(self._event)
+        return self._endpoint.handle(self._event)
 
 
 def _validate_event_version(version: str) -> Optional[AWSEventVersion]:

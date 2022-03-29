@@ -17,7 +17,7 @@ class Endpoint:
         return False
 
     def handle(self, event: APIGatewayEvent):
-        self._handle()
+        return self._handle()
 
     @property
     def path_length(self):
