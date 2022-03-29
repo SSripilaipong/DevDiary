@@ -1,11 +1,13 @@
+from pytest import raises
 from typing import Dict, Any
 
 from lambler import Lambler
 from lambler.base.handler import PatternMatcher, Handler
 
 
-def test_should_return_None_when_no_matchers():
-    assert Lambler()({}, ...) is None
+def test_should_raise_NotImplementedError_when_no_matchers():
+    with raises(NotImplementedError):
+        Lambler()({}, ...)
 
 
 def test_should_return_from_matched_handler():
