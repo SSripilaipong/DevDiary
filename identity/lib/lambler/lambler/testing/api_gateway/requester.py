@@ -1,16 +1,14 @@
-import json
-
 from lambler import Lambler
 from lambler.api_gateway.method import RequestMethodEnum
 from lambler.api_gateway.status import HTTPStatus
-from lambler.testing.api_gateway.response import HTTPResponse
+from lambler.api_gateway.response import JSONResponse, APIGatewayResponse
 
 
 class HTTPRequester:
     def __init__(self, lambler: Lambler):
         self._lambler = lambler
 
-    def get(self, path: str) -> HTTPResponse:
+    def get(self, path: str) -> APIGatewayResponse:
         event = {
             "path": path,
             "method": RequestMethodEnum.GET,
@@ -18,5 +16,4 @@ class HTTPRequester:
             "headers": {},
             "body": "",
         }
-        payload = self._lambler(event, ...)
-        return HTTPResponse(json.dumps(payload), HTTPStatus.OK)
+        return self._lambler.call_raw_response(event, ...)

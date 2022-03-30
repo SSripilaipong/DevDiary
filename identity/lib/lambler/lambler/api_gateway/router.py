@@ -8,6 +8,8 @@ from lambler.api_gateway.endpoint import Endpoint
 from lambler.api_gateway.endpoint.post import PostEndpoint
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
+from lambler.api_gateway.response import APIGatewayResponse, HTTPResponse, JSONResponse
+from lambler.api_gateway.status import HTTPStatus
 from lambler.base.handler import PatternMatcher, Handler
 
 
@@ -32,12 +34,29 @@ class EndpointSortWrapper:
         return self._endpoint
 
 
+class APIGatewayEventHandler(Handler):
+    def __init__(self, endpoint: Endpoint, event: APIGatewayEvent):
+        self._endpoint = endpoint
+        self._event = event
+
+    def handle(self) -> APIGatewayResponse:
+        body = self._endpoint.handle(self._event)
+        if body is None:
+            return HTTPResponse("", HTTPStatus.OK)
+        elif isinstance(body, str):
+            return HTTPResponse(body, HTTPStatus.OK)
+        elif isinstance(body, dict):
+            return JSONResponse(body, HTTPStatus.OK)
+        else:
+            raise NotImplementedError()
+
+
 class APIGatewayRouter(PatternMatcher):
     def __init__(self, *, event_version=None):
         self._event_version = _validate_event_version(event_version)
         self._endpoints: List[EndpointSortWrapper] = []
 
-    def match(self, event: Dict, context: Any) -> Optional[Handler]:
+    def match(self, event: Dict, context: Any) -> Optional[APIGatewayEventHandler]:
         api_event = self._validate_event(event)
         if api_event is None:
             return None
@@ -74,15 +93,6 @@ class APIGatewayRouter(PatternMatcher):
         except pydantic.ValidationError:
             return None
         raise NotImplementedError()
-
-
-class APIGatewayEventHandler(Handler):
-    def __init__(self, endpoint: Endpoint, event: APIGatewayEvent):
-        self._endpoint = endpoint
-        self._event = event
-
-    def handle(self) -> Any:
-        return self._endpoint.handle(self._event)
 
 
 def _validate_event_version(version: str) -> Optional[AWSEventVersion]:

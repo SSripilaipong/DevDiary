@@ -17,4 +17,4 @@ def test_should_make_get_request():
     requester = HTTPRequester(lambler)
     response = requester.get("/hello")
     assert response.status_code == HTTPStatus.OK
-    assert response.json() == {"message": "OK!"}
+    assert response.body_dict == {"message": "OK!"}

@@ -9,12 +9,15 @@ class Lambler:
         self.__patterns: List[PatternMatcher] = []
 
     def __call__(self, event: Dict, context: Any) -> Any:
-        handler = self.__get_matched_handler(event, context)
-        response = handler.handle()
+        response = self.call_raw_response(event, context)
 
         if isinstance(response, LamblerResponse):
             return response.to_dict()
         return response
+
+    def call_raw_response(self, event: Dict, context: Any) -> LamblerResponse:
+        handler = self.__get_matched_handler(event, context)
+        return handler.handle()
 
     def include_pattern(self, pattern: PatternMatcher):
         self.__patterns.append(pattern)

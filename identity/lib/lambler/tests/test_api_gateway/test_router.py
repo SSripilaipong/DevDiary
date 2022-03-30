@@ -106,4 +106,4 @@ def test_should_return_value_from_function():
     def hello():
         return "OK!"
 
-    assert router.match(simple_get_event("/hello"), ...).handle() == "OK!"
+    assert router.match(simple_get_event("/hello"), ...).handle().body == "OK!"
