@@ -4,7 +4,7 @@ import json
 
 from lambler import Lambler
 from lambler.api_gateway.method import RequestMethodEnum
-from lambler.api_gateway.response import APIGatewayResponse
+from lambler.api_gateway.response import APIGatewayResponse, JSONResponse, HTTPResponse
 
 
 class HTTPRequester:
@@ -35,4 +35,16 @@ class HTTPRequester:
             "headers": headers or {},
             "body": body,
         }
-        return self._lambler.call_raw_response(event, ...)
+        response = self._lambler(event, ...)
+        return self.__convert_response(response)
+
+    def __convert_response(self, raw: Dict) -> APIGatewayResponse:
+        assert isinstance(raw, dict)
+
+        headers = raw["headers"]
+        status_code = raw["statusCode"]
+
+        if headers.get("content-type", None) == "application/json":
+            return JSONResponse(body=json.loads(raw.get("body", "null")), status_code=status_code)
+
+        return HTTPResponse(body=raw.get("body", None), status_code=status_code)
