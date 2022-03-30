@@ -47,6 +47,8 @@ class APIGatewayEventHandler(Handler):
             return HTTPResponse(body, HTTPStatus.OK)
         elif isinstance(body, dict):
             return JSONResponse(body, HTTPStatus.OK)
+        elif isinstance(body, APIGatewayResponse):
+            return body
         else:
             raise NotImplementedError()
 
