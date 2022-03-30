@@ -18,3 +18,19 @@ def test_should_make_get_request():
     response = requester.get("/hello")
     assert response.status_code == HTTPStatus.OK
     assert response.body_dict == {"message": "OK!"}
+
+
+def test_should_make_post_request():
+    router = APIGatewayRouter()
+
+    @router.post("/hello")
+    def hello():
+        return {"message": "OK!"}
+
+    lambler = Lambler()
+    lambler.include_pattern(router)
+
+    requester = HTTPRequester(lambler)
+    response = requester.post("/hello")
+    assert response.status_code == HTTPStatus.OK
+    assert response.body_dict == {"message": "OK!"}

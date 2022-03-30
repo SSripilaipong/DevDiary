@@ -17,3 +17,6 @@ class HTTPRequester:
             "body": "",
         }
         return self._lambler.call_raw_response(event, ...)
+
+    def post(self, path: str) -> APIGatewayResponse:
+        pass
