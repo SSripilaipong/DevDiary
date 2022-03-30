@@ -11,4 +11,5 @@ def test_should_not_call_real_usecase_when_mocking():
     def not_gonna_do_it():
         do_something()
 
+    not_gonna_do_it()
     assert not getattr(do_something, "done", False)
