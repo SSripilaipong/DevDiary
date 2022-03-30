@@ -14,7 +14,7 @@ def test_should_make_get_request():
     lambler = Lambler()
     lambler.include_pattern(router)
 
-    requester = HTTPRequester()
+    requester = HTTPRequester(lambler)
     response = requester.get("/hello")
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {"message": "OK!"}
