@@ -10,7 +10,7 @@ class HTTPRequester:
     def get(self, path: str) -> APIGatewayResponse:
         return self.__call_lambler(path, RequestMethodEnum.GET)
 
-    def post(self, path: str) -> APIGatewayResponse:
+    def post(self, path: str, body: dict = None) -> APIGatewayResponse:
         return self.__call_lambler(path, RequestMethodEnum.POST)
 
     def __call_lambler(self, path: str, method: RequestMethodEnum) -> APIGatewayResponse:

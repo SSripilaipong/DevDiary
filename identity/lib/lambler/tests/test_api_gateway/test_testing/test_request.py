@@ -1,4 +1,7 @@
+from typing import Dict
+
 from lambler import Lambler
+from lambler.api_gateway.endpoint.marker import JSONBody
 from lambler.api_gateway.router import APIGatewayRouter
 from lambler.api_gateway.status import HTTPStatus
 from lambler.testing.api_gateway.requester import HTTPRequester
@@ -34,3 +37,18 @@ def test_should_make_post_request():
     response = requester.post("/hello")
     assert response.status_code == HTTPStatus.OK
     assert response.body_dict == {"message": "OK!"}
+
+
+def test_should_make_post_request_with_json_body():
+    router = APIGatewayRouter()
+
+    @router.post("/hello")
+    def hello(request: Dict = JSONBody()):
+        return {"request": request}
+
+    lambler = Lambler()
+    lambler.include_pattern(router)
+
+    requester = HTTPRequester(lambler)
+    response = requester.post("/hello", body={"Hello": "World"})
+    assert response.body_dict["request"] == {"Hello": "World"}
