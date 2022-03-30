@@ -72,7 +72,7 @@ def test_should_return_from_raw_response():
     assert response.body_dict == {"Hello": "World"}
 
 
-def test_should_support_aws_event_version():
+def test_should_support_aws_api_event_v2():
     router = APIGatewayRouter(event_version=AWSEventVersion.V2)
 
     @router.get("/hello")

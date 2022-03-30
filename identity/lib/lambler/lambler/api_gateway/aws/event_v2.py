@@ -29,3 +29,17 @@ class AWSAPIGatewayEventV2(BaseModel):
         return APIGatewayEvent(path=self.raw_path, method=self.request_context.http.method,
                                query_string_parameters=self.query_string_parameters, body=self.body,
                                headers=self.headers)
+
+    @classmethod
+    def from_api_event(cls, event: APIGatewayEvent) -> 'AWSAPIGatewayEventV2':
+        http_context = {
+            "path": event.path,
+            "method": event.method,
+        }
+        request_context = {
+            "requestId": "",
+            "http": http_context,
+            "stage": "$default",
+        }
+        return cls(rawPath=event.path, rawQueryString="", requestContext=request_context, headers=event.headers,
+                   queryStringParameters=event.query_string_parameters, body=event.body)
