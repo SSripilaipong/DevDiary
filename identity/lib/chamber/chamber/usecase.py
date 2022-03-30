@@ -5,4 +5,4 @@ T = TypeVar("T", bound=Callable)
 
 
 def usecase(func: T) -> T:
-    pass
+    return func
