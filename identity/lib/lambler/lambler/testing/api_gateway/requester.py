@@ -1,7 +1,6 @@
 from lambler import Lambler
 from lambler.api_gateway.method import RequestMethodEnum
-from lambler.api_gateway.status import HTTPStatus
-from lambler.api_gateway.response import JSONResponse, APIGatewayResponse
+from lambler.api_gateway.response import APIGatewayResponse
 
 
 class HTTPRequester:
@@ -9,14 +8,17 @@ class HTTPRequester:
         self._lambler = lambler
 
     def get(self, path: str) -> APIGatewayResponse:
+        return self.__call_lambler(path, RequestMethodEnum.GET)
+
+    def post(self, path: str) -> APIGatewayResponse:
+        return self.__call_lambler(path, RequestMethodEnum.POST)
+
+    def __call_lambler(self, path: str, method: RequestMethodEnum) -> APIGatewayResponse:
         event = {
             "path": path,
-            "method": RequestMethodEnum.GET,
+            "method": method,
             "query_string_parameters": {},
             "headers": {},
             "body": "",
         }
         return self._lambler.call_raw_response(event, ...)
-
-    def post(self, path: str) -> APIGatewayResponse:
-        pass
