@@ -3,13 +3,15 @@ from typing import Dict
 import json
 
 from lambler import Lambler
+from lambler.api_gateway.aws.version import AWSEventVersion
 from lambler.api_gateway.method import RequestMethodEnum
 from lambler.api_gateway.response import APIGatewayResponse, JSONResponse, HTTPResponse
 
 
 class HTTPRequester:
-    def __init__(self, lambler: Lambler):
+    def __init__(self, lambler: Lambler, *, event_version: AWSEventVersion = None):
         self._lambler = lambler
+        self._event_version = event_version
 
     def get(self, path: str) -> APIGatewayResponse:
         return self.__call_lambler(path, RequestMethodEnum.GET)

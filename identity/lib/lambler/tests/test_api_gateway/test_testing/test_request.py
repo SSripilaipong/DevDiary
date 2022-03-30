@@ -1,6 +1,7 @@
 from typing import Dict
 
 from lambler import Lambler
+from lambler.api_gateway.aws.version import AWSEventVersion
 from lambler.api_gateway.endpoint.marker import JSONBody
 from lambler.api_gateway.response import JSONResponse
 from lambler.api_gateway.router import APIGatewayRouter
@@ -66,6 +67,22 @@ def test_should_return_from_raw_response():
     lambler.include_pattern(router)
 
     requester = HTTPRequester(lambler)
+    response = requester.get("/hello")
+    assert response.status_code == HTTPStatus.CREATED
+    assert response.body_dict == {"Hello": "World"}
+
+
+def test_should_support_aws_event_version():
+    router = APIGatewayRouter(event_version=AWSEventVersion.V2)
+
+    @router.get("/hello")
+    def hello():
+        return JSONResponse({"Hello": "World"}, HTTPStatus.CREATED)
+
+    lambler = Lambler()
+    lambler.include_pattern(router)
+
+    requester = HTTPRequester(lambler, event_version=AWSEventVersion.V2)
     response = requester.get("/hello")
     assert response.status_code == HTTPStatus.CREATED
     assert response.body_dict == {"Hello": "World"}
