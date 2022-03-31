@@ -32,8 +32,8 @@ class ParameterValidator:
             kind = param.kind
 
             if len(args) > 0:
-                if kind not in [Parameter.POSITIONAL_OR_KEYWORD, Parameter.POSITIONAL_ONLY]:
-                    raise NotImplementedError()
+                if kind == Parameter.KEYWORD_ONLY:
+                    raise TypeError(f"Usecase's parameter {name} is keyword-only parameter")
                 value = args.popleft()
             elif name in kwargs:
                 value = kwargs.pop(name)
