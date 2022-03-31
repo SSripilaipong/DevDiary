@@ -34,5 +34,6 @@ class UsecaseMocker:
         return self._call.result
 
 
-def when(call: UsecaseCallMocker) -> UsecaseCallResultMocker:
+def when(call: Any) -> UsecaseCallResultMocker:
+    assert isinstance(call, UsecaseCallMocker)
     return UsecaseCallResultMocker(call)
