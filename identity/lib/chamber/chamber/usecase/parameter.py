@@ -28,13 +28,16 @@ class ParameterValidator:
         args = deque(args)
         for name, param in self._parameters:
             annotation = param.annotation
+            default = param.default
             if param.kind in [Parameter.POSITIONAL_OR_KEYWORD, Parameter.POSITIONAL_ONLY]:
                 if len(args) > 0:
                     value = args.popleft()
                 elif name in kwargs:
                     value = kwargs.pop(name)
-                else:
+                elif default is not Signature.empty:
                     raise NotImplementedError()
+                else:
+                    raise TypeError(f"Usecase's parameter {name} is missing.")
 
                 if not isinstance(value, annotation):
                     raise TypeError(f"Usecase's parameter {name} should be {annotation.__name__}")
