@@ -67,3 +67,13 @@ def test_should_raise_TypeError_when_parameter_missing_and_no_default_value():
 
     with raises(TypeError):
         do_something(123)
+
+
+def test_should_proceed_when_parameter_missing_but_have_default_value():
+    @usecase
+    def do_something(a: int, b: str = "") -> None:
+        do_something.done = True
+
+    do_something(123)
+
+    assert getattr(do_something, "done", False)
