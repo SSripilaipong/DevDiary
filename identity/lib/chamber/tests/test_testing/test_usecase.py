@@ -42,3 +42,20 @@ def test_should_be_able_to_run_real_usecase_outside_mock_area():
 
     do_something()
     assert getattr(do_something, "done", False)
+
+
+def test_should_pass_parameters():
+    @usecase
+    def do_something():
+        pass
+
+    @mock_usecase(do_something)
+    def do_mock(value):
+        if value == "VALUE":
+            do_mock.ok = True
+
+    do_mock("VALUE")
+    assert not getattr(do_mock, "ok", False)
+
+    do_something()
+    assert getattr(do_something, "ok", False)
