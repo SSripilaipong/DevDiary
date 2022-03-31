@@ -31,5 +31,6 @@ class ParameterValidator:
             if param.kind in [Parameter.POSITIONAL_OR_KEYWORD, Parameter.POSITIONAL_ONLY]:
                 if not isinstance(args[0], annotation):
                     raise TypeError(f"Usecase's parameter {name} should be {annotation.__name__}")
+                args.popleft()
+            else:
                 raise NotImplementedError()
-            raise NotImplementedError()
