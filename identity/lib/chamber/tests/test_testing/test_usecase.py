@@ -137,3 +137,16 @@ def test_should_raise_TypeError_when_the_instructed_return_value_not_matched_wit
 
     with raises(TypeError):
         do_mock()
+
+
+def test_should_raise_TypeError_when_the_instructed_return_value_is_not_None_but_the_annotated_return_type_is_None():
+    @usecase
+    def do_something() -> None:
+        pass
+
+    @mock_usecase(do_something)
+    def do_mock():
+        when(do_something()).then_return("This should fail")
+
+    with raises(TypeError):
+        do_mock()
