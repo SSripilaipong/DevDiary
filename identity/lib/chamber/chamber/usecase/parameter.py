@@ -15,7 +15,10 @@ class ParameterValidator:
         params = inspect.signature(func).parameters
         param_list = []
         for name, param in params.items():
+            kind = param.kind
             annotation = param.annotation
+            if kind == Parameter.VAR_KEYWORD:
+                raise TypeError(f"Usecase should not have keyword variable-length argument (**{name}).")
             if annotation is Signature.empty:
                 raise TypeError("Usecase's parameters should be type-annotated.")
             elif not isinstance(annotation, type):
