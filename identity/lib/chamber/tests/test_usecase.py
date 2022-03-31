@@ -31,3 +31,12 @@ def test_should_raise_TypeError_when_parameter_annotation_is_not_a_type():
         @usecase
         def do_something(a: 123) -> None:
             pass
+
+
+def test_should_raise_TypeError_when_calling_with_wrong_type_parameter():
+    @usecase
+    def do_something(a: int) -> None:
+        pass
+
+    with raises(TypeError):
+        do_something("Hello")
