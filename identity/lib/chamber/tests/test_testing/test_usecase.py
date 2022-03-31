@@ -6,7 +6,7 @@ from chamber.testing import mock_usecase
 
 def test_should_not_call_real_usecase_when_mocking():
     @usecase
-    def do_something():
+    def do_something() -> None:
         do_something.done = True
 
     @mock_usecase(do_something)
@@ -19,7 +19,7 @@ def test_should_not_call_real_usecase_when_mocking():
 
 def test_should_run_the_test_function():
     @usecase
-    def do_something():
+    def do_something() -> None:
         pass
 
     @mock_usecase(do_something)
@@ -32,7 +32,7 @@ def test_should_run_the_test_function():
 
 def test_should_be_able_to_run_real_usecase_outside_mock_area():
     @usecase
-    def do_something():
+    def do_something() -> None:
         do_something.done = True
 
     @mock_usecase(do_something)
@@ -48,7 +48,7 @@ def test_should_be_able_to_run_real_usecase_outside_mock_area():
 
 def test_should_pass_parameters():
     @usecase
-    def do_something():
+    def do_something() -> None:
         pass
 
     @mock_usecase(do_something)
@@ -62,7 +62,7 @@ def test_should_pass_parameters():
 
 def test_should_disable_mock_whether_error_occur_or_not():
     @usecase
-    def do_something():
+    def do_something() -> None:
         do_something.done = True
 
     class SomeException(Exception):
@@ -83,7 +83,7 @@ def test_should_disable_mock_whether_error_occur_or_not():
 
 def test_should_return_value():
     @usecase
-    def do_something():
+    def do_something() -> None:
         pass
 
     @mock_usecase(do_something)
