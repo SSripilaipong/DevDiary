@@ -103,3 +103,10 @@ def test_should_raise_TypeError_when_define_usecase_with_kwargs():
         @usecase
         def do_something(**kwargs: int) -> None:
             pass
+
+
+def test_should_raise_TypeError_when_define_usecase_with_args():
+    with raises(TypeError):
+        @usecase
+        def do_something(*args: int) -> None:
+            pass
