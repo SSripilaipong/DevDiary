@@ -117,7 +117,7 @@ def test_should_return_with_the_instructed_value():
     assert do_mock.return_value == 999
 
 
-def test_should_raise_TypeError_when_using_when_not_using_when_with_mocked_usecase():
+def test_should_raise_TypeError_when_not_using_when_with_mocked_usecase():
     @usecase
     def do_something() -> None:
         pass
