@@ -1,3 +1,5 @@
+from pytest import raises
+
 from chamber import usecase
 from chamber.testing import mock_usecase
 
@@ -56,3 +58,24 @@ def test_should_pass_parameters():
 
     do_mock("VALUE")
     assert getattr(do_mock, "ok", False)
+
+
+def test_should_disable_mock_whether_error_occur_or_not():
+    @usecase
+    def do_something():
+        do_something.done = True
+
+    class SomeException(Exception):
+        pass
+
+    @mock_usecase(do_something)
+    def do_mock():
+        do_something()
+        raise SomeException()
+
+    with raises(SomeException):
+        do_mock()
+    assert not getattr(do_something, "done", False)
+
+    do_something()
+    assert getattr(do_something, "done", False)
