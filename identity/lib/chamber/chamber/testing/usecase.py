@@ -20,3 +20,12 @@ def mock_usecase(usecase_function: Usecase):
                 usecase_function.disable_mock()
         return wrapper
     return decorator
+
+
+class UsecaseMocker:
+    def then_return(self, value):
+        pass
+
+
+def when(_):
+    return UsecaseMocker()

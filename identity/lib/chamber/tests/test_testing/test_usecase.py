@@ -1,7 +1,7 @@
 from pytest import raises
 
 from chamber import usecase
-from chamber.testing import mock_usecase
+from chamber.testing import mock_usecase, when
 
 
 def test_should_not_call_real_usecase_when_mocking():
@@ -101,3 +101,17 @@ def test_should_raise_TypeError_when_type_is_not_Usecase():
         @mock_usecase(not_usecase)
         def do_mock():
             pass
+
+
+def test_should_return_with_the_instructed_value():
+    @usecase
+    def do_something() -> int:
+        return 123
+
+    @mock_usecase(do_something)
+    def do_mock():
+        when(do_something()).then_return(999)
+        do_mock.return_value = do_something()
+
+    do_mock()
+    assert do_mock.return_value == 999
