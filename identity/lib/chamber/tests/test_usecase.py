@@ -77,3 +77,13 @@ def test_should_proceed_when_parameter_missing_but_have_default_value():
     do_something(123)
 
     assert getattr(do_something, "done", False)
+
+
+def test_should_proceed_with_keyword_only_parameter():
+    @usecase
+    def do_something(*, a: int) -> None:
+        do_something.done = True
+
+    do_something(a=123)
+
+    assert getattr(do_something, "done", False)
