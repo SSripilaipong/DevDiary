@@ -1,6 +1,7 @@
 from typing import TypeVar, Callable
 from functools import wraps
 
+from chamber.testing.usecase.mocker import UsecaseMocker
 from chamber.usecase import Usecase
 
 T = TypeVar("T", bound=Callable)
@@ -14,7 +15,8 @@ def mock_usecase(usecase_function: Usecase):
         @wraps(func)
         def wrapper(*args, **kwargs):
             real = usecase_function.get_function()
-            usecase_function.override_function(lambda: None)
+            mocker = UsecaseMocker()
+            usecase_function.override_function(mocker)
             try:
                 return func(*args, **kwargs)
             finally:
