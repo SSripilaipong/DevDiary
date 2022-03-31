@@ -13,8 +13,11 @@ class ParameterValidator:
         params = inspect.signature(func).parameters
         param_list = []
         for name, param in params.items():
-            if param.annotation is Signature.empty:
+            annotation = param.annotation
+            if annotation is Signature.empty:
                 raise TypeError("Usecase's parameters should be type-annotated.")
+            elif not isinstance(annotation, type):
+                raise TypeError("Usecase's parameters should be annotated with a type.")
             param_list.append((name, param))
 
         return ParameterValidator(param_list)
