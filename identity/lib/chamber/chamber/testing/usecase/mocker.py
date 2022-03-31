@@ -35,5 +35,6 @@ class UsecaseMocker:
 
 
 def when(call: Any) -> UsecaseCallResultMocker:
-    assert isinstance(call, UsecaseCallMocker)
+    if not isinstance(call, UsecaseCallMocker):
+        raise TypeError("when() should be used with mocked usecase.")
     return UsecaseCallResultMocker(call)
