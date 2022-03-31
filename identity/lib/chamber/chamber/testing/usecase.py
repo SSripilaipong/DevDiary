@@ -11,7 +11,7 @@ def mock_usecase(usecase_function: Usecase):
         @wraps(func)
         def wrapper(*args, **kwargs):
             usecase_function.enable_mock()
-            func()  # TODO: handle params, errors
+            func(*args, **kwargs)  # TODO: handle errors
             usecase_function.disable_mock()
         return wrapper
     return decorator

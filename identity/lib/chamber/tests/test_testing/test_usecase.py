@@ -55,7 +55,4 @@ def test_should_pass_parameters():
             do_mock.ok = True
 
     do_mock("VALUE")
-    assert not getattr(do_mock, "ok", False)
-
-    do_something()
-    assert getattr(do_something, "ok", False)
+    assert getattr(do_mock, "ok", False)
