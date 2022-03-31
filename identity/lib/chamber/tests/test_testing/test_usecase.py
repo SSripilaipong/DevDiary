@@ -124,3 +124,16 @@ def test_should_raise_TypeError_when_not_using_when_with_mocked_usecase():
 
     with raises(TypeError):
         when(do_something())
+
+
+def test_should_raise_TypeError_when_the_instructed_return_value_not_matched_with_annotated_return_value():
+    @usecase
+    def do_something() -> int:
+        return 123
+
+    @mock_usecase(do_something)
+    def do_mock():
+        when(do_something()).then_return("This should fail")
+
+    with raises(TypeError):
+        do_mock()
