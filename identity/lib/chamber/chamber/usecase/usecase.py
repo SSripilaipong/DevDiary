@@ -12,7 +12,11 @@ class Usecase:
         self._func = func
 
     def __call__(self, *args, **kwargs) -> Any:
+        self.validate_parameter(*args, **kwargs)
         return self._func(*args, **kwargs)
+
+    def validate_parameter(self, *args, **kwargs):
+        self._parameter_validator.validate_parameter(*args, **kwargs)
 
     def override_function(self, func: Callable):
         self._func = func

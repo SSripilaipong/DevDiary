@@ -1,3 +1,5 @@
+from collections import deque
+
 import inspect
 from inspect import Parameter, Signature
 
@@ -21,3 +23,13 @@ class ParameterValidator:
             param_list.append((name, param))
 
         return ParameterValidator(param_list)
+
+    def validate_parameter(self, *args, **kwargs):
+        args = deque(args)
+        for name, param in self._parameters:
+            annotation = param.annotation
+            if param.kind in [Parameter.POSITIONAL_OR_KEYWORD, Parameter.POSITIONAL_ONLY]:
+                if not isinstance(args[0], annotation):
+                    raise TypeError(f"Usecase's parameter {name} should be {annotation.__name__}")
+                raise NotImplementedError()
+            raise NotImplementedError()
