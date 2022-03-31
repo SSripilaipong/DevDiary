@@ -17,7 +17,9 @@ class ParameterValidator:
         for name, param in params.items():
             kind = param.kind
             annotation = param.annotation
-            if kind == Parameter.VAR_KEYWORD:
+            if kind == Parameter.VAR_POSITIONAL:
+                raise TypeError(f"Usecase should not have variable-length argument (*{name}).")
+            elif kind == Parameter.VAR_KEYWORD:
                 raise TypeError(f"Usecase should not have keyword variable-length argument (**{name}).")
             if annotation is Signature.empty:
                 raise TypeError("Usecase's parameters should be type-annotated.")
