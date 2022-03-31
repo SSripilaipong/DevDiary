@@ -17,3 +17,10 @@ def test_should_raise_TypeError_when_return_type_is_not_annotated():
         @usecase
         def do_something():
             return 0
+
+
+def test_should_raise_TypeError_when_parameter_annotation_missing():
+    with raises(TypeError):
+        @usecase
+        def do_something(a) -> None:
+            pass
