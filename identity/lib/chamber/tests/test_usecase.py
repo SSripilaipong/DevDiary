@@ -40,3 +40,12 @@ def test_should_raise_TypeError_when_calling_with_wrong_type_parameter():
 
     with raises(TypeError):
         do_something("Hello")
+
+
+def test_should_raise_TypeError_when_calling_with_wrong_type_parameters():
+    @usecase
+    def do_something(a: int, b: str, c: bool) -> None:
+        pass
+
+    with raises(TypeError):
+        do_something(123, True, "Hello")
