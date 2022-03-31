@@ -24,3 +24,10 @@ def test_should_raise_TypeError_when_parameter_annotation_missing():
         @usecase
         def do_something(a) -> None:
             pass
+
+
+def test_should_raise_TypeError_when_parameter_annotation_is_not_a_type():
+    with raises(TypeError):
+        @usecase
+        def do_something(a: 123) -> None:
+            pass
