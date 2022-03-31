@@ -58,3 +58,12 @@ def test_should_raise_TypeError_when_calling_with_wrong_type_keyword_parameters(
 
     with raises(TypeError):
         do_something(123, b=True)
+
+
+def test_should_raise_TypeError_when_parameter_missing_and_no_default_value():
+    @usecase
+    def do_something(a: int, b: str) -> None:
+        pass
+
+    with raises(TypeError):
+        do_something(123)
