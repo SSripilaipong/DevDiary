@@ -163,3 +163,17 @@ def test_should_accept_None_as_return_value_when_the_annotated_return_type_is_No
         do_something()
 
     do_mock()
+
+
+def test_should_raise_TypeError_when_mocked_call_has_invalid_parameter_type():
+    @usecase
+    def do_something(a: int, b: str = "") -> None:
+        pass
+
+    @mock_usecase(do_something)
+    def do_mock():
+        when(do_something("Hello")).then_return(None)
+        do_something()
+
+    with raises(TypeError):
+        do_mock()
