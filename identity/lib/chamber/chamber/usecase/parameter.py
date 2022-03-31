@@ -29,17 +29,18 @@ class ParameterValidator:
         for name, param in self._parameters:
             annotation = param.annotation
             default = param.default
-            if param.kind in [Parameter.POSITIONAL_OR_KEYWORD, Parameter.POSITIONAL_ONLY]:
-                if len(args) > 0:
-                    value = args.popleft()
-                elif name in kwargs:
-                    value = kwargs.pop(name)
-                elif default is not Signature.empty:
-                    continue
-                else:
-                    raise TypeError(f"Usecase's parameter {name} is missing.")
+            kind = param.kind
 
-                if not isinstance(value, annotation):
-                    raise TypeError(f"Usecase's parameter {name} should be {annotation.__name__}")
+            if len(args) > 0:
+                if kind not in [Parameter.POSITIONAL_OR_KEYWORD, Parameter.POSITIONAL_ONLY]:
+                    raise NotImplementedError()
+                value = args.popleft()
+            elif name in kwargs:
+                value = kwargs.pop(name)
+            elif default is not Signature.empty:
+                continue
             else:
-                raise NotImplementedError()
+                raise TypeError(f"Usecase's parameter {name} is missing.")
+
+            if not isinstance(value, annotation):
+                raise TypeError(f"Usecase's parameter {name} should be {annotation.__name__}")
