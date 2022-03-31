@@ -91,3 +91,15 @@ def test_should_return_value():
         return 123
 
     assert do_mock() == 123
+
+
+def test_should_raise_TypeError_when_type_is_not_Usecase():
+    def not_usecase():
+        pass
+
+    @mock_usecase(not_usecase)
+    def do_mock():
+        pass
+
+    with raises(TypeError):
+        do_mock()
