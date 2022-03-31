@@ -79,3 +79,15 @@ def test_should_disable_mock_whether_error_occur_or_not():
 
     do_something()
     assert getattr(do_something, "done", False)
+
+
+def test_should_return_value():
+    @usecase
+    def do_something():
+        pass
+
+    @mock_usecase(do_something)
+    def do_mock():
+        return 123
+
+    assert do_mock() == 123
