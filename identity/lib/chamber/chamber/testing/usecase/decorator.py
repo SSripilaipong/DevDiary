@@ -13,10 +13,11 @@ def mock_usecase(usecase_function: Usecase):
     def decorator(func: T) -> T:
         @wraps(func)
         def wrapper(*args, **kwargs):
-            usecase_function.enable_mock()
+            real = usecase_function.get_function()
+            usecase_function.override_function(lambda: None)
             try:
                 return func(*args, **kwargs)
             finally:
-                usecase_function.disable_mock()
+                usecase_function.override_function(real)
         return wrapper
     return decorator
