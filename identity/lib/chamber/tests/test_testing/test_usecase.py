@@ -97,9 +97,7 @@ def test_should_raise_TypeError_when_type_is_not_Usecase():
     def not_usecase():
         pass
 
-    @mock_usecase(not_usecase)
-    def do_mock():
-        pass
-
     with raises(TypeError):
-        do_mock()
+        @mock_usecase(not_usecase)
+        def do_mock():
+            pass
