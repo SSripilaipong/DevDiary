@@ -1,5 +1,6 @@
 from typing import Union, Any, Optional, Type
 
+from chamber.testing.exception import UnusedMockException
 from chamber.usecase import Usecase
 
 
@@ -7,14 +8,20 @@ class UsecaseCallMocker:
     def __init__(self, mocker: 'UsecaseMocker'):
         self._mocker = mocker
         self._result = None
+        self._is_called = False
 
-    @property
-    def result(self):
+    def get_result(self):
+        self._is_called = True
         return self._result
 
-    @result.setter
-    def result(self, value):
+    def set_result(self, value):
         self._result = value
+
+    def is_called(self) -> bool:
+        return self._is_called
+
+    def add_to_mocker(self):
+        self._mocker.add_mocked_call(self)
 
     @property
     def expected_return_type(self) -> Type:
@@ -32,7 +39,7 @@ class UsecaseCallResultMocker:
                 raise TypeError("then_return() accepts only None, since the usecase function only return None.")
         elif not isinstance(value, expected_type):
             raise TypeError(f"then_return() should be called with value of type {expected_type.__name__}.")
-        self._call.result = value
+        self._call.set_result(value)
 
 
 class UsecaseMocker:
@@ -42,16 +49,23 @@ class UsecaseMocker:
 
     def __call__(self, *args, **kwargs) -> Union[Any, UsecaseCallMocker]:
         if self._call is None:
-            self._call = UsecaseCallMocker(self)
-            return self._call
-        return self._call.result
+            return UsecaseCallMocker(self)
+        return self._call.get_result()
+
+    def add_mocked_call(self, call: 'UsecaseCallMocker'):
+        self._call = call  # TODO: make support for multiple calls
 
     @property
     def return_type(self) -> Type:
         return self._usecase.return_type
 
+    def raise_unused_mock(self):
+        if self._call is not None and not self._call.is_called():
+            raise UnusedMockException("Mocked when() clause unused.")
+
 
 def when(call: Any) -> UsecaseCallResultMocker:
     if not isinstance(call, UsecaseCallMocker):
         raise TypeError("when() should be used with mocked usecase.")
+    call.add_to_mocker()
     return UsecaseCallResultMocker(call)

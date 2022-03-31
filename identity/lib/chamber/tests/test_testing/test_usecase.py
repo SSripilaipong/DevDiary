@@ -135,6 +135,7 @@ def test_should_raise_TypeError_when_the_instructed_return_value_not_matched_wit
     @mock_usecase(do_something)
     def do_mock():
         when(do_something()).then_return("This should fail")
+        do_something()
 
     with raises(TypeError):
         do_mock()
@@ -148,6 +149,7 @@ def test_should_raise_TypeError_when_the_instructed_return_value_is_not_None_but
     @mock_usecase(do_something)
     def do_mock():
         when(do_something()).then_return("This should fail")
+        do_something()
 
     with raises(TypeError):
         do_mock()
@@ -188,7 +190,6 @@ def test_should_raise_UnusedMockException_when_mocked_call_not_used():
     @mock_usecase(do_something)
     def do_mock():
         when(do_something(123)).then_return(None)
-        do_something(456)
 
     with raises(UnusedMockException):
         do_mock()
