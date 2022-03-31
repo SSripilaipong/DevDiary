@@ -1,0 +1,2 @@
+class UnusedMockException(Exception):
+    pass

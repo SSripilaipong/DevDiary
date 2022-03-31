@@ -2,6 +2,7 @@ from pytest import raises
 
 from chamber import usecase
 from chamber.testing import mock_usecase, when
+from chamber.testing.exception import UnusedMockException
 
 
 def test_should_not_call_real_usecase_when_mocking():
@@ -176,4 +177,18 @@ def test_should_raise_TypeError_when_mocked_call_has_invalid_parameter_type():
         do_something()
 
     with raises(TypeError):
+        do_mock()
+
+
+def test_should_raise_UnusedMockException_when_mocked_call_not_used():
+    @usecase
+    def do_something(a: int) -> None:
+        pass
+
+    @mock_usecase(do_something)
+    def do_mock():
+        when(do_something(123)).then_return(None)
+        do_something(456)
+
+    with raises(UnusedMockException):
         do_mock()

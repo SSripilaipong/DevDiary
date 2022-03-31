@@ -40,7 +40,7 @@ class UsecaseMocker:
         self._usecase = usecase
         self._call: Optional[UsecaseCallMocker] = None
 
-    def __call__(self) -> Union[Any, UsecaseCallMocker]:
+    def __call__(self, *args, **kwargs) -> Union[Any, UsecaseCallMocker]:
         if self._call is None:
             self._call = UsecaseCallMocker(self)
             return self._call
