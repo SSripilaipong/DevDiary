@@ -96,3 +96,10 @@ def test_should_raise_TypeError_when_passing_keyword_only_parameter_with_positio
 
     with raises(TypeError):
         do_something(123)
+
+
+def test_should_raise_TypeError_when_define_usecase_with_kwargs():
+    with raises(TypeError):
+        @usecase
+        def do_something(**kwargs: int) -> None:
+            pass
