@@ -27,7 +27,10 @@ class UsecaseCallResultMocker:
 
     def then_return(self, value: Any):
         expected_type = self._call.expected_return_type
-        if not isinstance(value, expected_type):
+        if expected_type is None:
+            if value is not None:
+                raise TypeError("then_return() accepts only None, since the usecase function only return None.")
+        elif not isinstance(value, expected_type):
             raise TypeError(f"then_return() should be called with value of type {expected_type.__name__}.")
         self._call.result = value
 
