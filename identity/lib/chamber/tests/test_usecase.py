@@ -1,5 +1,5 @@
 from pytest import raises
-from chamber import usecase
+from chamber.usecase import usecase
 
 
 def test_should_run_usecase_function():

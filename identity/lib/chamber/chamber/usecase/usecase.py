@@ -1,11 +1,14 @@
 from typing import TypeVar, Callable, Any, Type, Optional
 
+from chamber.usecase.parameter import ParameterValidator
+
 T = TypeVar("T", bound=Callable)
 
 
 class Usecase:
     def __init__(self, func: Callable):
         self._return_type = self._extract_return_type(func)
+        self._parameter_validator = ParameterValidator.from_function(func)
         self._func = func
 
     def __call__(self, *args, **kwargs) -> Any:
@@ -28,7 +31,3 @@ class Usecase:
     @property
     def return_type(self) -> Type:
         return self._return_type
-
-
-def usecase(func: T) -> T:
-    return Usecase(func)
