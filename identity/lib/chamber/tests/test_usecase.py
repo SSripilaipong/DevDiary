@@ -87,3 +87,12 @@ def test_should_proceed_with_keyword_only_parameter():
     do_something(a=123)
 
     assert getattr(do_something, "done", False)
+
+
+def test_should_raise_TypeError_when_passing_keyword_only_parameter_with_positional_parameter():
+    @usecase
+    def do_something(*, a: int) -> None:
+        pass
+
+    with raises(TypeError):
+        do_something(123)
