@@ -12,7 +12,7 @@ def mock_usecase(usecase_function: Usecase):
         def wrapper(*args, **kwargs):
             usecase_function.enable_mock()
             try:
-                func(*args, **kwargs)
+                return func(*args, **kwargs)
             finally:
                 usecase_function.disable_mock()
         return wrapper
