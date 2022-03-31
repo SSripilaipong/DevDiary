@@ -21,7 +21,13 @@ class Usecase:
         annotations = getattr(func, "__annotations__", {})
         if "return" not in annotations:
             raise TypeError("Usecase should have a return type.")
-        # TODO: implement this
+        return_type = annotations["return"]
+        assert isinstance(return_type, type) or return_type is None  # TODO: properly raise error
+        return return_type
+
+    @property
+    def return_type(self) -> Type:
+        return self._return_type
 
 
 def usecase(func: T) -> T:
