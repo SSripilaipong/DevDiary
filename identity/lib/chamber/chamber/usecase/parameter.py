@@ -50,7 +50,7 @@ class ParameterValidator:
             elif name in kwargs:
                 value = kwargs.pop(name)
             elif default is not Signature.empty:
-                continue
+                value = default
             else:
                 raise TypeError(f"Usecase's parameter {name} is missing.")
 
