@@ -210,3 +210,21 @@ def test_should_support_multiple_mock_result():
         assert do_something(123) == "Hello"
 
     do_mock()
+
+
+def test_should_support_multiple_mock_result_with_complex_parameters():
+    @usecase
+    def do_something(a: int, b: str, c: bool = False, *, d: str = "Hello") -> str:
+        pass
+
+    @mock_usecase(do_something)
+    def do_mock():
+        when(do_something(123, c=True, b="ABC")).then_return("Hello")
+        when(do_something(b="", d="DEF", a=456, c=False)).then_return("World")
+
+        assert do_something(123, "ABC", True) == "Hello"
+        assert do_something(456, "", False, d="DEF") == "World"
+        assert do_something(b="ABC", c=True, a=123) == "Hello"
+        assert do_something(456, "", d="DEF") == "World"
+
+    do_mock()
