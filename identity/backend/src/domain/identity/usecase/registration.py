@@ -1,5 +1,6 @@
 from typing import overload
 
+from chamber import usecase
 from chamber.transaction import transaction
 from domain.identity.security.password import hash_password
 from domain.identity.registration.registration import Registration
@@ -10,6 +11,11 @@ from domain.identity.value_object.username import Username
 from domain.registry import Registry
 
 
+@overload
+def register_user(username: Username, password: Password, display_name: DisplayName, email: Email) -> Registration: ...
+
+
+@usecase
 def register_user(username: Username, password: Password, display_name: DisplayName, email: Email) -> Registration:
     """
     :raises:
@@ -23,11 +29,12 @@ def register_user(username: Username, password: Password, display_name: DisplayN
 
 
 @overload
-def confirm_registration(email: Email, confirmation_code: str): ...
+def confirm_registration(email: Email, confirmation_code: str) -> None: ...
 
 
+@usecase
 @transaction
-def confirm_registration(email: Email, confirmation_code: str):
+def confirm_registration(email: Email, confirmation_code: str) -> None:
     """
     :raises:
         RegistrationNotFoundException
@@ -40,5 +47,10 @@ def confirm_registration(email: Email, confirmation_code: str):
     all_registrations.save(registration)
 
 
-def send_confirmation_email(email: Email, confirmation_code: str):
+@overload
+def send_confirmation_email(email: Email, confirmation_code: str) -> None: ...
+
+
+@usecase
+def send_confirmation_email(email: Email, confirmation_code: str) -> None:
     Registry().email_service.send_confirmation_email(email, confirmation_code)
