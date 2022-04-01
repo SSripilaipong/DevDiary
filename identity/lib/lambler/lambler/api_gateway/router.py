@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from typing import Dict, Any, Optional, List
 import bisect
 import pydantic
@@ -10,7 +12,6 @@ from lambler.api_gateway.endpoint.post import PostEndpoint
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
 from lambler.api_gateway.response import APIGatewayResponse, HTTPResponse, JSONResponse
-from lambler.api_gateway.status import HTTPStatus
 from lambler.base.handler import PatternMatcher, Handler
 
 
@@ -44,7 +45,7 @@ class APIGatewayEventHandler(Handler):
         try:
             body = self._endpoint.handle(self._event)
         except InvalidParameterError:
-            return JSONResponse({"message": "Unprocessable Entity"}, status_code=422)
+            return JSONResponse({"message": "Unprocessable Entity"}, status_code=HTTPStatus.UNPROCESSABLE_ENTITY)
         if body is None:
             return HTTPResponse("", HTTPStatus.OK)
         elif isinstance(body, str):

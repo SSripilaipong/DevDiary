@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from lambler import Lambler
 from lambler.api_gateway.aws.version import AWSEventVersion
 from lambler.api_gateway.endpoint.marker import JSONBody
@@ -16,4 +18,4 @@ def test_should_response_unprocessable_entity_when_json_body_required_but_none_g
     lambler.include_pattern(router)
     requester = HTTPRequester(lambler, event_version=AWSEventVersion.V2)
     response = requester.post("/")
-    assert response.status_code == 422
+    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY

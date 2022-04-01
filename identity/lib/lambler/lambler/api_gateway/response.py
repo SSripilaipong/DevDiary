@@ -1,10 +1,11 @@
+from http import HTTPStatus
+
 import json
 
 from typing import Dict
 
 from abc import ABC, abstractmethod
 
-from lambler.api_gateway.status import HTTPStatus
 from lambler.base.response import LamblerResponse
 
 
@@ -15,7 +16,7 @@ class APIGatewayResponse(LamblerResponse, ABC):
         self._is_base64_encoded = is_base64_encoded
 
     @property
-    def status_code(self) -> HTTPStatus:
+    def status_code(self) -> int:
         return self._status_code
 
     @property
@@ -38,7 +39,7 @@ class APIGatewayResponse(LamblerResponse, ABC):
 
 
 class HTTPResponse(APIGatewayResponse):
-    def __init__(self, body="", status_code=None):
+    def __init__(self, body="", status_code: int = None):
         super().__init__(status_code=status_code)
         self._body = body or ""
 
