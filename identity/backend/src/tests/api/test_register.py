@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from pytest import fixture
 from app.main import handler
 from chamber.testing import mock_usecase, when
@@ -37,7 +39,7 @@ def test_should_response_409_when_email_already_registered(requester):
 
     response = requester.post("/users/register", {"username": "cpeng", "password": "CPEng12345678",
                                                   "displayName": "cpeng", "email": "cpeng@devdiary.link"})
-    assert response.status_code == 409
+    assert response.status_code == HTTPStatus.CONFLICT
     assert response.body_dict.get("message", None) == "Email already used"
 
 
@@ -49,5 +51,5 @@ def test_should_response_409_when_username_already_registered(requester):
 
     response = requester.post("/users/register", {"username": "cpeng", "password": "CPEng12345678",
                                                   "displayName": "cpeng", "email": "cpeng@devdiary.link"})
-    assert response.status_code == 409
+    assert response.status_code == HTTPStatus.CONFLICT
     assert response.body_dict.get("message", None) == "Username already used"

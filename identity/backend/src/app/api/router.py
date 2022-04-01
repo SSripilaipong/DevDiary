@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 import json
 
 from typing import Dict
@@ -22,31 +24,7 @@ def register(request: RegistrationRequest = JSONBody()):
     try:
         _ = register_user(request.username, request.password, request.display_name, request.email)
     except EmailAlreadyRegisteredException:
-        return JSONResponse({"message": "Email already used"}, status_code=409)
+        return JSONResponse({"message": "Email already used"}, status_code=HTTPStatus.CONFLICT)
     except UsernameAlreadyRegisteredException:
-        return JSONResponse({"message": "Username already used"}, status_code=409)
-    return created_response("ok")
-
-
-def unprocessable_entity_response(message: str) -> Dict:
-    return {
-        "statusCode": 422,
-        "headers": {
-            "Content-Type": "application/json",
-        },
-        "body": json.dumps({
-            "message": message,
-        }),
-    }
-
-
-def created_response(message: str) -> Dict:
-    return {
-        "statusCode": 201,
-        "headers": {
-            "Content-Type": "application/json",
-        },
-        "body": json.dumps({
-            "message": message,
-        }),
-    }
+        return JSONResponse({"message": "Username already used"}, status_code=HTTPStatus.CONFLICT)
+    return JSONResponse({"message": "ok"}, status_code=HTTPStatus.CREATED)
