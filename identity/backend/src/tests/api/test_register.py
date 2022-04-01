@@ -29,7 +29,7 @@ def test_should_call_register_user_usecase(requester):
 
 
 @mock_usecase(register_user)
-def test_should_call_register_user_usecase(requester):
+def test_should_response_409_when_email_already_registered(requester):
     when(register_user(Username.as_is("cpeng"), Password.as_is("CPEng12345678"),
                        DisplayName.as_is("cpeng"), Email.as_is("cpeng@devdiary.link"))) \
         .then_raise(EmailAlreadyRegisteredException())
