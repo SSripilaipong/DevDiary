@@ -3,6 +3,7 @@ import json
 from typing import Dict
 
 from domain.identity.registration.exception import EmailAlreadyRegisteredException
+from domain.identity.user.exception import UsernameAlreadyRegisteredException
 from lambler.api_gateway.aws.version import AWSEventVersion
 from lambler.api_gateway.endpoint.marker import JSONBody
 from lambler.api_gateway.response import JSONResponse
@@ -22,6 +23,8 @@ def register(request: RegistrationRequest = JSONBody()):
         _ = register_user(request.username, request.password, request.display_name, request.email)
     except EmailAlreadyRegisteredException:
         return JSONResponse({"message": "Email already used"}, status_code=409)
+    except UsernameAlreadyRegisteredException:
+        return JSONResponse({"message": "Username already used"}, status_code=409)
     return created_response("ok")
 
 
