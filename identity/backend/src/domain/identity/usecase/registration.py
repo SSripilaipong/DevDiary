@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import overload
 
 from chamber.transaction import transaction
 from domain.identity.security.password import hash_password
@@ -22,6 +22,10 @@ def register_user(username: Username, password: Password, display_name: DisplayN
     return all_registrations.create(registration)
 
 
+@overload
+def confirm_registration(email: Email, confirmation_code: str): ...
+
+
 @transaction
 def confirm_registration(email: Email, confirmation_code: str):
     """
@@ -38,7 +42,3 @@ def confirm_registration(email: Email, confirmation_code: str):
 
 def send_confirmation_email(email: Email, confirmation_code: str):
     Registry().email_service.send_confirmation_email(email, confirmation_code)
-
-
-if TYPE_CHECKING:
-    def confirm_registration(email: Email, confirmation_code: str): ...
