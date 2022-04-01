@@ -1,11 +1,8 @@
 from pydantic import BaseModel
 from typing import Dict, Type, Callable, Any
 
-from pytest import raises
-
 from chamber.data.field import Field
 from chamber.data.model import DataModel
-from lambler.api_gateway.endpoint.exception import InvalidParameterError
 from lambler.api_gateway.endpoint.marker import JSONBody
 from lambler.api_gateway.router import APIGatewayRouter
 from .event_factory import simple_post_event
@@ -35,19 +32,19 @@ def test_should_pass_chamber_DataModel():
     _test_passing_json_body(MyModel, lambda body, name: getattr(body, name))
 
 
-def test_should_raise_InvalidParameterError_when_request_JSONBody_without_content_type_json():
+def test_should_respond_422_when_request_JSONBody_without_content_type_json():
     _test_invalid_parameter(dict, {"data": "Hello World"}, headers={})
 
 
-def test_should_raise_InvalidParameterError_when_request_JSONBody_failed_to_convert_to_json():
+def test_should_respond_422_when_request_JSONBody_failed_to_convert_to_json():
     _test_invalid_parameter(dict, "abc123")
 
 
-def test_should_raise_InvalidParameterError_when_request_JSONBody_is_not_dict():
+def test_should_respond_422_when_request_JSONBody_is_not_dict():
     _test_invalid_parameter(dict, '"Hello!"')
 
 
-def test_should_raise_InvalidParameterError_when_request_JSONBody_not_fit_to_model():
+def test_should_respond_422_when_request_JSONBody_not_fit_to_model():
     class MyModel(BaseModel):
         my_name: str
         my_number: int
@@ -55,7 +52,7 @@ def test_should_raise_InvalidParameterError_when_request_JSONBody_not_fit_to_mod
     _test_invalid_parameter(MyModel, {"Copy": "Paste", "Hello": "Engineer"})
 
 
-def test_should_raise_InvalidParameterError_when_request_JSONBody_not_fit_to_data_model():
+def test_should_respond_422_when_request_JSONBody_not_fit_to_data_model():
     class MyModel(DataModel):
         my_name: str = Field(getter=True)
         my_number: int = Field(getter=True)
@@ -74,8 +71,7 @@ def _test_invalid_parameter(model: Type, data: Any, headers=None):
         pass
 
     event = simple_post_event("/do/something", data, headers=headers)
-    with raises(InvalidParameterError):
-        router.match(event, ...).handle()
+    assert router.match(event, ...).handle().status_code == 422
 
 
 def _test_passing_json_body(model: Type, get_attr: Callable):

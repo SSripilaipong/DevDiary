@@ -5,6 +5,7 @@ import pydantic
 from lambler.api_gateway.aws.event_v2 import AWSAPIGatewayEventV2
 from lambler.api_gateway.aws.version import AWSEventVersion
 from lambler.api_gateway.endpoint import Endpoint
+from lambler.api_gateway.endpoint.exception import InvalidParameterError
 from lambler.api_gateway.endpoint.post import PostEndpoint
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
@@ -40,7 +41,10 @@ class APIGatewayEventHandler(Handler):
         self._event = event
 
     def handle(self) -> APIGatewayResponse:
-        body = self._endpoint.handle(self._event)
+        try:
+            body = self._endpoint.handle(self._event)
+        except InvalidParameterError:
+            return JSONResponse({"message": "Unprocessable Entity"}, status_code=422)
         if body is None:
             return HTTPResponse("", HTTPStatus.OK)
         elif isinstance(body, str):
