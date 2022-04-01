@@ -254,4 +254,5 @@ def test_should_raise_TypeError_when_using_then_raise_with_non_exception():
     def do_mock():
         when(do_something(123)).then_raise(123)
 
-    do_mock()
+    with raises(TypeError):
+        do_mock()

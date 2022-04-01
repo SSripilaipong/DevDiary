@@ -54,7 +54,7 @@ class UsecaseCallResultMocker:
 
     def then_raise(self, exception: BaseException):
         if not isinstance(exception, BaseException):
-            raise NotImplementedError()
+            raise TypeError("then_raise() accepts only Exceptions")
         self._call.set_exception(exception)
 
 
