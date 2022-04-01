@@ -46,6 +46,8 @@ class APIGatewayEventHandler(Handler):
             body = self._endpoint.handle(self._event)
         except InvalidParameterError:
             return JSONResponse({"message": "Unprocessable Entity"}, status_code=HTTPStatus.UNPROCESSABLE_ENTITY)
+        except BaseException:
+            return JSONResponse({"message": "Internal Server Error"}, status_code=HTTPStatus.INTERNAL_SERVER_ERROR)
         if body is None:
             return HTTPResponse("", HTTPStatus.OK)
         elif isinstance(body, str):
