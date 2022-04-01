@@ -15,7 +15,7 @@ def mock_usecase(usecase_function: Usecase):
         @wraps(func)
         def wrapper(*args, **kwargs):
             real = usecase_function.get_function()
-            mocker = UsecaseMocker(usecase_function)
+            mocker = UsecaseMocker.from_usecase(usecase_function)
             usecase_function.override_function(mocker)
             try:
                 result = func(*args, **kwargs)

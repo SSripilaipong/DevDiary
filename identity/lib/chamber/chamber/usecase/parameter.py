@@ -3,7 +3,7 @@ from collections import deque
 import inspect
 from inspect import Parameter, Signature
 
-from typing import Callable, List, Tuple
+from typing import Callable, List, Tuple, Dict, Any
 
 
 class ParameterValidator:
@@ -30,6 +30,13 @@ class ParameterValidator:
         return ParameterValidator(param_list)
 
     def validate_parameter(self, *args, **kwargs):
+        _ = self.make_parameter_value_mapping(*args, **kwargs)
+
+    def get_parameter_names(self) -> List[str]:
+        return [name for name, param in self._parameters]
+
+    def make_parameter_value_mapping(self, *args, **kwargs) -> Dict[str, Any]:
+        mapping = {}
         args = deque(args)
         for name, param in self._parameters:
             annotation = param.annotation
@@ -49,3 +56,6 @@ class ParameterValidator:
 
             if not isinstance(value, annotation):
                 raise TypeError(f"Usecase's parameter {name} should be {annotation.__name__}")
+            mapping[name] = value
+
+        return mapping

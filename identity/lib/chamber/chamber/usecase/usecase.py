@@ -9,14 +9,16 @@ class Usecase:
     def __init__(self, func: Callable):
         self._return_type = self._extract_return_type(func)
         self._parameter_validator = ParameterValidator.from_function(func)
-        self._func = func
+        self._default_func = func
+
+        self._func = self.__default_func_call
 
     def __call__(self, *args, **kwargs) -> Any:
-        self.validate_parameter(*args, **kwargs)
         return self._func(*args, **kwargs)
 
-    def validate_parameter(self, *args, **kwargs):
+    def __default_func_call(self, *args, **kwargs) -> Any:
         self._parameter_validator.validate_parameter(*args, **kwargs)
+        return self._default_func(*args, **kwargs)
 
     def override_function(self, func: Callable):
         self._func = func
@@ -35,3 +37,6 @@ class Usecase:
     @property
     def return_type(self) -> Type:
         return self._return_type
+
+    def get_parameter_validator(self) -> ParameterValidator:
+        return self._parameter_validator

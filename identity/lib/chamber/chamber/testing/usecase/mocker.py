@@ -1,12 +1,13 @@
-from typing import Union, Any, Optional, Type
+from typing import Union, Any, Optional, Type, List, Dict, Tuple
 
 from chamber.testing.exception import UnusedMockException
 from chamber.usecase import Usecase
 
 
 class UsecaseCallMocker:
-    def __init__(self, mocker: 'UsecaseMocker'):
+    def __init__(self, mocker: 'UsecaseMocker', param_tuple: Tuple):
         self._mocker = mocker
+        self._param_tuple = param_tuple
         self._result = None
         self._is_called = False
 
@@ -22,6 +23,10 @@ class UsecaseCallMocker:
 
     def add_to_mocker(self):
         self._mocker.add_mocked_call(self)
+
+    @property
+    def param_tuple(self) -> Tuple:
+        return self._param_tuple
 
     @property
     def expected_return_type(self) -> Type:
@@ -43,25 +48,41 @@ class UsecaseCallResultMocker:
 
 
 class UsecaseMocker:
-    def __init__(self, usecase: Usecase):
+    def __init__(self, usecase: Usecase, params: List[str]):
         self._usecase = usecase
-        self._call: Optional[UsecaseCallMocker] = None
+        self._params = params
+        self._calls: Dict[Tuple, UsecaseCallMocker] = {}
 
     def __call__(self, *args, **kwargs) -> Union[Any, UsecaseCallMocker]:
-        if self._call is None:
-            return UsecaseCallMocker(self)
-        return self._call.get_result()
+        param_tuple = self._get_param_tuple(args, kwargs)
+        mocked_call = self._calls.get(param_tuple, None)
+        if mocked_call is None:
+            return UsecaseCallMocker(self, param_tuple)
+        return mocked_call.get_result()
+
+    def _get_param_tuple(self, args, kwargs) -> Tuple:
+        validator = self._usecase.get_parameter_validator()
+        mapping = validator.make_parameter_value_mapping(*args, **kwargs)
+        param_tuple = tuple(mapping[name] for name in self._params)
+        return param_tuple
 
     def add_mocked_call(self, call: 'UsecaseCallMocker'):
-        self._call = call  # TODO: make support for multiple calls
+        self._calls[call.param_tuple] = call
 
     @property
     def return_type(self) -> Type:
         return self._usecase.return_type
 
     def raise_unused_mock(self):
-        if self._call is not None and not self._call.is_called():
-            raise UnusedMockException("Mocked when() clause unused.")
+        for call in self._calls.values():
+            if not call.is_called():
+                raise UnusedMockException("Mocked when() clause unused.")
+
+    @classmethod
+    def from_usecase(cls, usecase: Usecase):
+        validator = usecase.get_parameter_validator()
+        params = validator.get_parameter_names()
+        return cls(usecase, params)
 
 
 def when(call: Any) -> UsecaseCallResultMocker:
