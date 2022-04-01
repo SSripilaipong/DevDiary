@@ -228,3 +228,18 @@ def test_should_support_multiple_mock_result_with_complex_parameters():
         assert do_something(456, "", d="DEF") == "World"
 
     do_mock()
+
+
+def test_should_raise_instructed_exception():
+    @usecase
+    def do_something(a: int) -> str:
+        pass
+
+    @mock_usecase(do_something)
+    def do_mock():
+        when(do_something(123)).then_raise(ZeroDivisionError())
+
+        with raises(ZeroDivisionError):
+            do_something(123)
+
+    do_mock()

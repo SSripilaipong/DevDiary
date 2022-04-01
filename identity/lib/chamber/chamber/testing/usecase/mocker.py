@@ -46,6 +46,9 @@ class UsecaseCallResultMocker:
             raise TypeError(f"then_return() should be called with value of type {expected_type.__name__}.")
         self._call.set_result(value)
 
+    def then_raise(self, exception: Exception):
+        pass
+
 
 class UsecaseMocker:
     def __init__(self, usecase: Usecase, params: List[str]):
