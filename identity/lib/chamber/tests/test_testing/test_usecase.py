@@ -243,3 +243,15 @@ def test_should_raise_instructed_exception():
             do_something(123)
 
     do_mock()
+
+
+def test_should_raise_TypeError_when_using_then_raise_with_non_exception():
+    @usecase
+    def do_something(a: int) -> str:
+        pass
+
+    @mock_usecase(do_something)
+    def do_mock():
+        when(do_something(123)).then_raise(123)
+
+    do_mock()
