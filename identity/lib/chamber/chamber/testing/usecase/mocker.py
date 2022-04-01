@@ -9,10 +9,13 @@ class UsecaseCallMocker:
         self._mocker = mocker
         self._param_tuple = param_tuple
         self._result = None
+        self._exception = None
         self._is_called = False
 
     def get_result(self):
         self._is_called = True
+        if self._exception is not None:
+            raise self._exception
         return self._result
 
     def set_result(self, value):
@@ -32,6 +35,9 @@ class UsecaseCallMocker:
     def expected_return_type(self) -> Type:
         return self._mocker.return_type
 
+    def set_exception(self, exception: BaseException):
+        self._exception = exception
+
 
 class UsecaseCallResultMocker:
     def __init__(self, call: UsecaseCallMocker):
@@ -46,8 +52,10 @@ class UsecaseCallResultMocker:
             raise TypeError(f"then_return() should be called with value of type {expected_type.__name__}.")
         self._call.set_result(value)
 
-    def then_raise(self, exception: Exception):
-        pass
+    def then_raise(self, exception: BaseException):
+        if not isinstance(exception, BaseException):
+            raise NotImplementedError()
+        self._call.set_exception(exception)
 
 
 class UsecaseMocker:
