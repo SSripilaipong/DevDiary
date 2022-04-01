@@ -193,3 +193,20 @@ def test_should_raise_UnusedMockException_when_mocked_call_not_used():
 
     with raises(UnusedMockException):
         do_mock()
+
+
+def test_should_support_multiple_mock_result():
+    @usecase
+    def do_something(a: int) -> str:
+        pass
+
+    @mock_usecase(do_something)
+    def do_mock():
+        when(do_something(123)).then_return("Hello")
+        when(do_something(456)).then_return("World")
+
+        assert do_something(123) == "Hello"
+        assert do_something(456) == "World"
+        assert do_something(123) == "Hello"
+
+    do_mock()
