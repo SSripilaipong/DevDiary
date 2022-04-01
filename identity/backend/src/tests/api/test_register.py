@@ -4,6 +4,7 @@ from chamber.testing import mock_usecase, when
 from domain.identity.registration.exception import EmailAlreadyRegisteredException
 from domain.identity.registration.registration import Registration
 from domain.identity.usecase.registration import register_user
+from domain.identity.user.exception import UsernameAlreadyRegisteredException
 from domain.identity.value_object.display_name import DisplayName
 from domain.identity.value_object.email import Email
 from domain.identity.value_object.password import Password
@@ -38,3 +39,15 @@ def test_should_response_409_when_email_already_registered(requester):
                                                   "displayName": "cpeng", "email": "cpeng@devdiary.link"})
     assert response.status_code == 409
     assert response.body_dict.get("message", None) == "Email already used"
+
+
+@mock_usecase(register_user)
+def test_should_response_409_when_username_already_registered(requester):
+    when(register_user(Username.as_is("cpeng"), Password.as_is("CPEng12345678"),
+                       DisplayName.as_is("cpeng"), Email.as_is("cpeng@devdiary.link"))) \
+        .then_raise(UsernameAlreadyRegisteredException())
+
+    response = requester.post("/users/register", {"username": "cpeng", "password": "CPEng12345678",
+                                                  "displayName": "cpeng", "email": "cpeng@devdiary.link"})
+    assert response.status_code == 409
+    assert response.body_dict.get("message", None) == "Username already used"
