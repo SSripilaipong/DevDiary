@@ -53,8 +53,11 @@ class HTTPResponse(APIGatewayResponse):
 
 
 class JSONResponse(APIGatewayResponse):
-    def __init__(self, body=None, status_code=None):
-        super().__init__(status_code=status_code)
+    def __init__(self, body=None, status_code=None, headers=None):
+        headers = headers or {}
+        headers.update({"content-type": "application/json"})
+
+        super().__init__(status_code=status_code, headers=headers)
         self._body = body or {}
 
     @property
