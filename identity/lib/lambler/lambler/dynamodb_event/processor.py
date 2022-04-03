@@ -27,12 +27,12 @@ class DynamodbEventProcessor(PatternMatcher):
 
         return self.__make_batch_handler(records, context)
 
-    def __make_batch_handler(self, records: List[Dict], context: Any) -> DynamodbEventBatchHandler:
+    def __make_batch_handler(self, records: List[Dict], context: Any) -> Optional[DynamodbEventBatchHandler]:
         handlers = []
         for record in records:
             matched_handler = self._router.match(record, context)
             if matched_handler is None:
-                raise NotImplementedError()
+                return None
             handlers.append(matched_handler)
         return DynamodbEventBatchHandler(handlers)
 
