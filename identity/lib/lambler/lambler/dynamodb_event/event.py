@@ -22,3 +22,7 @@ class DynamodbEvent(BaseModel, LamblerEvent):
     aws_region: str = Field(alias="awsRegion")
     event_source_arn: str = Field(alias="eventSourceARN")
     dynamodb: Data
+
+
+class DynamodbEventRecords(BaseModel):
+    records: List[DynamodbEvent] = Field(alias="Records")
