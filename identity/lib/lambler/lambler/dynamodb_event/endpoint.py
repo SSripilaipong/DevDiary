@@ -1,6 +1,6 @@
 import inspect
 
-from typing import Callable
+from typing import Callable, Dict
 
 from boto3.dynamodb.types import TypeDeserializer
 
@@ -23,6 +23,11 @@ class DynamodbEventEndpoint(Endpoint):
         return True
 
     def process(self, event: DynamodbEvent) -> DynamodbEventResponse:
+        params = self._extract_params(event)
+        self._handle(**params)
+        return DynamodbEventResponse()
+
+    def _extract_params(self, event: DynamodbEvent) -> Dict:
         body = event.dynamodb.new_image or {}
         body = {key: self._deserializer.deserialize(value) for key, value in body.items()}
 
@@ -30,5 +35,7 @@ class DynamodbEventEndpoint(Endpoint):
         for name, marker in self._parameters.items():
             if isinstance(marker.default, EventBody):
                 params[name] = body
-        self._handle(**params)
-        return DynamodbEventResponse()
+            else:
+                raise NotImplementedError()
+
+        return params
