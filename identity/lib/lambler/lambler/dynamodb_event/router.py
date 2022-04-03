@@ -1,3 +1,4 @@
+import pydantic
 from typing import Callable, List, Optional, Iterator, TYPE_CHECKING, Any, Dict
 
 from lambler.base.event import LamblerEvent
@@ -32,7 +33,7 @@ class DynamodbEventRouter(Router):
     def _validate_event(self, event) -> Optional[DynamodbEvent]:
         try:
             return DynamodbEvent(**event)
-        except:
+        except pydantic.ValidationError:
             return None
 
     def _iterate_endpoints(self) -> Iterator[Endpoint]:
