@@ -8,23 +8,23 @@ from .event_factory import simple_insert_event
 
 
 def test_should_match_dynamodb_event():
-    router = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
 
-    @router.insert()
+    @processor.insert()
     def on_insert(data: Dict = EventBody()):
         pass
 
-    assert isinstance(router.match(simple_insert_event(), ...), Handler)
+    assert isinstance(processor.match(simple_insert_event(), ...), Handler)
 
 
 def test_should_not_match_random_event():
-    router = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
 
-    @router.insert()
+    @processor.insert()
     def on_insert():
         pass
 
-    assert router.match({"Hello": "World"}, ...) is None
+    assert processor.match({"Hello": "World"}, ...) is None
 
 
 def test_should_not_match_when_operation_not_registered():
