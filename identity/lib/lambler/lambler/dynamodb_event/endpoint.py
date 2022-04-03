@@ -2,6 +2,7 @@ from typing import Callable
 
 from lambler.base.router.endpoint import Endpoint
 from lambler.dynamodb_event.event import DynamodbEvent
+from lambler.dynamodb_event.response import DynamodbEventResponse
 from lambler.dynamodb_event.type import DynamodbEventType
 
 
@@ -12,3 +13,7 @@ class DynamodbEventEndpoint(Endpoint):
 
     def can_accept(self, event: DynamodbEvent) -> bool:
         return True
+
+    def process(self, event: DynamodbEvent) -> DynamodbEventResponse:
+        self._handle()
+        return DynamodbEventResponse()

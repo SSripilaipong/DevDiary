@@ -2,20 +2,21 @@ from typing import Callable, List, Optional, Iterator, TYPE_CHECKING, Any, Dict
 
 from lambler.base.event import LamblerEvent
 from lambler.base.handler import Handler
-from lambler.base.response import LamblerResponse
 from lambler.base.router import Router
 from lambler.base.router.endpoint import Endpoint
 from lambler.dynamodb_event.endpoint import DynamodbEventEndpoint
 from lambler.dynamodb_event.event import DynamodbEvent
+from lambler.dynamodb_event.response import DynamodbEventResponse
 from lambler.dynamodb_event.type import DynamodbEventType
 
 
 class DynamodbEventHandler(Handler):
     def __init__(self, endpoint: DynamodbEventEndpoint, event: DynamodbEvent):
-        pass
+        self._endpoint = endpoint
+        self._event = event
 
-    def handle(self) -> LamblerResponse:
-        pass
+    def handle(self) -> DynamodbEventResponse:
+        return self._endpoint.process(self._event)
 
 
 class DynamodbEventRouter(Router):

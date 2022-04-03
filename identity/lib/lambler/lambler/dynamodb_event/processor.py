@@ -1,7 +1,7 @@
 from typing import Dict, Any, TypeVar, Callable, List, Optional
 
 from lambler.base.handler import PatternMatcher, Handler
-from lambler.base.response import LamblerResponse
+from lambler.dynamodb_event.response import DynamodbEventBatchResponse
 from lambler.dynamodb_event.router import DynamodbEventHandler, DynamodbEventRouter
 
 
@@ -10,10 +10,15 @@ T = TypeVar("T", bound=Callable)
 
 class DynamodbEventBatchHandler(Handler):
     def __init__(self, handlers: List[DynamodbEventHandler]):
-        pass
+        self._handlers = handlers
 
-    def handle(self) -> LamblerResponse:
-        pass
+    def handle(self) -> DynamodbEventBatchResponse:
+        for handler in self._handlers:
+            try:
+                handler.handle()
+            except:
+                raise NotImplementedError()
+        return DynamodbEventBatchResponse()
 
 
 class DynamodbEventProcessor(PatternMatcher):
