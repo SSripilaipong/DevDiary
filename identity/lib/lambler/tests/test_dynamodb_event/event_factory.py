@@ -1,4 +1,9 @@
-def simple_insert_event():
+def simple_insert_event(body=None):
+    body = body or {
+        "name": {
+            "S": "CPEngineer"
+        }
+    }
 
     return {
         "Records": [
@@ -15,11 +20,7 @@ def simple_insert_event():
                             "S": "CPEngineer"
                         }
                     },
-                    "NewImage": {
-                        "name": {
-                            "S": "CPEngineer"
-                        }
-                    },
+                    "NewImage": body,
                     "SequenceNumber": "28232500000000016381400609",
                     "SizeBytes": 123,
                     "StreamViewType": "NEW_IMAGE"

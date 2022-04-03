@@ -42,3 +42,19 @@ def test_should_should_call_function():
 
     processor.match(simple_insert_event(), ...).handle()
     assert getattr(on_insert, "is_called", False)
+
+
+def test_should_pass_body_to_function():
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
+    @processor.insert()
+    def on_insert(body: Dict = EventBody()):
+        on_insert.read_data = body
+
+    raw_body = {
+        "name": {"S": "CPEngineer"},
+        "email": {"S": "cpeng@devdiary.link"},
+        "age": {"N": "11"},
+    }
+    processor.match(simple_insert_event(body=raw_body), ...).handle()
+    assert getattr(on_insert, "read_data", None) == {"name": "CPEngineer", "email": "cpeng@devdiary.link", "age": 11}
