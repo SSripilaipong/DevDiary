@@ -25,3 +25,9 @@ def test_should_not_match_random_event():
         pass
 
     assert router.match({"Hello": "World"}, ...) is None
+
+
+def test_should_not_match_when_operation_not_registered():
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
+    assert processor.match(simple_insert_event(), ...) is None
