@@ -1,1 +1,1 @@
-from .endpoint import Endpoint
+from .endpoint import HTTPEndpoint

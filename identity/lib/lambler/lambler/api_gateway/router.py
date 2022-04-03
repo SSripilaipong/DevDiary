@@ -1,22 +1,23 @@
 from http import HTTPStatus
 
-from typing import Dict, Any, Optional, List
+from typing import Dict, Optional, List, Iterator
 import bisect
 import pydantic
 
 from lambler.api_gateway.aws.event_v2 import AWSAPIGatewayEventV2
 from lambler.api_gateway.aws.version import AWSEventVersion
-from lambler.api_gateway.endpoint import Endpoint
+from lambler.api_gateway.endpoint import HTTPEndpoint
 from lambler.api_gateway.endpoint.exception import InvalidParameterError
 from lambler.api_gateway.endpoint.post import PostEndpoint
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
 from lambler.api_gateway.response import APIGatewayResponse, HTTPResponse, JSONResponse
-from lambler.base.handler import PatternMatcher, Handler
+from lambler.base.handler import Handler
+from lambler.base.router import Router
 
 
 class EndpointSortWrapper:
-    def __init__(self, endpoint: Endpoint):
+    def __init__(self, endpoint: HTTPEndpoint):
         self._endpoint = endpoint
 
     def __eq__(self, other):
@@ -37,7 +38,7 @@ class EndpointSortWrapper:
 
 
 class APIGatewayEventHandler(Handler):
-    def __init__(self, endpoint: Endpoint, event: APIGatewayEvent):
+    def __init__(self, endpoint: HTTPEndpoint, event: APIGatewayEvent):
         self._endpoint = endpoint
         self._event = event
 
@@ -60,27 +61,24 @@ class APIGatewayEventHandler(Handler):
             raise NotImplementedError()
 
 
-class APIGatewayRouter(PatternMatcher):
+class APIGatewayRouter(Router):
     def __init__(self, *, event_version=None):
         self._event_version = _validate_event_version(event_version)
         self._endpoints: List[EndpointSortWrapper] = []
 
-    def match(self, event: Dict, context: Any) -> Optional[APIGatewayEventHandler]:
-        api_event = self._validate_event(event)
-        if api_event is None:
-            return None
-        return self._match_event_with_endpoints(api_event)
-
-    def _match_event_with_endpoints(self, api_event):
+    def _iterate_endpoints(self) -> Iterator[HTTPEndpoint]:
         for wrapper in self._endpoints:
-            endpoint = wrapper.endpoint
-            if endpoint.match(api_event):
-                return APIGatewayEventHandler(endpoint, api_event)
+            yield wrapper.endpoint
+
+    def _make_handler(self, endpoint: HTTPEndpoint, event: APIGatewayEvent) -> APIGatewayEventHandler:
+        return APIGatewayEventHandler(endpoint, event)
+
+    def _on_no_endpoint_matched(self, event: APIGatewayEvent) -> Optional[Handler]:
         return None
 
     def get(self, path: str):
         def decorator(func):
-            self._append_endpoint(Endpoint(path, method=RequestMethodEnum.GET, handle=func))
+            self._append_endpoint(HTTPEndpoint(path, method=RequestMethodEnum.GET, handle=func))
             return func
         return decorator
 
@@ -90,7 +88,7 @@ class APIGatewayRouter(PatternMatcher):
             return func
         return decorator
 
-    def _append_endpoint(self, endpoint: Endpoint):
+    def _append_endpoint(self, endpoint: HTTPEndpoint):
         bisect.insort_right(self._endpoints, EndpointSortWrapper(endpoint))
 
     def _validate_event(self, event: Dict) -> Optional[APIGatewayEvent]:

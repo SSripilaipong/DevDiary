@@ -8,7 +8,7 @@ from typing import Callable, Any, Dict
 
 import chamber.data.exception
 from chamber.data.model import DataModel
-from lambler.api_gateway.endpoint import Endpoint
+from lambler.api_gateway.endpoint import HTTPEndpoint
 from lambler.api_gateway.endpoint.exception import InvalidParameterError
 from lambler.api_gateway.endpoint.marker import JSONBody
 from lambler.api_gateway.event import APIGatewayEvent
@@ -75,7 +75,7 @@ class RequestBodyInjection:
         return params
 
 
-class PostEndpoint(Endpoint):
+class PostEndpoint(HTTPEndpoint):
     def __init__(self, path: str, method: RequestMethodEnum, handle: Callable):
         super().__init__(path, method, handle)
         self._body_injection = RequestBodyInjection.from_handle_function(handle)
