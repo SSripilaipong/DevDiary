@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from typing import Dict, Optional, List, Iterator
+from typing import Dict, Optional, List, Iterator, Any, TYPE_CHECKING
 import bisect
 import pydantic
 
@@ -100,6 +100,9 @@ class APIGatewayRouter(Router):
         except pydantic.ValidationError:
             return None
         raise NotImplementedError()
+
+    if TYPE_CHECKING:
+        def match(self, event: Dict, context: Any) -> Optional[APIGatewayEventHandler]: ...
 
 
 def _validate_event_version(version: str) -> Optional[AWSEventVersion]:
