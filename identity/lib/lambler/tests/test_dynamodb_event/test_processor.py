@@ -31,3 +31,14 @@ def test_should_not_match_when_operation_not_registered():
     processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
 
     assert processor.match(simple_insert_event(), ...) is None
+
+
+def test_should_should_call_function():
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
+    @processor.insert()
+    def on_insert():
+        on_insert.is_called = True
+
+    processor.match(simple_insert_event(), ...).handle()
+    assert getattr(on_insert, "is_called", False)
