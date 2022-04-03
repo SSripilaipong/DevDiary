@@ -1,7 +1,10 @@
-from typing import Dict, Any, TypeVar, Callable, List
+from typing import TypeVar, Callable, List, Optional, Iterator
 
-from lambler.base.handler import PatternMatcher, Handler
+from lambler.base.event import LamblerEvent
+from lambler.base.handler import Handler
 from lambler.base.response import LamblerResponse
+from lambler.base.router import Router
+from lambler.base.router.endpoint import Endpoint
 from lambler.dynamodb_event.endpoint import DynamodbEventEndpoint
 from lambler.dynamodb_event.event import DynamodbEvent
 from lambler.dynamodb_event.type import DynamodbEventType
@@ -17,15 +20,9 @@ class DynamodbEventHandler(Handler):
         pass
 
 
-class DynamodbEventRouter(PatternMatcher):
+class DynamodbEventRouter(Router):
     def __init__(self, stream_view_type):
         self._endpoints: List[DynamodbEventEndpoint] = []
-
-    def match(self, event: Dict, context: Any) -> DynamodbEventHandler:
-        event: DynamodbEvent = self._validate_event(event)
-        for endpoint in self._endpoints:
-            if endpoint.accept(event):
-                return DynamodbEventHandler(endpoint, event)
 
     def insert(self):
         def decorator(func: T) -> T:
@@ -41,3 +38,12 @@ class DynamodbEventRouter(PatternMatcher):
             return DynamodbEvent(**event)
         except:
             pass  # TODO: implement this
+
+    def _iterate_endpoints(self) -> Iterator[Endpoint]:
+        yield from self._endpoints
+
+    def _make_handler(self, endpoint: DynamodbEventEndpoint, event: DynamodbEvent) -> Handler:
+        return DynamodbEventHandler(endpoint, event)
+
+    def _on_no_endpoint_matched(self, event: LamblerEvent) -> Optional[Handler]:
+        pass
