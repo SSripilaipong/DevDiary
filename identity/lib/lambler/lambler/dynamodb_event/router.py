@@ -33,11 +33,11 @@ class DynamodbEventRouter(Router):
     def _append_endpoint(self, endpoint):
         self._endpoints.append(endpoint)
 
-    def _validate_event(self, event) -> DynamodbEvent:
+    def _validate_event(self, event) -> Optional[DynamodbEvent]:
         try:
             return DynamodbEvent(**event)
         except:
-            pass  # TODO: implement this
+            return None
 
     def _iterate_endpoints(self) -> Iterator[Endpoint]:
         yield from self._endpoints
