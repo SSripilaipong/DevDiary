@@ -14,3 +14,13 @@ def test_should_match_dynamodb_event():
         pass
 
     assert isinstance(router.match(simple_insert_event(), ...), DynamodbEventHandler)
+
+
+def test_should_not_match_random_event():
+    router = DynamodbEventRouter(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
+    @router.insert()
+    def on_insert():
+        pass
+
+    assert router.match({"Hello": "World"}, ...) is None
