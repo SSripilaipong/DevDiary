@@ -1,78 +1,51 @@
 import json
 
 import inspect
-import pydantic
-from pydantic import BaseModel
+from typing import Callable, Dict
 
-from typing import Callable, Any, Dict
-
-import chamber.data.exception
-from chamber.data.model import DataModel
 from lambler.api_gateway.endpoint import HTTPEndpoint
 from lambler.api_gateway.endpoint.exception import InvalidParameterError
-from lambler.api_gateway.endpoint.marker import JSONBody
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
+from lambler.base.marker import Marker
 
 
 class RequestBodyInjection:
-    def __init__(self, params: Dict):
-        self._params = params
+    def __init__(self, markers: Dict[str, Marker]):
+        self._markers = markers
 
     @classmethod
     def from_handle_function(cls, handle: Callable) -> 'RequestBodyInjection':
         signature = inspect.signature(handle)
-        params = {}
-        for name, param in signature.parameters.items():
-            annotation = param.annotation
-            default = param.default
-            if isinstance(default, type) and issubclass(default, JSONBody):
-                default = default()
-            if isinstance(default, JSONBody):
-                if annotation is dict or annotation is Dict:
-                    params[name] = dict
-                elif isinstance(annotation, type) and issubclass(annotation, BaseModel):
-                    params[name] = annotation
-                elif isinstance(annotation, type) and issubclass(annotation, DataModel):
-                    params[name] = annotation
-                else:
-                    raise NotImplementedError()  # TODO: implement this
+        markers = {}
+        for name, marker in signature.parameters.items():
+            type_ = marker.annotation
+            value = marker.default
+            if isinstance(value, Marker):
+                value.register_type(type_)
+                markers[name] = value
+            else:
+                raise NotImplementedError()  # TODO: implement
 
-        return RequestBodyInjection(params)
+        return RequestBodyInjection(markers)
 
     def extract_params(self, event: APIGatewayEvent) -> Dict:
-        if not self._params:
+        if not self._markers:
             return {}
 
+        body = self._extract_request_body(event)
+        return {key: marker.extract_param(body) for key, marker in self._markers.items()}
+
+    def _extract_request_body(self, event):
         if event.headers.get('content-type', None) != 'application/json':
             raise InvalidParameterError()
-
         try:
             body = json.loads(event.body)
         except json.JSONDecodeError:
             raise InvalidParameterError()
-
         if not isinstance(body, dict):
             raise InvalidParameterError()
-
-        params = {}
-        for key, type_ in self._params.items():
-            if type_ is dict:
-                params[key] = body
-            elif isinstance(type_, type) and issubclass(type_, BaseModel):
-                try:
-                    params[key] = type_(**body)
-                except pydantic.ValidationError:
-                    raise InvalidParameterError()
-            elif isinstance(type_, type) and issubclass(type_, DataModel):
-                try:
-                    params[key] = type_.from_dict(body)
-                except chamber.data.exception.DeserializationFailedException:
-                    raise InvalidParameterError()
-            else:
-                raise NotImplementedError()
-
-        return params
+        return body
 
 
 class PostEndpoint(HTTPEndpoint):
