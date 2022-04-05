@@ -2,9 +2,8 @@ import pydantic
 from typing import Callable, List, Optional, Iterator, TYPE_CHECKING, Any, Dict
 
 from lambler.base.event import LamblerEvent
-from lambler.base.handler import Handler
+from lambler.base.handler import Handler, PatternMatcher
 from lambler.base.router import Router
-from lambler.base.router.endpoint import Endpoint
 from lambler.dynamodb_event.endpoint import DynamodbEventEndpoint
 from lambler.dynamodb_event.event import DynamodbEvent
 from lambler.dynamodb_event.response import DynamodbEventResponse
@@ -36,7 +35,7 @@ class DynamodbEventRouter(Router):
         except pydantic.ValidationError:
             return None
 
-    def _iterate_endpoints(self) -> Iterator[Endpoint]:
+    def _iterate_patterns(self) -> Iterator[PatternMatcher]:
         yield from self._endpoints
 
     def _make_handler(self, endpoint: DynamodbEventEndpoint, event: DynamodbEvent) -> Handler:

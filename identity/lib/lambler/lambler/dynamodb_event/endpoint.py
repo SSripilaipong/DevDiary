@@ -1,11 +1,11 @@
 import inspect
 
-from typing import Callable, Dict
+from typing import Callable, Dict, Any, Optional
 
 from boto3.dynamodb.types import TypeDeserializer
 
+from lambler.base.handler import PatternMatcher, Handler
 from lambler.base.marker import Marker
-from lambler.base.router.endpoint import Endpoint
 from lambler.dynamodb_event.event import DynamodbEvent
 from lambler.dynamodb_event.response import DynamodbEventResponse
 from lambler.dynamodb_event.type import DynamodbEventType
@@ -37,17 +37,27 @@ class ParameterInjection:
         return {key: marker.extract_param(body) for key, marker in self._markers.items()}
 
 
-class DynamodbEventEndpoint(Endpoint):
+class DynamodbEventHandler(Handler):
+    def __init__(self, handle: Callable, event: DynamodbEvent, param_injection: ParameterInjection):
+        self._handle = handle
+        self._event = event
+
+        self._param_injection = param_injection
+
+    @classmethod
+    def create(cls, method: DynamodbEventType, handle: Callable, event: DynamodbEvent) -> 'DynamodbEventHandler':
+        return cls(handle, event, ParameterInjection.from_handle_function(handle))
+
+    def handle(self) -> DynamodbEventResponse:
+        params = self._param_injection.extract_params(self._event)
+        self._handle(**params)
+        return DynamodbEventResponse()
+
+
+class DynamodbEventEndpoint(PatternMatcher):
     def __init__(self, method: DynamodbEventType, handle: Callable):
         self._method = method
         self._handle = handle
 
-        self._param_injection = ParameterInjection.from_handle_function(handle)
-
-    def can_accept(self, event: DynamodbEvent) -> bool:
-        return True
-
-    def process(self, event: DynamodbEvent) -> DynamodbEventResponse:
-        params = self._param_injection.extract_params(event)
-        self._handle(**params)
-        return DynamodbEventResponse()
+    def match(self, event: DynamodbEvent, context: Any) -> Optional[DynamodbEventHandler]:
+        return DynamodbEventHandler.create(self._method, self._handle, event)
