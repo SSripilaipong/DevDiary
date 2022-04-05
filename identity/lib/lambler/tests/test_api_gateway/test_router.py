@@ -1,4 +1,5 @@
-from lambler.api_gateway.router import APIGatewayRouter, APIGatewayEventHandler
+from lambler.api_gateway.endpoint.endpoint import HTTPHandler
+from lambler.api_gateway.router import APIGatewayRouter
 from .event_factory import simple_post_event, simple_get_event
 
 
@@ -7,7 +8,7 @@ def test_should_match_api_gateway_event():
 
     router.get("/default/something")(lambda: ...)
 
-    assert isinstance(router.match(simple_get_event("/default/something"), ...), APIGatewayEventHandler)
+    assert isinstance(router.match(simple_get_event("/default/something"), ...), HTTPHandler)
 
 
 def test_should_return_None_for_random_event():

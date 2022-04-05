@@ -42,7 +42,7 @@ class DynamodbEventRouter(Router):
     def _make_handler(self, endpoint: DynamodbEventEndpoint, event: DynamodbEvent) -> Handler:
         return DynamodbEventHandler(endpoint, event)
 
-    def _on_no_endpoint_matched(self, event: LamblerEvent) -> Optional[Handler]:
+    def _on_no_pattern_matched(self, event: LamblerEvent) -> Optional[Handler]:
         pass
 
     if TYPE_CHECKING:
