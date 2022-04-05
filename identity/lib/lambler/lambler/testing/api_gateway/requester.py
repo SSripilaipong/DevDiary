@@ -3,8 +3,8 @@ from typing import Dict
 import json
 
 from lambler import Lambler
-from lambler.api_gateway.aws.event_v2 import AWSAPIGatewayEventV2
-from lambler.api_gateway.aws.version import AWSEventVersion
+from lambler.api_gateway.aws.event.event_v2 import AWSAPIGatewayEventV2
+from lambler.api_gateway.aws.event.version import AWSEventVersion
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
 from lambler.api_gateway.response import APIGatewayResponse, JSONResponse, HTTPResponse

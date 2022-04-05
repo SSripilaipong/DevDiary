@@ -1,0 +1,2 @@
+class AWSEventParsingError(Exception):
+    pass

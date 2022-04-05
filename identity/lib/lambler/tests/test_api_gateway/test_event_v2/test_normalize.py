@@ -4,7 +4,7 @@ import os.path
 from pytest import fixture
 from typing import Dict
 
-from lambler.api_gateway.aws.event_v2 import AWSAPIGatewayEventV2
+from lambler.api_gateway.aws.event.event_v2 import AWSAPIGatewayEventV2
 from lambler.api_gateway.event import APIGatewayEvent
 
 

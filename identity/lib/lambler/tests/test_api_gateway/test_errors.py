@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from lambler import Lambler
-from lambler.api_gateway.aws.version import AWSEventVersion
+from lambler.api_gateway.aws.event.version import AWSEventVersion
 from lambler.api_gateway.marker import JSONBody
 from lambler.api_gateway.router import APIGatewayRouter
 from lambler.testing.api_gateway.requester import HTTPRequester

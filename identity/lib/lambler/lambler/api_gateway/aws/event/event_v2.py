@@ -1,7 +1,10 @@
+import pydantic
 from typing import Dict, Any, Optional
 
 from pydantic import BaseModel, Field
 
+from lambler.api_gateway.aws.event.event import AWSAPIGatewayEvent
+from lambler.api_gateway.aws.event.exception import AWSEventParsingError
 from lambler.api_gateway.event import APIGatewayEvent
 
 
@@ -16,7 +19,7 @@ class RequestContext(BaseModel):
     stage: str
 
 
-class AWSAPIGatewayEventV2(BaseModel):
+class AWSAPIGatewayEventV2(BaseModel, AWSAPIGatewayEvent):
     raw_path: str = Field(..., alias="rawPath")
     raw_query_string: str = Field(..., alias="rawQueryString")
     request_context: RequestContext = Field(..., alias="requestContext")
@@ -43,3 +46,10 @@ class AWSAPIGatewayEventV2(BaseModel):
         }
         return cls(rawPath=event.path, rawQueryString="", requestContext=request_context, headers=event.headers,
                    queryStringParameters=event.query_string_parameters, body=event.body)
+
+    @classmethod
+    def from_dict(cls, event: Dict) -> 'AWSAPIGatewayEventV2':
+        try:
+            return cls(**event)
+        except pydantic.ValidationError:
+            raise AWSEventParsingError()
