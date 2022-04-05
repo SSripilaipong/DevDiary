@@ -3,7 +3,7 @@ from typing import Dict, Type
 from chamber.data.model import DataModel
 from chamber.data.exception import DeserializationFailedException
 from lambler.api_gateway.endpoint.exception import InvalidParameterError
-from lambler.api_gateway.endpoint.marker.json_body.parser.parser import Parser
+from lambler.api_gateway.marker.json_body.parser.parser import Parser
 
 
 class ChamberParser(Parser):

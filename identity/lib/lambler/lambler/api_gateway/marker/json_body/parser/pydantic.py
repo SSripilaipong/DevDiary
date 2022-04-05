@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import Dict, Type
 
 from lambler.api_gateway.endpoint.exception import InvalidParameterError
-from lambler.api_gateway.endpoint.marker.json_body.parser.parser import Parser
+from lambler.api_gateway.marker.json_body.parser.parser import Parser
 
 
 class PydanticParser(Parser):

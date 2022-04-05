@@ -3,10 +3,10 @@ from typing import Dict, Type
 
 from chamber.data.model import DataModel
 from lambler.api_gateway.endpoint.exception import InvalidParameterError
-from lambler.api_gateway.endpoint.marker.json_body.parser.dict import DictParser
-from lambler.api_gateway.endpoint.marker.json_body.parser.chamber import ChamberParser
-from lambler.api_gateway.endpoint.marker.json_body.parser.parser import Parser
-from lambler.api_gateway.endpoint.marker.json_body.parser.pydantic import PydanticParser
+from lambler.api_gateway.marker.json_body.parser.dict import DictParser
+from lambler.api_gateway.marker.json_body.parser.chamber import ChamberParser
+from lambler.api_gateway.marker.json_body.parser.parser import Parser
+from lambler.api_gateway.marker.json_body.parser.pydantic import PydanticParser
 
 
 class ParserFactory:

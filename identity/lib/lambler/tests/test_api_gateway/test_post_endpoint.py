@@ -3,7 +3,7 @@ from typing import Dict, Type, Callable, Any
 
 from chamber.data.field import Field
 from chamber.data.model import DataModel
-from lambler.api_gateway.endpoint.marker import JSONBody
+from lambler.api_gateway.marker import JSONBody
 from lambler.api_gateway.router import APIGatewayRouter
 from .event_factory import simple_post_event
 

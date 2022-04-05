@@ -4,7 +4,7 @@ from typing import Dict
 
 from lambler import Lambler
 from lambler.api_gateway.aws.version import AWSEventVersion
-from lambler.api_gateway.endpoint.marker import JSONBody
+from lambler.api_gateway.marker import JSONBody
 from lambler.api_gateway.response import JSONResponse
 from lambler.api_gateway.router import APIGatewayRouter
 from lambler.testing.api_gateway.requester import HTTPRequester

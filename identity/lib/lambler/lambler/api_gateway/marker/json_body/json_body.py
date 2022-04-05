@@ -1,6 +1,6 @@
 from typing import Type, Dict, Any, Optional
 
-from lambler.api_gateway.endpoint.marker.json_body.parser import parser_factory, Parser
+from lambler.api_gateway.marker.json_body.parser import parser_factory, Parser
 from lambler.base.marker import Marker
 
 
