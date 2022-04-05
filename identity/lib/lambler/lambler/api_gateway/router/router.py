@@ -5,7 +5,7 @@ from lambler.api_gateway.aws.event import event_parser
 from lambler.api_gateway.aws.event.exception import AWSEventParsingError
 from lambler.api_gateway.aws.event.version import AWSEventVersion
 from lambler.api_gateway.endpoint import HTTPEndpointPattern, HTTPHandler, HTTPPathPattern
-from lambler.api_gateway.endpoint.post import PostEndpointPattern
+from lambler.api_gateway.endpoint.handler.post import PostEndpointPattern
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
 from lambler.api_gateway.router.wrapper import PathPatternSortWrapper
