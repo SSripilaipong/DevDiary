@@ -3,7 +3,7 @@ from typing import Dict
 from lambler.base.handler import Handler
 from lambler.dynamodb_event.processor import DynamodbEventProcessor
 from lambler.dynamodb_event.marker import EventBody
-from lambler.dynamodb_event.model.view import DynamodbStreamView
+from lambler.dynamodb_event.data.view import DynamodbStreamView
 from .event_factory import simple_insert_event
 
 

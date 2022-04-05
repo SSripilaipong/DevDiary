@@ -1,9 +1,9 @@
 from typing import Callable, Any, Optional
 
 from lambler.base.handler import PatternMatcher
-from lambler.dynamodb_event.model.event import DynamodbEvent
+from lambler.dynamodb_event.data.event import DynamodbEvent
 from lambler.dynamodb_event.endpoint.handler import DynamodbEventHandler
-from lambler.dynamodb_event.model.type import DynamodbEventType
+from lambler.dynamodb_event.data.type import DynamodbEventType
 
 
 class DynamodbEventEndpoint(PatternMatcher):

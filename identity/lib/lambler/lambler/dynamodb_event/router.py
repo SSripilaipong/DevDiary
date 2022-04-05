@@ -5,8 +5,8 @@ from lambler.base.event import LamblerEvent
 from lambler.base.handler import Handler, PatternMatcher
 from lambler.base.router import Router
 from lambler.dynamodb_event.endpoint import DynamodbEventEndpoint, DynamodbEventHandler
-from lambler.dynamodb_event.model.event import DynamodbEvent
-from lambler.dynamodb_event.model.type import DynamodbEventType
+from lambler.dynamodb_event.data.event import DynamodbEvent
+from lambler.dynamodb_event.data.type import DynamodbEventType
 
 
 class DynamodbEventRouter(Router):
