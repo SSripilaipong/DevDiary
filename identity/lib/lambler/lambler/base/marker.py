@@ -1,6 +1,8 @@
-from typing import Type, Dict, Any
+from typing import Type, Any
 
 from abc import ABC, abstractmethod
+
+from lambler.base.source import FunctionInputSourceCollection
 
 
 class Marker(ABC):
@@ -9,5 +11,5 @@ class Marker(ABC):
         pass
 
     @abstractmethod
-    def extract_param(self, data: Dict) -> Any:
+    def extract_param(self, data: FunctionInputSourceCollection) -> Any:
         pass

@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from typing import Any
 
-from lambler.api_gateway.endpoint.exception import InvalidParameterError
+from lambler.api_gateway.exception import InvalidParameterError
 from lambler.api_gateway.response import APIGatewayResponse, HTTPResponse, JSONResponse
 
 

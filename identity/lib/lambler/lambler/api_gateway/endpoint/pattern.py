@@ -2,16 +2,21 @@ from typing import Callable, Any, Optional
 
 from lambler.api_gateway.endpoint.abstract import HTTPPathPattern
 from lambler.api_gateway.endpoint.handler import HTTPHandler
+from lambler.base.function import MarkedFunction
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
 
 
 class HTTPEndpointPattern(HTTPPathPattern):
-    def __init__(self, path: str, method: RequestMethodEnum, handle: Callable):
+    def __init__(self, path: str, method: RequestMethodEnum, handle: MarkedFunction):
         self._path = path
         self._method = method
         self._path_length = len(path)
         self._handle = handle
+
+    @classmethod
+    def create(cls, path: str, method: RequestMethodEnum, handle: Callable) -> 'HTTPEndpointPattern':
+        return cls(path, method, MarkedFunction.from_function(handle))
 
     def match(self, event: Any, context: Any) -> Optional[HTTPHandler]:
         assert isinstance(event, APIGatewayEvent)

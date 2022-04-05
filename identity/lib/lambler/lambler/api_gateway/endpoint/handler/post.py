@@ -5,7 +5,7 @@ from typing import Callable, Dict, Any
 
 from lambler.api_gateway.endpoint.handler import HTTPHandler
 from lambler.api_gateway.endpoint.pattern import HTTPEndpointPattern
-from lambler.api_gateway.endpoint.exception import InvalidParameterError
+from lambler.api_gateway.exception import InvalidParameterError
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
 from lambler.base.marker import Marker

@@ -5,7 +5,6 @@ from lambler.api_gateway.aws.event import event_parser
 from lambler.api_gateway.aws.event.exception import AWSEventParsingError
 from lambler.api_gateway.aws.event.version import AWSEventVersion
 from lambler.api_gateway.endpoint import HTTPEndpointPattern, HTTPHandler, HTTPPathPattern
-from lambler.api_gateway.endpoint.handler.post import PostEndpointPattern
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
 from lambler.api_gateway.router.wrapper import PathPatternSortWrapper
@@ -27,13 +26,13 @@ class APIGatewayRouter(Router):
 
     def get(self, path: str):
         def decorator(func):
-            self._append_pattern(HTTPEndpointPattern(path, method=RequestMethodEnum.GET, handle=func))
+            self._append_pattern(HTTPEndpointPattern.create(path, method=RequestMethodEnum.GET, handle=func))
             return func
         return decorator
 
     def post(self, path: str):
         def decorator(func):
-            self._append_pattern(PostEndpointPattern(path, method=RequestMethodEnum.POST, handle=func))
+            self._append_pattern(HTTPEndpointPattern.create(path, method=RequestMethodEnum.POST, handle=func))
             return func
         return decorator
 

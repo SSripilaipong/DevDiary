@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Dict, Type
 
 from chamber.data.model import DataModel
-from lambler.api_gateway.endpoint.exception import InvalidParameterError
+from lambler.api_gateway.exception import InvalidParameterError
 from lambler.api_gateway.marker.json_body.parser.dict import DictParser
 from lambler.api_gateway.marker.json_body.parser.chamber import ChamberParser
 from lambler.api_gateway.marker.json_body.parser.parser import Parser
