@@ -2,8 +2,8 @@ from typing import Dict, Any, TypeVar, Callable, List, Optional
 
 from lambler.base.handler import PatternMatcher, Handler
 from lambler.dynamodb_event.response import DynamodbEventBatchResponse
-from lambler.dynamodb_event.router import DynamodbEventHandler, DynamodbEventRouter
-
+from lambler.dynamodb_event.router import DynamodbEventRouter
+from lambler.dynamodb_event.endpoint import DynamodbEventHandler
 
 T = TypeVar("T", bound=Callable)
 
