@@ -4,34 +4,13 @@ import pydantic
 
 from lambler.api_gateway.aws.event_v2 import AWSAPIGatewayEventV2
 from lambler.api_gateway.aws.version import AWSEventVersion
-from lambler.api_gateway.endpoint import HTTPEndpointPattern
-from lambler.api_gateway.endpoint.endpoint import HTTPHandler, HTTPPathPattern
+from lambler.api_gateway.endpoint import HTTPEndpointPattern, HTTPHandler, HTTPPathPattern
 from lambler.api_gateway.endpoint.post import PostEndpointPattern
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
+from lambler.api_gateway.router.wrapper import PathPatternSortWrapper
 from lambler.base.handler import Handler
 from lambler.base.router import Router
-
-
-class PathPatternSortWrapper:
-    def __init__(self, pattern: HTTPPathPattern):
-        self._pattern = pattern
-
-    def __eq__(self, other):
-        assert isinstance(other, PathPatternSortWrapper)
-        return self._pattern.path_length == other._pattern.path_length
-
-    def __lt__(self, other):
-        assert isinstance(other, PathPatternSortWrapper)
-        return self._pattern.path_length < other._pattern.path_length
-
-    def __le__(self, other):
-        assert isinstance(other, PathPatternSortWrapper)
-        return self._pattern.path_length <= other._pattern.path_length
-
-    @property
-    def pattern(self) -> HTTPPathPattern:
-        return self._pattern
 
 
 class APIGatewayRouter(Router):
