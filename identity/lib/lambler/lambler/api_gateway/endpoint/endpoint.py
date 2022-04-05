@@ -1,12 +1,10 @@
 from abc import abstractmethod
-from http import HTTPStatus
 
 from typing import Callable, Any, Optional
 
-from lambler.api_gateway.endpoint.exception import InvalidParameterError
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
-from lambler.api_gateway.response import JSONResponse, HTTPResponse, APIGatewayResponse
+from lambler.api_gateway.response import response_parser
 from lambler.base.handler import PatternMatcher, Handler
 from lambler.base.response import LamblerResponse
 
@@ -25,20 +23,10 @@ class HTTPHandler(Handler):
     def handle(self) -> LamblerResponse:
         try:
             body = self._execute()
-        except InvalidParameterError:
-            return JSONResponse({"message": "Unprocessable Entity"}, status_code=HTTPStatus.UNPROCESSABLE_ENTITY)
-        except BaseException:
-            return JSONResponse({"message": "Internal Server Error"}, status_code=HTTPStatus.INTERNAL_SERVER_ERROR)
-        if body is None:
-            return HTTPResponse("", HTTPStatus.OK)
-        elif isinstance(body, str):
-            return HTTPResponse(body, HTTPStatus.OK)
-        elif isinstance(body, dict):
-            return JSONResponse(body, HTTPStatus.OK)
-        elif isinstance(body, APIGatewayResponse):
-            return body
-        else:
-            raise NotImplementedError()
+        except BaseException as e:
+            return response_parser.parse_error(e)
+
+        return response_parser.parse_response(body)
 
 
 class HTTPPathPattern(PatternMatcher):
