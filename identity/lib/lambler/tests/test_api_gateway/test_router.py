@@ -1,4 +1,4 @@
-from lambler.api_gateway.endpoint.endpoint import HTTPHandler
+from lambler.api_gateway.endpoint import HTTPHandler
 from lambler.api_gateway.router import APIGatewayRouter
 from .event_factory import simple_post_event, simple_get_event
 

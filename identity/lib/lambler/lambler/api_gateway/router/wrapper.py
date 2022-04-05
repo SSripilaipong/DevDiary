@@ -1,4 +1,4 @@
-from lambler.api_gateway.endpoint.endpoint import HTTPPathPattern
+from lambler.api_gateway.endpoint import HTTPPathPattern
 
 
 class PathPatternSortWrapper:

@@ -3,8 +3,8 @@ import json
 import inspect
 from typing import Callable, Dict, Any
 
-from lambler.api_gateway.endpoint import HTTPEndpointPattern
-from lambler.api_gateway.endpoint.endpoint import HTTPHandler
+from lambler.api_gateway.endpoint.handler import HTTPHandler
+from lambler.api_gateway.endpoint.pattern import HTTPEndpointPattern
 from lambler.api_gateway.endpoint.exception import InvalidParameterError
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.method import RequestMethodEnum
@@ -56,7 +56,7 @@ class PostHandler(HTTPHandler):
         self._body_injection = body_injection
 
     @classmethod
-    def create(cls, endpoint: 'HTTPEndpointPattern', handle: Callable, event: APIGatewayEvent) -> 'HTTPHandler':
+    def create(cls, handle: Callable, event: APIGatewayEvent) -> 'HTTPHandler':
         return cls(handle, event, RequestBodyInjection.from_handle_function(handle))
 
     def _execute(self) -> Any:
@@ -69,4 +69,4 @@ class PostEndpointPattern(HTTPEndpointPattern):
         self._body_injection = RequestBodyInjection.from_handle_function(handle)
 
     def _create_handler(self, event: APIGatewayEvent) -> HTTPHandler:
-        return PostHandler.create(self, self._handle, event)
+        return PostHandler.create(self._handle, event)
