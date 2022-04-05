@@ -11,7 +11,7 @@ from domain.identity.value_object.display_name import DisplayName
 from domain.identity.value_object.email import Email
 from domain.identity.value_object.password import Password
 from domain.identity.value_object.username import Username
-from lambler.api_gateway.aws.version import AWSEventVersion
+from lambler.api_gateway.aws.event.version import AWSEventVersion
 from lambler.testing.api_gateway.requester import HTTPRequester
 
 

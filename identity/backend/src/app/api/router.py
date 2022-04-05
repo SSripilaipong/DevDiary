@@ -1,13 +1,9 @@
 from http import HTTPStatus
 
-import json
-
-from typing import Dict
-
 from domain.identity.registration.exception import EmailAlreadyRegisteredException
 from domain.identity.user.exception import UsernameAlreadyRegisteredException
-from lambler.api_gateway.aws.version import AWSEventVersion
-from lambler.api_gateway.endpoint.marker import JSONBody
+from lambler.api_gateway.aws.event.version import AWSEventVersion
+from lambler.api_gateway.marker import JSONBody
 from lambler.api_gateway.response import JSONResponse
 from lambler.api_gateway.router import APIGatewayRouter
 
