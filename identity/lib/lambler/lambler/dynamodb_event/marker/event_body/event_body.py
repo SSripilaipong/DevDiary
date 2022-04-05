@@ -1,6 +1,6 @@
 from typing import Dict, Any, Type, Optional
 
-from lambler.base.marker import Marker
+from lambler.base.function.marker import Marker
 
 
 class EventBody(Marker):

@@ -2,7 +2,7 @@ from typing import Type, Any
 
 from abc import ABC, abstractmethod
 
-from lambler.base.source import FunctionInputSourceCollection
+from lambler.base.function.input import FunctionInputSourceCollection
 
 
 class Marker(ABC):

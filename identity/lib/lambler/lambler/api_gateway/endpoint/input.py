@@ -6,7 +6,7 @@ from typing import Dict, Optional
 
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.exception import InvalidParameterError
-from lambler.base.source import FunctionInputSourceCollection, FunctionInputSource
+from lambler.base.function.input import FunctionInputSourceCollection, FunctionInputSource
 
 
 class BodyInputSource(FunctionInputSource):

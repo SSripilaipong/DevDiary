@@ -2,7 +2,7 @@ from typing import Any
 
 from lambler.api_gateway.endpoint.input import HTTPInputCollection
 from lambler.base.function import MarkedFunction
-from lambler.base.source import FunctionInputSourceCollection
+from lambler.base.function.input import FunctionInputSourceCollection
 from lambler.api_gateway.event import APIGatewayEvent
 from lambler.api_gateway.response import response_parser
 from lambler.base.handler import Handler

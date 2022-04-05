@@ -1,8 +1,8 @@
 import inspect
 from typing import Any, Iterator, Tuple, Callable, Dict
 
-from lambler.base.marker import Marker
-from lambler.base.source import FunctionInputSourceCollection
+from lambler.base.function.marker import Marker
+from lambler.base.function.input import FunctionInputSourceCollection
 
 
 class MarkedFunction:

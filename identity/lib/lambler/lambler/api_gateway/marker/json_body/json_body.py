@@ -3,7 +3,7 @@ from typing import Type, Any, Optional
 from lambler.api_gateway.endpoint.input import HTTPInputCollection
 from lambler.api_gateway.exception import InvalidParameterError
 from lambler.api_gateway.marker.json_body.parser import parser_factory, Parser
-from lambler.base.marker import Marker
+from lambler.base.function.marker import Marker
 
 
 class JSONBody(Marker):

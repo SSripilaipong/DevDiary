@@ -3,7 +3,7 @@ import inspect
 from boto3.dynamodb.types import TypeDeserializer
 from typing import Dict, Callable
 
-from lambler.base.marker import Marker
+from lambler.base.function.marker import Marker
 from lambler.dynamodb_event.data.event import DynamodbEvent
 
 
