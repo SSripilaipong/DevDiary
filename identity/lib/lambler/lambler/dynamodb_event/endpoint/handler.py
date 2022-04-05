@@ -2,9 +2,9 @@ from typing import Callable
 
 from lambler.base.handler import Handler
 from lambler.dynamodb_event.endpoint.parameter import ParameterInjection
-from lambler.dynamodb_event.event import DynamodbEvent
+from lambler.dynamodb_event.model.event import DynamodbEvent
 from lambler.dynamodb_event.response import DynamodbEventResponse
-from lambler.dynamodb_event.type import DynamodbEventType
+from lambler.dynamodb_event.model.type import DynamodbEventType
 
 
 class DynamodbEventHandler(Handler):
