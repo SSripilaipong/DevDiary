@@ -1,24 +1,20 @@
-from typing import Callable
-
+from lambler.base.function import MarkedFunction
 from lambler.base.handler import Handler
-from lambler.dynamodb_event.endpoint.parameter import ParameterInjection
-from lambler.dynamodb_event.data.event import DynamodbEvent
+from lambler.dynamodb_event.input.collection import DynamodbEventInputCollection
 from lambler.dynamodb_event.response import DynamodbEventResponse
 from lambler.dynamodb_event.data.type import DynamodbEventType
 
 
 class DynamodbEventHandler(Handler):
-    def __init__(self, handle: Callable, event: DynamodbEvent, param_injection: ParameterInjection):
+    def __init__(self, handle: MarkedFunction, sources: DynamodbEventInputCollection):
         self._handle = handle
-        self._event = event
-
-        self._param_injection = param_injection
+        self._sources = sources
 
     @classmethod
-    def create(cls, method: DynamodbEventType, handle: Callable, event: DynamodbEvent) -> 'DynamodbEventHandler':
-        return cls(handle, event, ParameterInjection.from_handle_function(handle))
+    def create(cls, method: DynamodbEventType, handle: MarkedFunction, sources: DynamodbEventInputCollection) \
+            -> 'DynamodbEventHandler':
+        return cls(handle, sources)
 
     def handle(self) -> DynamodbEventResponse:
-        params = self._param_injection.extract_params(self._event)
-        self._handle(**params)
+        self._handle.execute(self._sources)
         return DynamodbEventResponse()

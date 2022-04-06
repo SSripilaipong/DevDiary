@@ -14,7 +14,7 @@ class DynamodbEventRouter(Router):
         self._endpoints: List[DynamodbEventEndpoint] = []
 
     def subscribe_insert(self, handle: Callable):
-        self._endpoints.append(DynamodbEventEndpoint(method=DynamodbEventType.INSERT, handle=handle))
+        self._endpoints.append(DynamodbEventEndpoint.create(method=DynamodbEventType.INSERT, handle=handle))
 
     def _validate_event(self, event) -> Optional[DynamodbEvent]:
         try:
