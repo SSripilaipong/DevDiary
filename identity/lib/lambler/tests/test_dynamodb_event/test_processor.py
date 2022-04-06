@@ -1,7 +1,9 @@
+from operator import getitem
+
 from decimal import Decimal
 
 from pydantic import BaseModel
-from typing import Dict
+from typing import Dict, Type, Callable
 
 from chamber.data.field import Field
 from chamber.data.model import DataModel
@@ -50,52 +52,32 @@ def test_should_should_call_function():
 
 
 def test_should_pass_body_to_function():
-    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
-
-    @processor.insert()
-    def on_insert(body: Dict = EventBody()):
-        on_insert.read_data = body
-
-    raw_body = {
-        "name": {"S": "CPEngineer"},
-        "email": {"S": "cpeng@devdiary.link"},
-        "age": {"N": "11"},
-    }
-    processor.match(simple_insert_event(body=raw_body), ...).handle()
-    assert getattr(on_insert, "read_data", None) == {"name": "CPEngineer", "email": "cpeng@devdiary.link", "age": 11}
+    _test_support_model_body(Dict, getitem)
 
 
 def test_should_support_passing_pydantic_body_to_function():
-    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
-
     class MyData(BaseModel):
         name: str
         email: str
         age: int
 
-    @processor.insert()
-    def on_insert(body: MyData = EventBody()):
-        on_insert.read_data = body
-
-    raw_body = {
-        "name": {"S": "CPEngineer"},
-        "email": {"S": "cpeng@devdiary.link"},
-        "age": {"N": "11"},
-    }
-    processor.match(simple_insert_event(body=raw_body), ...).handle()
-    assert getattr(on_insert, "read_data", None) == MyData(name="CPEngineer", email="cpeng@devdiary.link", age=11)
+    _test_support_model_body(MyData, getattr)
 
 
 def test_should_support_passing_chamber_body_to_function():
-    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
-
     class MyData(DataModel):
         name: str = Field(getter=True)
         email: str = Field(getter=True)
         age: Decimal = Field(getter=True)
 
+    _test_support_model_body(MyData, getattr)
+
+
+def _test_support_model_body(model: Type, get_attr: Callable):
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
     @processor.insert()
-    def on_insert(body: MyData = EventBody()):
+    def on_insert(body: model = EventBody()):
         on_insert.read_data = body
 
     raw_body = {
@@ -106,4 +88,6 @@ def test_should_support_passing_chamber_body_to_function():
     processor.match(simple_insert_event(body=raw_body), ...).handle()
     read_data = getattr(on_insert, "read_data", None)
     assert read_data is not None
-    assert read_data.name == "CPEngineer" and read_data.email == "cpeng@devdiary.link" and read_data.age == 11
+    assert get_attr(read_data, "name") == "CPEngineer"
+    assert get_attr(read_data, "email") == "cpeng@devdiary.link"
+    assert get_attr(read_data, "age") == 11
