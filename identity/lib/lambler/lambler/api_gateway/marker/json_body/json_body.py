@@ -2,7 +2,8 @@ from typing import Type, Any, Optional
 
 from lambler.api_gateway.endpoint.input import HTTPInputCollection
 from lambler.api_gateway.exception import InvalidParameterError
-from lambler.api_gateway.marker.json_body.parser import parser_factory, Parser
+from lambler.base.data.parser import parser_factory, Parser
+from lambler.base.data.parser.exception import DataParsingError
 from lambler.base.function.marker import Marker
 
 
@@ -11,7 +12,10 @@ class JSONBody(Marker):
         self._parser: Optional[Parser] = None
 
     def register_type(self, type_: Type):
-        self._parser = parser_factory.for_type(type_)
+        try:
+            self._parser = parser_factory.for_type(type_)
+        except TypeError:
+            raise InvalidParameterError()
 
     def extract_param(self, sources: HTTPInputCollection) -> Any:
         assert isinstance(sources, HTTPInputCollection)
@@ -20,6 +24,9 @@ class JSONBody(Marker):
             raise InvalidParameterError()
 
         if self._parser is not None:
-            return self._parser.parse(sources.body.to_dict())
+            try:
+                return self._parser.parse(sources.body.to_dict())
+            except DataParsingError:
+                raise InvalidParameterError()
 
         raise NotImplementedError()

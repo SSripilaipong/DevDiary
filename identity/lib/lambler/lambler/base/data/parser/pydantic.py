@@ -2,8 +2,8 @@ import pydantic
 from pydantic import BaseModel
 from typing import Dict, Type
 
-from lambler.api_gateway.exception import InvalidParameterError
-from lambler.api_gateway.marker.json_body.parser.parser import Parser
+from lambler.base.data.parser.exception import DataParsingError
+from lambler.base.data.parser.parser import Parser
 
 
 class PydanticParser(Parser):
@@ -20,4 +20,4 @@ class PydanticParser(Parser):
         try:
             return self._model(**data)
         except pydantic.ValidationError:
-            raise InvalidParameterError()
+            raise DataParsingError()

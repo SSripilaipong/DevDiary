@@ -2,11 +2,10 @@ from pydantic import BaseModel
 from typing import Dict, Type
 
 from chamber.data.model import DataModel
-from lambler.api_gateway.exception import InvalidParameterError
-from lambler.api_gateway.marker.json_body.parser.dict import DictParser
-from lambler.api_gateway.marker.json_body.parser.chamber import ChamberParser
-from lambler.api_gateway.marker.json_body.parser.parser import Parser
-from lambler.api_gateway.marker.json_body.parser.pydantic import PydanticParser
+from lambler.base.data.parser.dict import DictParser
+from lambler.base.data.parser.chamber import ChamberParser
+from lambler.base.data.parser.parser import Parser
+from lambler.base.data.parser.pydantic import PydanticParser
 
 
 class ParserFactory:
@@ -23,7 +22,7 @@ class ParserFactory:
         for parent, parser in self._parsers.items():
             if type_ is parent or (isinstance(type_, type) and issubclass(type_, parent)):
                 return parser.from_type(type_)
-        raise InvalidParameterError()
+        raise TypeError()
 
 
 parser_factory = ParserFactory()

@@ -2,8 +2,8 @@ from typing import Dict, Type
 
 from chamber.data.model import DataModel
 from chamber.data.exception import DeserializationFailedException
-from lambler.api_gateway.exception import InvalidParameterError
-from lambler.api_gateway.marker.json_body.parser.parser import Parser
+from lambler.base.data.parser.exception import DataParsingError
+from lambler.base.data.parser.parser import Parser
 
 
 class ChamberParser(Parser):
@@ -21,4 +21,4 @@ class ChamberParser(Parser):
         try:
             return self._model.from_dict(data)
         except DeserializationFailedException:
-            raise InvalidParameterError()
+            raise DataParsingError()

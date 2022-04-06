@@ -1,6 +1,6 @@
 from typing import Dict, Type
 
-from lambler.api_gateway.marker.json_body.parser.parser import Parser
+from lambler.base.data.parser.parser import Parser
 
 
 class DictParser(Parser):
