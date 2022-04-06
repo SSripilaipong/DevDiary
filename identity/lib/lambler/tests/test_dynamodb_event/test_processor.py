@@ -8,6 +8,7 @@ from typing import Dict, Type, Callable
 from chamber.data.field import Field
 from chamber.data.model import DataModel
 from lambler.base.handler import Handler
+from lambler.base.response import LamblerResponse
 from lambler.dynamodb_event.processor import DynamodbEventProcessor
 from lambler.dynamodb_event.marker import EventBody
 from lambler.dynamodb_event.data.view import DynamodbStreamView
@@ -71,6 +72,16 @@ def test_should_support_passing_chamber_body_to_function():
         age: Decimal = Field(getter=True)
 
     _test_support_model_body(MyData, getattr)
+
+
+def test_should_return_LamblerResponse():
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
+    @processor.insert()
+    def on_insert():
+        pass
+
+    assert isinstance(processor.match(simple_insert_event(), ...).handle(), LamblerResponse)
 
 
 def _test_support_model_body(model: Type, get_attr: Callable):
