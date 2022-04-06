@@ -1,3 +1,4 @@
+from pydantic import BaseModel
 from typing import Dict
 
 from lambler.base.handler import Handler
@@ -58,3 +59,24 @@ def test_should_pass_body_to_function():
     }
     processor.match(simple_insert_event(body=raw_body), ...).handle()
     assert getattr(on_insert, "read_data", None) == {"name": "CPEngineer", "email": "cpeng@devdiary.link", "age": 11}
+
+
+def test_should_support_passing_pydantic_body_to_function():
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
+    class MyData(BaseModel):
+        name: str
+        email: str
+        age: int
+
+    @processor.insert()
+    def on_insert(body: MyData = EventBody()):
+        on_insert.read_data = body
+
+    raw_body = {
+        "name": {"S": "CPEngineer"},
+        "email": {"S": "cpeng@devdiary.link"},
+        "age": {"N": "11"},
+    }
+    processor.match(simple_insert_event(body=raw_body), ...).handle()
+    assert getattr(on_insert, "read_data", None) == MyData(name="CPEngineer", email="cpeng@devdiary.link", age=11)
