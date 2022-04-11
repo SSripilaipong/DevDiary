@@ -12,7 +12,7 @@ from lambler.base.response import LamblerResponse
 from lambler.dynamodb_event.processor import DynamodbEventProcessor
 from lambler.dynamodb_event.marker import EventBody
 from lambler.dynamodb_event.data.view import DynamodbStreamView
-from .event_factory import simple_insert_event
+from .event_factory import simple_insert_event, simple_insert_event_multiple_records
 
 
 def test_should_match_dynamodb_event():
@@ -82,6 +82,19 @@ def test_should_return_LamblerResponse():
         pass
 
     assert isinstance(processor.match(simple_insert_event(), ...).handle(), LamblerResponse)
+
+
+def test_should_support_multiple_records():
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
+    inputs = []
+
+    @processor.insert()
+    def on_insert(data: Dict = EventBody()):
+        inputs.append(data["num"])
+
+    processor.match(simple_insert_event_multiple_records(nums=[1, 2]), ...).handle()
+    assert inputs == [1, 2]
 
 
 def _test_support_model_body(model: Type, get_attr: Callable):
