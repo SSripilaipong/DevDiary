@@ -25,7 +25,14 @@ class DynamodbEventSimulator:
 
         serialized_data = {key: self._serializer.serialize(value) for key, value in data.items()}
         event = _simple_event("INSERT", keys, new_image=serialized_data)
-        self._lambler(event, ...)
+        response = self._lambler(event, ...)
+        return self.__convert_response(response)
+
+    def __convert_response(self, response: Dict) -> DynamodbEventBatchResponse:
+        if not isinstance(response, dict):
+            raise NotImplementedError()
+
+        return DynamodbEventBatchResponse.from_dict(response)
 
 
 def _simple_event(event_name, keys, new_image):
