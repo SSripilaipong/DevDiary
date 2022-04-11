@@ -135,6 +135,20 @@ def test_should_report_only_failed_items_when_multiple_records_passed():
     assert {report["itemIdentifier"] for report in response["batchItemFailures"]} == {"e2", "e3"}
 
 
+def test_should_report_item_failure_when_data_passing_failed():
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
+    class MyModel(BaseModel):
+        num: int
+
+    @processor.insert()
+    def on_insert(data: MyModel = EventBody()):
+        pass
+
+    response = processor.match(simple_insert_event(body={"Hello": "World"}, event_id="e1"), ...).handle().to_dict()
+    assert response["batchItemFailures"][0]["itemIdentifier"] == "e1"
+
+
 def _test_support_model_body(model: Type, get_attr: Callable):
     processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
 
