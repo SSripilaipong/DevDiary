@@ -84,6 +84,18 @@ def test_should_return_LamblerResponse():
     assert isinstance(processor.match(simple_insert_event(), ...).handle(), LamblerResponse)
 
 
+def test_should_not_report_item_failure_when_success():
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
+    @processor.insert()
+    def on_insert():
+        pass
+
+    response = processor.match(simple_insert_event(event_id="123"), ...).handle().to_dict()
+    assert "batchItemFailures" in response
+    assert len(response["batchItemFailures"]) == 0
+
+
 def test_should_support_multiple_records():
     processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
 

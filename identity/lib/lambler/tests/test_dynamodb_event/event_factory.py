@@ -1,14 +1,16 @@
-def simple_insert_event(body=None):
+def simple_insert_event(body=None, event_id=None):
     body = body or {
         "name": {
             "S": "CPEngineer"
         }
     }
 
+    event_id = event_id or "f10b783edf0aba4f639df2a6eb408ee7"
+
     return {
         "Records": [
             {
-                "eventID": "f10b783edf0aba4f639df2a6eb408ee7",
+                "eventID": event_id,
                 "eventName": "INSERT",
                 "eventVersion": "1.1",
                 "eventSource": "aws:dynamodb",
