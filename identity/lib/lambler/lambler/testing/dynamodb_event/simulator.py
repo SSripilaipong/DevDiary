@@ -11,7 +11,8 @@ class DynamodbEventSimulator:
         self._lambler = lambler
         self._serializer = TypeSerializer()
 
-    def insert(self, data: Dict[str, Any], partition_key: str, sort_key: str = None) -> DynamodbEventBatchResponse:
+    def insert(self, data: Dict[str, Any], partition_key: str, sort_key: str = None, event_id: str = None) \
+            -> DynamodbEventBatchResponse:
         keys = {}
 
         if partition_key not in data:
