@@ -10,4 +10,6 @@ class DynamodbEventResponse(LamblerResponse):
 
 class DynamodbEventBatchResponse(LamblerResponse):
     def to_dict(self) -> Dict:
-        return {}
+        return {
+            "batchItemFailures": [],
+        }
