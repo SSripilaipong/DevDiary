@@ -13,12 +13,13 @@ class DynamodbEventBatchHandler(Handler):
         self._handlers = handlers
 
     def handle(self) -> DynamodbEventBatchResponse:
+        failed_item_ids = []
         for handler in self._handlers:
             try:
                 handler.handle()
             except:
-                raise NotImplementedError()
-        return DynamodbEventBatchResponse()
+                failed_item_ids.append({"itemIdentifier": handler.item_id})
+        return DynamodbEventBatchResponse(failed_item_ids=failed_item_ids)
 
 
 class DynamodbEventProcessor(PatternMatcher):

@@ -18,3 +18,7 @@ class DynamodbEventHandler(Handler):
     def handle(self) -> DynamodbEventResponse:
         self._handle.execute(self._sources)
         return DynamodbEventResponse()
+
+    @property
+    def item_id(self) -> str:
+        return self._sources.item_id.to_str()
