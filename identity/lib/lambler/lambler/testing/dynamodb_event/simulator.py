@@ -22,7 +22,8 @@ class DynamodbEventSimulator:
                 raise NotImplementedError()
             keys[sort_key] = self._serializer.serialize(data[sort_key])
 
-        event = _simple_event("INSERT", keys, new_image=data)
+        serialized_data = {key: self._serializer.serialize(value) for key, value in data.items()}
+        event = _simple_event("INSERT", keys, new_image=serialized_data)
         self._lambler(event, ...)
 
 
