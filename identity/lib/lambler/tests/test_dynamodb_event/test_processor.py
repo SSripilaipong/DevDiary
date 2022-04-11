@@ -96,6 +96,18 @@ def test_should_not_report_item_failure_when_success():
     assert len(response["batchItemFailures"]) == 0
 
 
+def test_should_report_item_failure_when_error_raised():
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
+    @processor.insert()
+    def on_insert():
+        raise Exception()
+
+    response = processor.match(simple_insert_event(event_id="123"), ...).handle().to_dict()
+    assert len(response["batchItemFailures"]) == 1
+    assert response["batchItemFailures"][0]["itemIdentifier"] == "123"
+
+
 def test_should_support_multiple_records():
     processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
 
