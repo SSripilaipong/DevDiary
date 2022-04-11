@@ -25,7 +25,7 @@ class DynamodbEventSimulator:
             keys[sort_key] = self._serializer.serialize(data[sort_key])
 
         serialized_data = {key: self._serializer.serialize(value) for key, value in data.items()}
-        event = _simple_event("INSERT", keys, new_image=serialized_data)
+        event = _simple_event("INSERT", keys, new_image=serialized_data, event_id=event_id or "ABC123")
         response = self._lambler(event, ...)
         return self.__convert_response(response)
 
@@ -36,11 +36,11 @@ class DynamodbEventSimulator:
         return DynamodbEventBatchResponse.from_dict(response)
 
 
-def _simple_event(event_name, keys, new_image):
+def _simple_event(event_name, keys, new_image, event_id):
     return {
         "Records": [
             {
-                "eventID": "ABC123",
+                "eventID": event_id,
                 "eventName": event_name,
                 "eventVersion": "1.1",
                 "eventSource": "aws:dynamodb",
