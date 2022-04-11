@@ -3,6 +3,7 @@ from typing import Dict, Any
 
 from lambler import Lambler
 from lambler.dynamodb_event.data.view import DynamodbStreamView
+from lambler.dynamodb_event.response import DynamodbEventBatchResponse
 
 
 class DynamodbEventSimulator:
@@ -10,7 +11,7 @@ class DynamodbEventSimulator:
         self._lambler = lambler
         self._serializer = TypeSerializer()
 
-    def insert(self, data: Dict[str, Any], partition_key: str, sort_key: str = None):
+    def insert(self, data: Dict[str, Any], partition_key: str, sort_key: str = None) -> DynamodbEventBatchResponse:
         keys = {}
 
         if partition_key not in data:
