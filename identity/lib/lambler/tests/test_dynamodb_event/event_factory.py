@@ -33,12 +33,14 @@ def simple_insert_event(body=None, event_id=None):
     }
 
 
-def simple_insert_event_multiple_records(nums):
+def simple_insert_event_multiple_records(nums, event_ids=None):
+    event_ids = event_ids or [f"e{n}" for n in nums]
+    assert len(nums) == len(event_ids)
 
     return {
         "Records": [
             {
-                "eventID": "f10b783edf0aba4f639df2a6eb408ee7",
+                "eventID": event_id,
                 "eventName": "INSERT",
                 "eventVersion": "1.1",
                 "eventSource": "aws:dynamodb",
@@ -63,6 +65,6 @@ def simple_insert_event_multiple_records(nums):
                     "StreamViewType": "NEW_IMAGE"
                 },
                 "eventSourceARN": "arn:aws:dynamodb:ap-southeast-1:123456789012:table/tableName/stream/2022-03-26T16:21:38.846"
-            } for num in nums
+            } for event_id, num in zip(event_ids, nums)
         ],
     }

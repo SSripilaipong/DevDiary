@@ -121,6 +121,20 @@ def test_should_support_multiple_records():
     assert inputs == [1, 2]
 
 
+def test_should_report_only_failed_items_when_multiple_records_passed():
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
+    @processor.insert()
+    def on_insert(data: Dict = EventBody()):
+        if data["num"] in (2, 3):
+            raise Exception()
+
+    records = simple_insert_event_multiple_records(nums=[1, 2, 3, 4], event_ids=["e1", "e2", "e3", "e4"])
+    response = processor.match(records, ...).handle().to_dict()
+    assert len(response["batchItemFailures"]) == 2
+    assert {report["itemIdentifier"] for report in response["batchItemFailures"]} == {"e2", "e3"}
+
+
 def _test_support_model_body(model: Type, get_attr: Callable):
     processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
 
