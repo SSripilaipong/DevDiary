@@ -14,7 +14,7 @@ def test_should_simulate_insert_event():
     lambler = Lambler()
     lambler.include_pattern(processor)
 
-    simulator = DynamodbEventSimulator(lambler)
-    simulator.insert({"num": 123}, partition="MyPartitionKey", sort="MySortKey")
+    simulator = DynamodbEventSimulator(lambler, stream_view_type=DynamodbStreamView.NEW_IMAGE)
+    simulator.insert({"Partition": "Hello", "Sort": 0, "num": 123}, partition_key="Partition", sort_key="Sort")
 
     assert getattr(on_insert, "is_called", False)
