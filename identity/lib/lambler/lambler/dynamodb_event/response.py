@@ -9,8 +9,8 @@ class DynamodbEventResponse(LamblerResponse):
 
 
 class DynamodbEventBatchResponse(LamblerResponse):
-    def __init__(self, failed_item_ids: List[Dict[str, str]]):
-        self._failed_item_ids = failed_item_ids
+    def __init__(self, failed_item_ids: List[str]):
+        self._failed_item_ids = [{"itemIdentifier": item_id} for item_id in failed_item_ids]
 
     def to_dict(self) -> Dict:
         return {

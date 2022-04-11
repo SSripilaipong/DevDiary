@@ -18,7 +18,7 @@ class DynamodbEventBatchHandler(Handler):
             try:
                 handler.handle()
             except:
-                failed_item_ids.append({"itemIdentifier": handler.item_id})
+                failed_item_ids.append(handler.item_id)
         return DynamodbEventBatchResponse(failed_item_ids=failed_item_ids)
 
 
