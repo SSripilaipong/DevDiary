@@ -16,7 +16,7 @@ class SynchronousMessageBus(MessageBus):
     def subscribe(self, message: Type[M], handler: Callable[[M], Any]):
         self._subscriptions[message] = self._subscriptions.get(message, []) + [handler]
 
-    def publish(self, message: Message):
+    def publish(self, topic: str, message: Message, key: str = None):
         if message.__class__ not in self._message_whitelist:
             raise MessageTypeNotAllowedException(message.__class__.__name__)
 

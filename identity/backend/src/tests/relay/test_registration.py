@@ -14,7 +14,7 @@ class MessageBusMock(MessageBus):
     def __init__(self):
         self.published_message = None
 
-    def publish(self, message: Message):
+    def publish(self, topic: str, message: Message, key: str = None):
         self.published_message = message
 
     def subscribe(self, message: Type[M], handler: Callable[[M], Any]):

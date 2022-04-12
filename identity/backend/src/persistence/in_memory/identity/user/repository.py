@@ -41,4 +41,4 @@ class AllUsersInMemory(AllUsers):
     def _handle_outbox(outbox: List[Message]):
         message_bus = Registry().message_bus
         for message in outbox:
-            message_bus.publish(message)
+            message_bus.publish(message.__class__.__name__, message)

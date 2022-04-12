@@ -17,7 +17,7 @@ def on_insert(data: Dict = EventBody()):
     for raw in events:
         event = _deserialize_message(raw)
 
-        message_bus.publish(event)
+        message_bus.publish("", event)
 
 
 def _get_message_type(name: str) -> Type[Message]:

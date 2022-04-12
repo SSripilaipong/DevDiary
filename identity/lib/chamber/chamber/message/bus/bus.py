@@ -9,8 +9,10 @@ M = TypeVar('M', bound=Message)
 
 class MessageBus(ABC):
     @abstractmethod
-    def publish(self, message: Message):
+    def publish(self, topic, message: Message, key=None):
         """
+        :param topic:
+        :param key:
         :raises:
             MessageTypeNotAllowedException
         """
