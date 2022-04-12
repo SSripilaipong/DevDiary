@@ -10,6 +10,8 @@ class Lambler:
 
     def __call__(self, event: Dict, context: Any) -> Any:
         handler = self.__get_matched_handler(event, context)
+        if handler is None:
+            return None
         response = handler.handle()
 
         if isinstance(response, LamblerResponse):
@@ -24,4 +26,4 @@ class Lambler:
             matched = pattern.match(event, context)
             if matched is not None:
                 return matched
-        raise NotImplementedError()
+        return None
