@@ -72,13 +72,3 @@ def test_should_return_response_with_failure_item():
     response = simulator.insert(data, partition_key="Partition", sort_key="Sort")
 
     assert not response.all_success()
-
-
-def test_should_return_None_when_no_handler_matched():
-    lambler = Lambler()
-
-    simulator = DynamodbEventSimulator(lambler, stream_view_type=DynamodbStreamView.NEW_IMAGE)
-    data = {"Partition": "Hello", "Sort": 0, "num": 123}
-    response = simulator.insert(data, partition_key="Partition", sort_key="Sort")
-
-    assert response is None
