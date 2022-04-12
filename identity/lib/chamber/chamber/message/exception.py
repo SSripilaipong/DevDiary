@@ -1,2 +1,2 @@
-class MessageTypeNotAllowedException(Exception):
+class TopicNotAllowedException(Exception):
     pass

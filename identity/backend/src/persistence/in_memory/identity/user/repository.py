@@ -9,8 +9,9 @@ from domain.registry import Registry
 
 
 class AllUsersInMemory(AllUsers):
-    def __init__(self, users: Dict[Username, User] = None):
+    def __init__(self, users: Dict[Username, User] = None, topic_prefix: str = ""):
         self._users = users or dict()
+        self._topic_prefix = topic_prefix
 
     def create(self, user: User) -> User:
         """
@@ -37,8 +38,7 @@ class AllUsersInMemory(AllUsers):
         self._users[user.username] = user
         self._handle_outbox(outbox)
 
-    @staticmethod
-    def _handle_outbox(outbox: List[Message]):
+    def _handle_outbox(self, outbox: List[Message]):
         message_bus = Registry().message_bus
         for message in outbox:
-            message_bus.publish(message.__class__.__name__, message)
+            message_bus.publish(f"{self._topic_prefix}{message.__class__.__name__}", message)

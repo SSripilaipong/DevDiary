@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Type, Callable, TypeVar, Any
+from typing import Callable, TypeVar, Any
 
 from chamber.message import Message
 
@@ -19,9 +19,9 @@ class MessageBus(ABC):
         """
 
     @abstractmethod
-    def subscribe(self, message: Type[M], handler: Callable[[M], Any]):
+    def subscribe(self, topic: str, handler: Callable[[M], Any]):
         pass
 
     @abstractmethod
-    def allow_publish_message(self, message: Type[Message]):
+    def allow_publish_message(self, topic: str):
         pass

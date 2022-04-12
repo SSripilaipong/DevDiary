@@ -17,10 +17,10 @@ class MessageBusMock(MessageBus):
     def publish(self, topic: str, message: Message, key: str = None):
         self.published_message = message
 
-    def subscribe(self, message: Type[M], handler: Callable[[M], Any]):
+    def subscribe(self, topic: str, handler: Callable[[M], Any]):
         pass
 
-    def allow_publish_message(self, message: Type[Message]):
+    def allow_publish_message(self, topic: str):
         pass
 
 

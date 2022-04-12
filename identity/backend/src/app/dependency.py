@@ -25,7 +25,7 @@ def _inject_prod():
     dynamodb_client = boto3.client("dynamodb")
     registry = Registry()
     registry.all_registrations = AllRegistrationsInDynamodb(dynamodb_client, table_name=table_name)
-    registry.all_users = AllUsersInMemory()
+    registry.all_users = AllUsersInMemory(topic_prefix="Identity.")
     registry.message_bus = _get_message_bus()
     registry.secret_manager = RandomSecretManager()
     registry.email_service = EmailServiceInMemory()
@@ -33,8 +33,8 @@ def _inject_prod():
 
 def _inject_test():
     registry = Registry()
-    registry.all_registrations = AllRegistrationsInMemory()
-    registry.all_users = AllUsersInMemory()
+    registry.all_registrations = AllRegistrationsInMemory(topic_prefix="Identity.")
+    registry.all_users = AllUsersInMemory(topic_prefix="Identity.")
     registry.message_bus = _get_message_bus()
     registry.secret_manager = RandomSecretManager()
     registry.email_service = EmailServiceInMemory()

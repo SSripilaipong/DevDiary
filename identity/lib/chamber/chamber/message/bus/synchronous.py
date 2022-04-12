@@ -1,8 +1,8 @@
-from typing import Type, Callable, Any, Dict, List, Set, TypeVar
+from typing import Callable, Any, Dict, List, Set, TypeVar
 
 from chamber.message import Message
 from chamber.message.bus import MessageBus
-from chamber.message.exception import MessageTypeNotAllowedException
+from chamber.message.exception import TopicNotAllowedException
 
 
 M = TypeVar('M', bound=Message)
@@ -10,18 +10,18 @@ M = TypeVar('M', bound=Message)
 
 class SynchronousMessageBus(MessageBus):
     def __init__(self):
-        self._subscriptions: Dict[Type[M], List[Callable[[M], Any]]] = {}
-        self._message_whitelist: Set[Type[Message]] = set()
+        self._subscriptions: Dict[str, List[Callable[[M], Any]]] = {}
+        self._topic_whitelist: Set[str] = set()
 
-    def subscribe(self, message: Type[M], handler: Callable[[M], Any]):
-        self._subscriptions[message] = self._subscriptions.get(message, []) + [handler]
+    def subscribe(self, topic: str, handler: Callable[[M], Any]):
+        self._subscriptions[topic] = self._subscriptions.get(topic, []) + [handler]
 
     def publish(self, topic: str, message: Message, key: str = None):
-        if message.__class__ not in self._message_whitelist:
-            raise MessageTypeNotAllowedException(message.__class__.__name__)
+        if topic not in self._topic_whitelist:
+            raise TopicNotAllowedException(topic)
 
-        for handler in self._subscriptions.get(message.__class__, []):
+        for handler in self._subscriptions.get(topic, []):
             handler(message)
 
-    def allow_publish_message(self, message: Type[Message]):
-        self._message_whitelist.add(message)
+    def allow_publish_message(self, topic: str):
+        self._topic_whitelist.add(topic)

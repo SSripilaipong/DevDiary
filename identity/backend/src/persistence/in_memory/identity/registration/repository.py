@@ -16,9 +16,10 @@ from domain.registry import Registry
 
 class AllRegistrationsInMemory(AllRegistrations):
     def __init__(self, registrations: Dict[Email, Registration] = None,
-                 active_or_confirmed_usernames: Set[Username] = None):
+                 active_or_confirmed_usernames: Set[Username] = None, topic_prefix: str = ""):
         self._registrations = registrations or dict()
         self._active_or_confirmed_usernames = active_or_confirmed_usernames or set()
+        self._topic_prefix = topic_prefix
 
     def create(self, registration: Registration) -> Registration:
         """
@@ -66,8 +67,7 @@ class AllRegistrationsInMemory(AllRegistrations):
         self._registrations[registration.email] = registration
         self._handle_outbox(outbox)
 
-    @staticmethod
-    def _handle_outbox(outbox: List[Message]):
+    def _handle_outbox(self, outbox: List[Message]):
         message_bus = Registry().message_bus
         for message in outbox:
-            message_bus.publish(message.__class__.__name__, message)
+            message_bus.publish(f"{self._topic_prefix}{message.__class__.__name__}", message)
