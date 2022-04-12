@@ -54,7 +54,7 @@ def test_should_return_response():
     data = {"Partition": "Hello", "Sort": 0, "num": 123}
     response = simulator.insert(data, partition_key="Partition", sort_key="Sort")
 
-    assert isinstance(response, DynamodbEventBatchResponse) and response.failed_item_ids == []
+    assert isinstance(response, DynamodbEventBatchResponse) and response.all_success()
 
 
 def test_should_return_response_with_failure_item():
@@ -69,6 +69,6 @@ def test_should_return_response_with_failure_item():
 
     simulator = DynamodbEventSimulator(lambler, stream_view_type=DynamodbStreamView.NEW_IMAGE)
     data = {"Partition": "Hello", "Sort": 0, "num": 123}
-    response = simulator.insert(data, partition_key="Partition", sort_key="Sort", event_id="E1")
+    response = simulator.insert(data, partition_key="Partition", sort_key="Sort")
 
-    assert response.failed_item_ids == ["E1"]
+    assert not response.all_success()

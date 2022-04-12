@@ -17,10 +17,6 @@ class DynamodbEventBatchResponse(LamblerResponse):
             "batchItemFailures": [{"itemIdentifier": item_id} for item_id in self._failed_item_ids],
         }
 
-    @property
-    def failed_item_ids(self) -> List[str]:
-        return self._failed_item_ids.copy()
-
     @classmethod
     def from_dict(cls, response: Dict) -> 'DynamodbEventBatchResponse':
         failures = response.get("batchItemFailures", [])
@@ -32,3 +28,6 @@ class DynamodbEventBatchResponse(LamblerResponse):
                 raise NotImplementedError()
             ids.append(id_)
         return cls(ids)
+
+    def all_success(self) -> bool:
+        return self._failed_item_ids == []
