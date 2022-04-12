@@ -2,6 +2,7 @@ from typing import Dict, Any
 
 from app import dependency
 from app.api.router import router
+from app.relay import dynamodb_event
 from lambler import Lambler
 from lambler.base.handler import PatternMatcher, Handler
 
@@ -22,4 +23,5 @@ class PrintEventHandler(PatternMatcher, Handler):
 
 handler = Lambler()
 handler.include_pattern(router)
+handler.include_pattern(dynamodb_event)
 handler.include_pattern(PrintEventHandler())

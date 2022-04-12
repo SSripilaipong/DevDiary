@@ -45,5 +45,5 @@ def test_should_publish_RegistrationEmailNeededToBeConfirmedEvent():
 
     message = bus.published_message
     assert isinstance(message, RegistrationEmailNeededToBeConfirmedEvent)
-    assert message.email == "test@devdiary.link"
+    assert message.email.str() == "test@devdiary.link"
     assert message.confirmation_code == "0864e05e-3b20-4341-b822-1de8f3b0b8d4"
