@@ -23,8 +23,8 @@ class DomainRegistrationDriver(RegistrationDriver):
         self._email_service = EmailServiceInMemory()
 
         registry = Registry()
-        registry.all_registrations = AllRegistrationsInMemory(topic_prefix="Identity.")
-        registry.all_users = AllUsersInMemory(topic_prefix="Identity.")
+        registry.all_registrations = AllRegistrationsInMemory(topic_prefix="Identity-")
+        registry.all_users = AllUsersInMemory(topic_prefix="Identity-")
         registry.message_bus = _get_message_bus()
         registry.secret_manager = RandomSecretManager()
         registry.email_service = self._email_service

@@ -47,5 +47,5 @@ def test_should_publish_RegistrationEmailNeededToBeConfirmedEvent():
     assert isinstance(message, RegistrationEmailNeededToBeConfirmedEvent)
     assert message.email.str() == "test@devdiary.link"
     assert message.confirmation_code == "0864e05e-3b20-4341-b822-1de8f3b0b8d4"
-    assert topic == "Identity.RegistrationEmailNeededToBeConfirmedEvent"
+    assert topic == "Identity-RegistrationEmailNeededToBeConfirmedEvent"
     assert key == "0864e05e-3b20-4341-b822-1de8f3b0b8d4"

@@ -3,5 +3,5 @@ from app.event.handler import handle_email_needed_confirmation, handle_registrat
 
 
 def subscribe_for_messages(message_bus: MessageBus):
-    message_bus.subscribe("Identity.RegistrationEmailNeededToBeConfirmedEvent", handle_email_needed_confirmation)
-    message_bus.subscribe("Identity.RegistrationConfirmedEvent", handle_registration_confirmed)
+    message_bus.subscribe("Identity-RegistrationEmailNeededToBeConfirmedEvent", handle_email_needed_confirmation)
+    message_bus.subscribe("Identity-RegistrationConfirmedEvent", handle_registration_confirmed)
