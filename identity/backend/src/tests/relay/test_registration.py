@@ -1,4 +1,4 @@
-from typing import Type, Callable, Any
+from typing import Callable, Any
 
 import app.main
 from chamber.message import Message
@@ -15,7 +15,7 @@ class MessageBusMock(MessageBus):
         self.published_message = None
 
     def publish(self, topic: str, message: Message, key: str = None):
-        self.published_message = message
+        self.published_message = (topic, message, key)
 
     def subscribe(self, topic: str, handler: Callable[[M], Any]):
         pass
@@ -43,7 +43,9 @@ def test_should_publish_RegistrationEmailNeededToBeConfirmedEvent():
     }, "_Partition", "_SortKey")
     assert response.all_success()
 
-    message = bus.published_message
+    topic, message, key = bus.published_message
     assert isinstance(message, RegistrationEmailNeededToBeConfirmedEvent)
     assert message.email.str() == "test@devdiary.link"
     assert message.confirmation_code == "0864e05e-3b20-4341-b822-1de8f3b0b8d4"
+    assert topic == "Identity.RegistrationEmailNeededToBeConfirmedEvent"
+    assert key == "0864e05e-3b20-4341-b822-1de8f3b0b8d4"
