@@ -46,7 +46,6 @@ jobs:
         working-directory: ./identity/infrastructure/src
         env:
           AWS_REGION: ${{ secrets.aws-region }}
-          TF_VAR_AWS_REGION: ${{ secrets.aws-region }}
           TF_VAR_AWS_ACCOUNT_ID: ${{ secrets.aws-account-id }}
           TF_VAR_APP_NAME: ${{ secrets.app-name }}
           TF_VAR_GLOBAL_PREFIX: ${{ inputs.environment }}

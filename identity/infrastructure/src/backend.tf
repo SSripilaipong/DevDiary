@@ -4,7 +4,6 @@ locals {
     ENVIRONMENT = var.GLOBAL_PREFIX
     DB_TABLE_NAME = aws_dynamodb_table.db.name
     AWS_ACCOUNT_ID = var.AWS_ACCOUNT_ID
-    AWS_REGION = var.AWS_REGION
   },
     length(aws_lambda_function.fakeEmail) != 0 ?
     { FAKE_EMAIL_LAMBDA_NAME = aws_lambda_function.fakeEmail[0].function_name } : {},
