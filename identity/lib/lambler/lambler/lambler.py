@@ -12,6 +12,7 @@ class Lambler:
         handler = self.__get_matched_handler(event, context)
         if handler is None:
             return None
+        print(event)  # TODO: remove
         response = handler.handle()
 
         if isinstance(response, LamblerResponse):
