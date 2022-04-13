@@ -12,6 +12,7 @@ dynamodb_event = DynamodbEventProcessor(DynamodbStreamView.NEW_IMAGE)
 
 @dynamodb_event.insert()
 def on_insert(data: Dict = EventBody()):
+    print("received data:", data)  # TODO: remove
     message_bus = Registry().message_bus
     events = data.get("_LatestEvents", [])
     for raw in events:
