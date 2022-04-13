@@ -19,7 +19,7 @@ resource "aws_iam_role_policy" "publish-topic-RegistrationEmailNeededToBeConfirm
   policy = jsonencode({
     Statement = [
       {
-        Sid = "publish-topic-RegistrationEmailNeededToBeConfirmedEvent"
+        Sid = "PublishTopicRegistrationEmailNeededToBeConfirmedEvent"
         Effect = "Allow"
         Action = [
           "sns:Publish",
