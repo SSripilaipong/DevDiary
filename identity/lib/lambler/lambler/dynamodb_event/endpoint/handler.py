@@ -1,3 +1,5 @@
+import traceback
+
 from lambler import logger
 from lambler.base.function import MarkedFunction
 from lambler.base.handler import Handler
@@ -24,6 +26,7 @@ class DynamodbEventHandler(Handler):
         try:
             self._handle.execute(self._sources)
         except Exception as e:
+            print(traceback.format_exc())  # TODO: use log level: DEBUG instead
             response = DynamodbEventResponse(self._item_id, success=False)
             exception = e
         else:
