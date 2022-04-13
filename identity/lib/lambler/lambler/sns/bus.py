@@ -22,11 +22,12 @@ class SNSMessageBus(MessageBus):
             raise TopicNotAllowedException()
 
         content = message.to_dict()
-        _ = self._client.publish(
+        response = self._client.publish(
             TopicArn=self._arn_prefix + topic,
             Message=json.dumps({'default': json.dumps(content)}),
             MessageStructure='json'
         )
+        print(response)
 
     def subscribe(self, topic: str, handler: Callable[[M], Any]):
         pass  # TODO: implement
