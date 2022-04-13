@@ -27,7 +27,7 @@ class SNSMessageBus(MessageBus):
             Message=json.dumps({'default': json.dumps(content)}),
             MessageStructure='json'
         )
-        print(response)
+        print(response)  # TODO: use proper logger
 
     def subscribe(self, topic: str, handler: Callable[[M], Any]):
         pass  # TODO: implement
