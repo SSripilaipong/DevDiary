@@ -1,3 +1,4 @@
+import logging
 from typing import Dict, Any, TypeVar, Callable, List, Optional
 
 from lambler.base.handler import PatternMatcher, Handler
@@ -11,15 +12,45 @@ T = TypeVar("T", bound=Callable)
 class DynamodbEventBatchHandler(Handler):
     def __init__(self, handlers: List[DynamodbEventHandler]):
         self._handlers = handlers
+        self.__logger = logging.getLogger("lambler")
 
     def handle(self) -> DynamodbEventBatchResponse:
+        self.__log_on_start()
         failed_item_ids = []
         for handler in self._handlers:
             try:
                 handler.handle()
             except:
                 failed_item_ids.append(handler.item_id)
-        return DynamodbEventBatchResponse(failed_item_ids=failed_item_ids)
+        response = DynamodbEventBatchResponse(failed_item_ids=failed_item_ids)
+        self.__log_on_finish(failed_item_ids)
+        return response
+
+    def __log_on_start(self):
+        self.__logger.info([
+            ("event", "DYNAMODB_EVENT"),
+            ("type", "BATCH"),
+            ("STATUS", "STARTED"),
+            ("batchSize", len(self._handlers)),
+        ])
+
+    def __log_on_finish(self, failed_item_ids: List[str]):
+        message = [
+            ("event", "DYNAMODB_EVENT"),
+            ("type", "BATCH"),
+        ]
+
+        if not failed_item_ids:
+            status = "SUCCESS"
+        elif len(failed_item_ids) < len(self._handlers):
+            status = "PARTIALLY_FAILED"
+        else:
+            status = "ALL_FAILED"
+        message.append(("STATUS", status))
+        if failed_item_ids:
+            message.append(("failedItemIDs", failed_item_ids))
+
+        self.__logger.info(message)
 
 
 class DynamodbEventProcessor(PatternMatcher):
