@@ -37,7 +37,7 @@ class DynamodbEventHandler(Handler):
             ("event", "DYNAMODB_EVENT"),
             ("type", self._event_type),
             ("itemId", self._item_id),
-            ("STATUS", "STARTED"),
+            ("status", "STARTED"),
         ])
 
     def __log_on_finish(self, exception: Exception):

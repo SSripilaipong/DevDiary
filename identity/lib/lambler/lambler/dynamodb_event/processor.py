@@ -28,7 +28,7 @@ class DynamodbEventBatchHandler(Handler):
         logger.info([
             ("event", "DYNAMODB_EVENT"),
             ("type", "BATCH"),
-            ("STATUS", "STARTED"),
+            ("status", "STARTED"),
             ("batchSize", len(self._handlers)),
         ])
 
@@ -44,7 +44,7 @@ class DynamodbEventBatchHandler(Handler):
             status = "PARTIALLY_FAILED"
         else:
             status = "ALL_FAILED"
-        message.append(("STATUS", status))
+        message.append(("status", status))
         if failed_item_ids:
             message.append(("failedItemIDs", failed_item_ids))
 
