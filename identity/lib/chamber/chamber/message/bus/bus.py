@@ -14,7 +14,7 @@ class MessageBus(ABC):
         :param topic:
         :param message:
         :raises:
-            MessageTypeNotAllowedException
+            TopicNotAllowedException
         """
 
     @abstractmethod
