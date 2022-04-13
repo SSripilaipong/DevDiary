@@ -1,3 +1,4 @@
+from lambler import logger
 from lambler.base.function import MarkedFunction
 from lambler.base.handler import Handler
 from lambler.dynamodb_event.input.collection import DynamodbEventInputCollection
@@ -11,6 +12,7 @@ class DynamodbEventHandler(Handler):
         self._sources = sources
 
         self._item_id = self._sources.item_id.to_str()
+        self._event_type = "INSERT"  # TODO: fix this
 
     @classmethod
     def create(cls, method: DynamodbEventType, handle: MarkedFunction, sources: DynamodbEventInputCollection) \
@@ -18,8 +20,36 @@ class DynamodbEventHandler(Handler):
         return cls(handle, sources)
 
     def handle(self) -> DynamodbEventResponse:
+        self.__log_on_start()
         try:
             self._handle.execute(self._sources)
-        except:
-            return DynamodbEventResponse(self._item_id, success=False)
-        return DynamodbEventResponse(self._item_id, success=True)
+        except Exception as e:
+            response = DynamodbEventResponse(self._item_id, success=False)
+            exception = e
+        else:
+            response = DynamodbEventResponse(self._item_id, success=True)
+            exception = None
+        self.__log_on_finish(exception)
+        return response
+
+    def __log_on_start(self):
+        logger.info([
+            ("event", "DYNAMODB_EVENT"),
+            ("type", self._event_type),
+            ("itemId", self._item_id),
+            ("STATUS", "STARTED"),
+        ])
+
+    def __log_on_finish(self, exception: Exception):
+        message = [
+            ("event", "DYNAMODB_EVENT"),
+            ("type", self._event_type),
+            ("itemId", self._item_id),
+        ]
+        if exception is None:
+            message.append(("status", "SUCCESS"))
+        else:
+            message.append(("status", "FAILED"))
+            message.append(("exceptionType", exception.__class__.__name__))
+            message.append(("exceptionMessage", str(exception)))
+        logger.error(message)
