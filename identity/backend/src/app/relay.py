@@ -16,9 +16,8 @@ def on_insert(data: Dict = EventBody()):
     events = data.get("_LatestEvents", [])
     for raw in events:
         event = _deserialize_message(raw)
-        key = _get_message_key(event)
 
-        message_bus.publish(f"Identity-{event.__class__.__name__}", event, key=key)
+        message_bus.publish(f"Identity-{event.__class__.__name__}", event)
 
 
 def _get_message_type(name: str) -> Type[Message]:
@@ -32,9 +31,3 @@ def _deserialize_message(event: Dict) -> Message:
     name = event.get("name", None)
     type_ = _get_message_type(name)
     return type_.from_dict(event)
-
-
-def _get_message_key(raw) -> str:
-    if isinstance(raw, RegistrationEmailNeededToBeConfirmedEvent):
-        return raw.confirmation_code
-    raise NotImplementedError()

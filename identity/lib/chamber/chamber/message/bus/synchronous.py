@@ -16,7 +16,7 @@ class SynchronousMessageBus(MessageBus):
     def subscribe(self, topic: str, handler: Callable[[M], Any]):
         self._subscriptions[topic] = self._subscriptions.get(topic, []) + [handler]
 
-    def publish(self, topic: str, message: Message, key: str = None):
+    def publish(self, topic: str, message: Message):
         if topic not in self._topic_whitelist:
             raise TopicNotAllowedException(topic)
 

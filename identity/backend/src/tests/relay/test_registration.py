@@ -14,8 +14,8 @@ class MessageBusMock(MessageBus):
     def __init__(self):
         self.published_message = None
 
-    def publish(self, topic: str, message: Message, key: str = None):
-        self.published_message = (topic, message, key)
+    def publish(self, topic: str, message: Message):
+        self.published_message = (topic, message)
 
     def subscribe(self, topic: str, handler: Callable[[M], Any]):
         pass
@@ -43,9 +43,8 @@ def test_should_publish_RegistrationEmailNeededToBeConfirmedEvent():
     }, "_Partition", "_SortKey")
     assert response.all_success()
 
-    topic, message, key = bus.published_message
+    topic, message = bus.published_message
     assert isinstance(message, RegistrationEmailNeededToBeConfirmedEvent)
     assert message.email.str() == "test@devdiary.link"
     assert message.confirmation_code == "0864e05e-3b20-4341-b822-1de8f3b0b8d4"
     assert topic == "Identity-RegistrationEmailNeededToBeConfirmedEvent"
-    assert key == "0864e05e-3b20-4341-b822-1de8f3b0b8d4"
