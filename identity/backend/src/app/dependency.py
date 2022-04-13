@@ -2,8 +2,10 @@ import os
 
 from app.event.publication import whitelist_messages
 from app.event.subscription import subscribe_for_messages
+from chamber.message.bus import MessageBus
 from domain.registry import Registry
 from emailling.in_memory import EmailServiceInMemory
+from lambler.sns import SNSMessageBus
 from persistence.dynamodb.identity.registration.repository import AllRegistrationsInDynamodb
 from persistence.in_memory.identity.registration.repository import AllRegistrationsInMemory
 from persistence.in_memory.identity.user.repository import AllUsersInMemory
@@ -23,25 +25,31 @@ def _inject_prod():
 
     import boto3
     dynamodb_client = boto3.client("dynamodb")
+
+    bus = SNSMessageBus(boto3.client("sns"), os.environ["AWS_ACCOUNT_ID"], os.environ["AWS_REGION"],
+                        prefix=f'{os.environ["ENVIRONMENT"]}-')
+    _setup_message_bus(bus)
+
     registry = Registry()
     registry.all_registrations = AllRegistrationsInDynamodb(dynamodb_client, table_name=table_name)
     registry.all_users = AllUsersInMemory(topic_prefix="Identity-")
-    registry.message_bus = _get_message_bus()
+    registry.message_bus = bus
     registry.secret_manager = RandomSecretManager()
     registry.email_service = EmailServiceInMemory()
 
 
 def _inject_test():
+    bus = SynchronousMessageBus()
+    _setup_message_bus(bus)
+
     registry = Registry()
     registry.all_registrations = AllRegistrationsInMemory(topic_prefix="Identity-")
     registry.all_users = AllUsersInMemory(topic_prefix="Identity-")
-    registry.message_bus = _get_message_bus()
+    registry.message_bus = bus
     registry.secret_manager = RandomSecretManager()
     registry.email_service = EmailServiceInMemory()
 
 
-def _get_message_bus() -> SynchronousMessageBus:
-    message_bus = SynchronousMessageBus()
-    subscribe_for_messages(message_bus)
-    whitelist_messages(message_bus)
-    return message_bus
+def _setup_message_bus(bus: MessageBus):
+    subscribe_for_messages(bus)
+    whitelist_messages(bus)
