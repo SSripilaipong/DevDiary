@@ -24,9 +24,12 @@ class LogFormatter(logging.Formatter):
         return json.dumps(message, default=str)
 
 
+root = logging.getLogger()
+for handler in root.handlers:
+    root.removeHandler(handler)
+
+logger = logging.getLogger("lambler")
 log_handler = logging.StreamHandler()
 log_handler.setFormatter(LogFormatter())
-log_handler.setLevel(logging.DEBUG)
-logger = logging.getLogger("lambler")
 logger.addHandler(log_handler)
 logger.setLevel(logging.INFO)
