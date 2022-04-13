@@ -10,6 +10,8 @@ on:
         required: true
       aws-secret-access-key:
         required: true
+      aws-account-id:
+        required: true
       aws-region:
         required: true
       app-name:
@@ -44,6 +46,8 @@ jobs:
         working-directory: ./identity/infrastructure/src
         env:
           AWS_REGION: ${{ secrets.aws-region }}
+          TF_VAR_AWS_REGION: ${{ secrets.aws-region }}
+          TF_VAR_AWS_ACCOUNT_ID: ${{ secrets.aws-account-id }}
           TF_VAR_APP_NAME: ${{ secrets.app-name }}
           TF_VAR_GLOBAL_PREFIX: ${{ inputs.environment }}
           TF_BACKEND_BUCKET_NAME: ${{ secrets.tf-bucket }}

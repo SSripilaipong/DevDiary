@@ -6,6 +6,14 @@ variable APP_NAME {
   type = string
 }
 
+variable AWS_ACCOUNT_ID {
+  type = string
+}
+
+variable AWS_REGION {
+  type = string
+}
+
 data "aws_apigatewayv2_apis" "core" {
   name          = var.GLOBAL_PREFIX
 }
