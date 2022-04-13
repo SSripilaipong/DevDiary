@@ -4,8 +4,23 @@ from lambler.base.response import LamblerResponse
 
 
 class DynamodbEventResponse(LamblerResponse):
+    def __init__(self, item_id: str, success: bool):
+        self._item_id = item_id
+        self._success = success
+
     def to_dict(self) -> Dict:
-        return {}
+        return {
+            "itemId": self._item_id,
+            "success": self._success,
+        }
+
+    @property
+    def item_id(self) -> str:
+        return self._item_id
+
+    @property
+    def success(self) -> bool:
+        return self._success
 
 
 class DynamodbEventBatchResponse(LamblerResponse):

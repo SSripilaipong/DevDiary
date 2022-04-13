@@ -17,10 +17,9 @@ class DynamodbEventBatchHandler(Handler):
         self.__log_on_start()
         failed_item_ids = []
         for handler in self._handlers:
-            try:
-                handler.handle()
-            except:
-                failed_item_ids.append(handler.item_id)
+            response = handler.handle()
+            if not response.success:
+                failed_item_ids.append(response.item_id)
         response = DynamodbEventBatchResponse(failed_item_ids=failed_item_ids)
         self.__log_on_finish(failed_item_ids)
         return response
