@@ -12,3 +12,24 @@ resource "aws_lambda_event_source_mapping" "relay" {
     aws_iam_role_policy.db-policy,
   ]
 }
+
+resource "aws_iam_role_policy" "publish-topic-RegistrationEmailNeededToBeConfirmedEvent" {
+  role = aws_iam_role.backend-exec.name
+
+  policy = jsonencode({
+    Statement = [
+      {
+        Sid = "publish-topic-RegistrationEmailNeededToBeConfirmedEvent"
+        Effect = "Allow"
+        Action = [
+          "sns:Publish",
+        ]
+        Resource = aws_sns_topic.RegistrationEmailNeededToBeConfirmedEvent.arn
+      },
+    ]
+  })
+
+  depends_on = [
+    aws_sns_topic.RegistrationEmailNeededToBeConfirmedEvent,
+  ]
+}
