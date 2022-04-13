@@ -30,4 +30,3 @@ log_handler.setLevel(logging.DEBUG)
 logger = logging.getLogger("lambler")
 logger.addHandler(log_handler)
 logger.setLevel(logging.INFO)
-

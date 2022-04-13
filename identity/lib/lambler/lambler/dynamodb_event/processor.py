@@ -1,6 +1,6 @@
-import logging
 from typing import Dict, Any, TypeVar, Callable, List, Optional
 
+from lambler import logger
 from lambler.base.handler import PatternMatcher, Handler
 from lambler.dynamodb_event.response import DynamodbEventBatchResponse
 from lambler.dynamodb_event.router import DynamodbEventRouter
@@ -12,7 +12,6 @@ T = TypeVar("T", bound=Callable)
 class DynamodbEventBatchHandler(Handler):
     def __init__(self, handlers: List[DynamodbEventHandler]):
         self._handlers = handlers
-        self.__logger = logging.getLogger("lambler")
 
     def handle(self) -> DynamodbEventBatchResponse:
         self.__log_on_start()
@@ -27,7 +26,7 @@ class DynamodbEventBatchHandler(Handler):
         return response
 
     def __log_on_start(self):
-        self.__logger.info([
+        logger.info([
             ("event", "DYNAMODB_EVENT"),
             ("type", "BATCH"),
             ("STATUS", "STARTED"),
@@ -50,7 +49,7 @@ class DynamodbEventBatchHandler(Handler):
         if failed_item_ids:
             message.append(("failedItemIDs", failed_item_ids))
 
-        self.__logger.info(message)
+        logger.info(message)
 
 
 class DynamodbEventProcessor(PatternMatcher):
