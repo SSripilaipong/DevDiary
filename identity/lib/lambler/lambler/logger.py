@@ -15,11 +15,8 @@ class LogFormatter(logging.Formatter):
     def format(self, record) -> str:
         message = OrderedDict()
 
-        now: datetime = self._now()
-        message["datetime"] = now.strftime("%Y-%m-%d %H:%M:%S.%f")
-
         message.update(OrderedDict(record.msg))
-        message["timestamp"] = now.timestamp()
+        message["timestamp"] = self._now().timestamp()
 
         return json.dumps(message, default=str)
 
