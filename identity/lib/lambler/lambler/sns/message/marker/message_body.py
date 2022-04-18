@@ -22,5 +22,5 @@ class MessageBody(Marker):
             raise NotImplementedError()
         try:
             return self._parser.parse(data)
-        except DataParsingError:
-            raise NotImplementedError()
+        except DataParsingError as e:
+            raise e

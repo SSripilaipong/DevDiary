@@ -2,6 +2,7 @@ import json
 
 from typing import Dict, Type
 
+from lambler.base.data.parser.exception import DataParsingError
 from lambler.base.data.parser.parser import Parser
 
 
@@ -15,6 +16,9 @@ class DictParser(Parser):
         if isinstance(data, dict):
             return data
         elif isinstance(data, str):
-            return json.loads(data)
+            try:
+                return json.loads(data)
+            except json.JSONDecodeError:
+                raise DataParsingError()
 
         raise NotImplementedError()

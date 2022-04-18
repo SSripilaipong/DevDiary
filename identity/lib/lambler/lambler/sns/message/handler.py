@@ -1,3 +1,4 @@
+from lambler.base.data.parser.exception import DataParsingError
 from lambler.base.function import MarkedFunction
 from lambler.base.function.input import FunctionInputSourceCollection
 from lambler.base.handler import Handler
@@ -13,7 +14,9 @@ class SNSMessageHandler(Handler):
     def handle(self) -> SNSMessageResponse:
         try:
             self._handle.execute(self._sources)
-        except:
+        except DataParsingError as e:
+            raise e
+        except Exception:
             raise NotImplementedError()
         return SNSMessageResponse()
 
