@@ -22,7 +22,7 @@ class PydanticParser(Parser):
             try:
                 data = json.loads(data)
             except json.JSONDecodeError:
-                raise NotImplementedError()
+                raise DataParsingError()
 
         if isinstance(data, dict):
             try:
