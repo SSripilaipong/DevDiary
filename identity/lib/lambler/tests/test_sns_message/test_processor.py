@@ -1,3 +1,4 @@
+from pydantic import BaseModel
 from typing import Dict, Type, Any
 
 from lambler.sns.message.marker import MessageBody
@@ -37,6 +38,14 @@ def test_should_pass_payload_as_Dict():
 
 def test_should_pass_payload_as_dict():
     _test_passed_payload('{"data": "abc", "num": 1234}', dict, {"data": "abc", "num": 1234})
+
+
+def test_should_pass_payload_as_pydantic_model():
+    class MyModel(BaseModel):
+        data: str
+        num: int
+
+    _test_passed_payload('{"data": "abc", "num": 1234}', MyModel, MyModel(data="abc", num=1234))
 
 
 def _test_passed_payload(message: str, type_: Type, expected_payload: Any):
