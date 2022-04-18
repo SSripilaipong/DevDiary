@@ -1,5 +1,6 @@
 from typing import Type, Any
 
+from lambler.base.data.parser.exception import DataParsingError
 from lambler.base.data.parser.parser import Parser
 
 
@@ -10,4 +11,7 @@ class StringParser(Parser):
         return cls()
 
     def parse(self, data: Any) -> str:
-        return str(data)
+        try:
+            return str(data)
+        except:
+            raise DataParsingError()
