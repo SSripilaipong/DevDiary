@@ -24,6 +24,6 @@ class SNSMessageProcessor(Router):
 
     def message(self, topic_name: str):
         def decorator(func: T) -> T:
-            self._endpoints.append(SNSMessageEndpoint(topic_name, func))
+            self._endpoints.append(SNSMessageEndpoint.create(topic_name, func))
             return func
         return decorator

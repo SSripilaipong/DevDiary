@@ -13,5 +13,5 @@ class Parser(ABC):
         pass
 
     @abstractmethod
-    def parse(self, data: Dict) -> Any:
+    def parse(self, data: Any) -> Any:
         pass

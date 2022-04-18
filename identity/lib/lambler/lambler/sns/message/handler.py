@@ -1,16 +1,20 @@
-from typing import Callable
-
+from lambler.base.function import MarkedFunction
+from lambler.base.function.input import FunctionInputSourceCollection
 from lambler.base.handler import Handler
 from lambler.base.response import LamblerResponse
 from lambler.sns.message.response import SNSMessageResponse
 
 
 class SNSMessageHandler(Handler):
-    def __init__(self, handle: Callable):
+    def __init__(self, handle: MarkedFunction, sources: FunctionInputSourceCollection):
         self._handle = handle
+        self._sources = sources
 
     def handle(self) -> SNSMessageResponse:
-        self._handle()
+        try:
+            self._handle.execute(self._sources)
+        except:
+            raise NotImplementedError()
         return SNSMessageResponse()
 
 
