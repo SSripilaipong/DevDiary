@@ -58,6 +58,14 @@ def test_should_pass_payload_as_pydantic_model():
     _test_passed_payload('{"data": "abc", "num": 1234}', MyModel, MyModel(data="abc", num=1234))
 
 
+def test_should_raise_DataParsingError_when_having_non_json_value_for_pydantic_model():
+    class MyModel(BaseModel):
+        data: str
+        num: int
+
+    _test_raise_DataParsingError('Cannot Parse', MyModel)
+
+
 def _test_raise_DataParsingError(message: str, type_: Type):
     processor = SNSMessageProcessor()
 
