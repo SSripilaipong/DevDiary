@@ -66,6 +66,14 @@ def test_should_raise_DataParsingError_when_having_non_json_value_for_pydantic_m
     _test_raise_DataParsingError('Cannot Parse', MyModel)
 
 
+def test_should_raise_DataParsingError_when_having_invalid_structure_for_pydantic_model():
+    class MyModel(BaseModel):
+        data: str
+        num: int
+
+    _test_raise_DataParsingError('{"Copy": "Paste", "data": "Something"}', MyModel)
+
+
 def _test_raise_DataParsingError(message: str, type_: Type):
     processor = SNSMessageProcessor()
 
