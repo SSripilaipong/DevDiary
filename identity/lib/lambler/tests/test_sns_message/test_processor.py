@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Type, Any
 
 from lambler.sns.message.marker import MessageBody
 from lambler.sns.message.processor import SNSMessageProcessor
@@ -28,11 +28,19 @@ def test_should_not_call_function_when_topic_not_matched():
 
 
 def test_should_pass_payload_as_str():
+    _test_passed_payload("Hello World", str, "Hello World")
+
+
+def test_should_pass_payload_as_Dict():
+    _test_passed_payload('{"data": "abc", "num": 1234}', Dict, {"data": "abc", "num": 1234})
+
+
+def _test_passed_payload(message: str, type_: Type, expected_payload: Any):
     processor = SNSMessageProcessor()
 
     @processor.message("my-topic")
-    def on_message(payload: str = MessageBody()):
-        on_message.payload = payload
+    def on_message(payload_: type_ = MessageBody()):
+        on_message.payload = payload_
 
-    processor.match(simple_notification_event("my-topic", message="Hello World"), ...).handle()
-    assert getattr(on_message, "payload", None) == "Hello World"
+    processor.match(simple_notification_event("my-topic", message=message), ...).handle()
+    assert getattr(on_message, "payload", None) == expected_payload
