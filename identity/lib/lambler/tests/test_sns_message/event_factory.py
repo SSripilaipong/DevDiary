@@ -28,7 +28,6 @@ def simple_notification_event(topic_name=None, message=None):
                     "Type": "Notification",
                     "UnsubscribeUrl": "https://sns.ap-southeast-2.amazonaws.com/?Action=Unsubscribe&amp;SubscriptionArn=arn:aws:sns:ap-southeast-2:123456789012:test-lambda:21be56ed-a058-49f5-8c98-aedd2564c486",
                     "TopicArn": f"arn:aws:sns:ap-southeast-2:123456789012:{topic_name}",
-                    "Subject": "TestInvoke"
                 }
             }
         ]

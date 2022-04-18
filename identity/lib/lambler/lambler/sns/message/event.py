@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 from pydantic import BaseModel, Field
 
@@ -16,7 +16,7 @@ class SNSMessageEventRecordNotification(BaseModel):
     type_: str = Field(alias="Type")
     unsubscribe_url: str = Field(alias="UnsubscribeUrl")
     topic_arn: str = Field(alias="TopicArn")
-    subject: str = Field(alias="Subject")
+    subject: Optional[str] = Field(alias="Subject")
 
 
 class SNSMessageEventRecord(BaseModel):
