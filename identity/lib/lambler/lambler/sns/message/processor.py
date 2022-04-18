@@ -21,7 +21,7 @@ class SNSMessageProcessor(Router):
     def _on_no_pattern_matched(self, event: LamblerEvent) -> Optional[Handler]:
         pass  # TODO: implement
 
-    def message(self):
+    def message(self, topic_name: str):
         def decorator(func: T) -> T:
             self._endpoints.append(SNSMessageEndpoint(func))
             return func
