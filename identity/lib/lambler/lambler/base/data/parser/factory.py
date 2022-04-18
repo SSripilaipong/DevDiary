@@ -6,6 +6,7 @@ from lambler.base.data.parser.dict import DictParser
 from lambler.base.data.parser.chamber import ChamberParser
 from lambler.base.data.parser.parser import Parser
 from lambler.base.data.parser.pydantic import PydanticParser
+from lambler.base.data.parser.string import StringParser
 
 
 class ParserFactory:
@@ -26,6 +27,7 @@ class ParserFactory:
 
 
 parser_factory = ParserFactory()
+parser_factory.add_parser(str, StringParser)
 parser_factory.add_parser(dict, DictParser)
 parser_factory.add_parser(Dict, DictParser)
 parser_factory.add_parser(BaseModel, PydanticParser)
