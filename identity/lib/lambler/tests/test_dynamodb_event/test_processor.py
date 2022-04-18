@@ -35,12 +35,6 @@ def test_should_not_match_random_event():
     assert processor.match({"Hello": "World"}, ...) is None
 
 
-def test_should_not_match_when_operation_not_registered():
-    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
-
-    assert processor.match(simple_insert_event(), ...) is None
-
-
 def test_should_should_call_function():
     processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
 
