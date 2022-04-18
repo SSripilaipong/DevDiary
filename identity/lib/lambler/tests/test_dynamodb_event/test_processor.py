@@ -143,7 +143,7 @@ def test_should_report_item_failure_when_data_passing_failed():
     assert response["batchItemFailures"][0]["itemIdentifier"] == "e1"
 
 
-def test_should_deny_different_types_of_event():
+def test_should_ignore_different_types_of_event():
     processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
 
     @processor.insert()
