@@ -35,6 +35,10 @@ def test_should_pass_payload_as_Dict():
     _test_passed_payload('{"data": "abc", "num": 1234}', Dict, {"data": "abc", "num": 1234})
 
 
+def test_should_pass_payload_as_dict():
+    _test_passed_payload('{"data": "abc", "num": 1234}', dict, {"data": "abc", "num": 1234})
+
+
 def _test_passed_payload(message: str, type_: Type, expected_payload: Any):
     processor = SNSMessageProcessor()
 
