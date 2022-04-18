@@ -12,7 +12,7 @@ from lambler.base.response import LamblerResponse
 from lambler.dynamodb_event.processor import DynamodbEventProcessor
 from lambler.dynamodb_event.marker import EventBody
 from lambler.dynamodb_event.data.view import DynamodbStreamView
-from .event_factory import simple_insert_event, simple_insert_event_multiple_records
+from .event_factory import simple_insert_event, simple_insert_event_multiple_records, simple_remove_event
 
 
 def test_should_match_dynamodb_event():
@@ -147,6 +147,17 @@ def test_should_report_item_failure_when_data_passing_failed():
 
     response = processor.match(simple_insert_event(body={"Hello": "World"}, event_id="e1"), ...).handle().to_dict()
     assert response["batchItemFailures"][0]["itemIdentifier"] == "e1"
+
+
+def test_should_deny_different_types_of_event():
+    processor = DynamodbEventProcessor(stream_view_type=DynamodbStreamView.NEW_IMAGE)
+
+    @processor.insert()
+    def on_insert():
+        on_insert.is_called = True
+
+    processor.match(simple_remove_event(), ...).handle()
+    assert not getattr(on_insert, "is_called", False)
 
 
 def _test_support_model_body(model: Type, get_attr: Callable):

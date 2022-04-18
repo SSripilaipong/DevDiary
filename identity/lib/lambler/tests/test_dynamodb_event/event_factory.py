@@ -1,4 +1,12 @@
 def simple_insert_event(body=None, event_id=None):
+    return _simple_event("INSERT", body, event_id)
+
+
+def simple_remove_event(body=None, event_id=None):
+    return _simple_event("REMOVE", body, event_id)
+
+
+def _simple_event(name, body=None, event_id=None):
     body = body or {
         "name": {
             "S": "CPEngineer"
@@ -11,7 +19,7 @@ def simple_insert_event(body=None, event_id=None):
         "Records": [
             {
                 "eventID": event_id,
-                "eventName": "INSERT",
+                "eventName": name,
                 "eventVersion": "1.1",
                 "eventSource": "aws:dynamodb",
                 "awsRegion": "ap-southeast-1",
