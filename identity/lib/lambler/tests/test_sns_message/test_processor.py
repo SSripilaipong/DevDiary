@@ -85,6 +85,14 @@ def test_should_pass_payload_as_chamber_data_model():
     assert payload.data == "abc" and payload.num == 1234
 
 
+def test_should_raise_DataParsingError_when_having_non_json_value_for_chamber_model():
+    class MyModel(DataModel):
+        data: str = Field()
+        num: int = Field()
+
+    _test_raise_DataParsingError('Cannot Parse', MyModel)
+
+
 def _test_raise_DataParsingError(message: str, type_: Type):
     processor = SNSMessageProcessor()
 
