@@ -42,6 +42,10 @@ def test_should_pass_payload_as_dict():
     _test_passed_payload('{"data": "abc", "num": 1234}', dict, {"data": "abc", "num": 1234})
 
 
+def test_should_raise_DataParsingError_when_cannot_parse_to_Dict():
+    _test_raise_DataParsingError('Cannot Parse', Dict)
+
+
 def test_should_raise_DataParsingError_when_cannot_parse_to_dict():
     _test_raise_DataParsingError('Cannot Parse', dict)
 
