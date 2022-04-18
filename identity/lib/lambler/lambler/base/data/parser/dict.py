@@ -1,3 +1,5 @@
+import json
+
 from typing import Dict, Type
 
 from lambler.base.data.parser.parser import Parser
@@ -10,5 +12,9 @@ class DictParser(Parser):
         return cls()
 
     def parse(self, data: Dict) -> Dict:
-        assert isinstance(data, dict)
-        return data
+        if isinstance(data, dict):
+            return data
+        elif isinstance(data, str):
+            return json.loads(data)
+
+        raise NotImplementedError()
