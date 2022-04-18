@@ -21,8 +21,8 @@ class ChamberParser(Parser):
         if isinstance(data, str):
             try:
                 data = json.loads(data)
-            except:
-                raise NotImplementedError()
+            except json.JSONDecodeError:
+                raise DataParsingError()
 
         if isinstance(data, dict):
             try:
