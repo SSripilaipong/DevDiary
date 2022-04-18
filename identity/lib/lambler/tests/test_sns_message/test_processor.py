@@ -93,6 +93,14 @@ def test_should_raise_DataParsingError_when_having_non_json_value_for_chamber_mo
     _test_raise_DataParsingError('Cannot Parse', MyModel)
 
 
+def test_should_raise_DataParsingError_when_having_invalid_structure_for_chamber_model():
+    class MyModel(DataModel):
+        data: str = Field()
+        num: int = Field()
+
+    _test_raise_DataParsingError('{"Copy": "Paste", "data": "Something"}', MyModel)
+
+
 def _test_raise_DataParsingError(message: str, type_: Type):
     processor = SNSMessageProcessor()
 
