@@ -66,9 +66,8 @@ class DynamodbEventProcessor(PatternMatcher):
         handlers = []
         for record in records:
             matched_handler = self._router.match(record, context)
-            if matched_handler is None:
-                return None
-            handlers.append(matched_handler)
+            if matched_handler is not None:
+                handlers.append(matched_handler)
         return DynamodbEventBatchHandler(handlers)
 
     def insert(self):

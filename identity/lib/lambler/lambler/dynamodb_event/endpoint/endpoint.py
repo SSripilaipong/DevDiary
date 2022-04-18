@@ -18,4 +18,6 @@ class DynamodbEventEndpoint(PatternMatcher):
         return cls(method, MarkedFunction.from_function(handle))
 
     def match(self, event: DynamodbEvent, context: Any) -> Optional[DynamodbEventHandler]:
+        if event.event_name != self._method:
+            return None
         return DynamodbEventHandler.create(self._method, self._handle, DynamodbEventInputCollection.from_event(event))
