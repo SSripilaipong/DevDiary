@@ -1,6 +1,8 @@
+import json
+
 import pydantic
 from pydantic import BaseModel
-from typing import Dict, Type
+from typing import Type, Any
 
 from lambler.base.data.parser.exception import DataParsingError
 from lambler.base.data.parser.parser import Parser
@@ -15,9 +17,15 @@ class PydanticParser(Parser):
         assert isinstance(type_, type) and issubclass(type_, BaseModel)
         return cls(type_)
 
-    def parse(self, data: Dict) -> BaseModel:
-        assert isinstance(data, dict)
-        try:
-            return self._model(**data)
-        except pydantic.ValidationError:
-            raise DataParsingError()
+    def parse(self, data: Any) -> BaseModel:
+        if isinstance(data, str):
+            try:
+                data = json.loads(data)
+            except json.JSONDecodeError:
+                raise NotImplementedError()
+
+        if isinstance(data, dict):
+            try:
+                return self._model(**data)
+            except pydantic.ValidationError:
+                raise DataParsingError()
